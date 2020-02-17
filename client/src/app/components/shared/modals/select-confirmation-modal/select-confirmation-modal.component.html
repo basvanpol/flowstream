@@ -1,0 +1,24 @@
+<div class="popup__container--medium">
+  <article>
+    <header>
+      <div class="popup__form-header">
+        <h3>{{ popupTitle }}</h3>
+      </div>
+    </header>
+    <section class="wrapper clearfix popup__form-content">
+      <app-select-list [listData]="listData" [selectedIdsOnLoaded]="selectedIdsOnLoaded" (selectedItemsEmitter)="onSelectedList($event)"></app-select-list>
+    </section>
+    <footer>
+      <div class="popup__form-footer">
+        <div class="popup__form-footer-button-container">
+          <div class="ok-button" (click)="onConfirm()">
+            <span>Save</span>
+          </div>
+          <div class="cancel-button" (click)="closeModal()">
+            <span>Cancel</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </article>
+</div>

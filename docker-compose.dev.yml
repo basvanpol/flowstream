@@ -1,0 +1,26 @@
+version: '3' # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  angular: # name of the first service
+    build: 
+        context: ./client # specify the directory of the Dockerfile
+        dockerfile: Dockerfile
+    ports:
+      - "4200:4200" # specify port forewarding
+      - "49153:49153"
+    links:
+        - server
+    volumes:
+        - /app/client/node_modules
+        - './client:/app/client'
+
+  server: #name of the second service
+    build: 
+        context: ./server # specify the directory of the Dockerfile
+        dockerfile: Dockerfile
+    ports:
+      - "8090:8090" #specify ports forewarding
+    volumes:
+      - /app/server/node_modules
+      - './server:/app/server'

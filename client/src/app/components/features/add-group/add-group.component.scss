@@ -1,0 +1,12 @@
+.group-form__form-container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cancel-button{
+    float: left;
+    position: relative;
+    min-width: 120px;
+    margin: 0 0 0 10px;
+}

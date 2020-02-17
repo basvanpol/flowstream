@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head></head>
+
+<body>
+  Allo
+</body>
+<script>
+  // document.body.onload = function () {
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const userId = urlParams.get('userId');
+  //   window.opener.postMessage(
+  //     {
+  //       userId: userId,
+  //       status: 'success'
+  //     },
+  //     window.opener.location
+  //   );
+  // };
+
+
+
+  // The ID of the extension we want to talk to.
+  var editorExtensionId = "gfjkeoihbpgjebcmcpmpjggcdcbihdng";
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get('userId');
+  obj = JSON.parse(JSON.stringify({
+    userId: userId,
+    status: 'success'
+  }));
+  chrome.runtime.sendMessage(editorExtensionId,
+    {},
+    (response) => {
+    });
+  window.close();
+</script>
+
+</html>

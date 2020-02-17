@@ -1,0 +1,29 @@
+<div class="post-padding">
+  <div class="post-header">
+    <app-feed-resource-thumb class="post-feed-thumb" [thumb]="authorThumb"></app-feed-resource-thumb>
+    <div class="post-author-container">
+      <app-feed-resource-name class="post-feed-name" [name]="feedName"></app-feed-resource-name>
+      <app-feed-resource-date class="post-feed-date" [date]="postDate"></app-feed-resource-date>
+    </div>
+  </div>
+  <div class="post-media">
+    <div class="post-header-media">
+      <!-- <feed-resource-thumb class="post__feed-thumb" feed="$ctrl.externalFeed"></feed-resource-thumb> -->
+      <div class="post-author-container">
+        <!-- <feed-resource-name class="post__feed-name" feed="$ctrl.externalFeed" ng-click="$ctrl.selectChannel($ctrl.post)"></feed-resource-name>
+              <feed-resource-date class="post__feed-date" date="$ctrl.post.date"></feed-resource-date> -->
+      </div>
+    </div>
+    <app-post-content *ngFor="let content of _post.contents" [content]="content" class="post-content" [showFull]="showFull" [ngClass]="content.type" (imageUpdated)="onImageUpdated($event)"></app-post-content>
+    <div class="portrait-gradient"></div>
+    <div *ngIf="title" class="post-title">
+      <p>{{ title }}</p>
+    </div>
+  </div>
+</div>
+<div *ngIf="showOverlay" (click)="openPost($event)" class="post-overlay">
+  <!-- <thumb-options post="$ctrl.post"></thumb-options> -->
+    <!-- <post-options post="post"></post-options> -->
+    <app-post-thumb-options [post]="_post"></app-post-thumb-options>
+  <!-- <post-cta post="post"></post-cta> -->
+</div>

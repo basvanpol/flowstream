@@ -1,0 +1,25 @@
+<div class="paper-view-container">
+    <div class="paper-view paper-scroll-container">
+        <div class="paper-center">
+            <section>
+                <div class="paper-post-container">
+                    <ng-container *ngFor="let post of firstPosts, let i = index">
+                        <app-post *ngIf="i < firstIndex" [post]="post" class="post-tmpl" [ngClass]="{'first': i === 0, 'second': i === 1}" [showFull]="false"></app-post>
+                    </ng-container>
+                </div>
+                <div class="paper-secondary-post-container">
+                    <ng-container *ngFor="let post of secondPosts, let i = index ">
+                        <app-post *ngIf="(i > (firstIndex-1) && i < secondIndex)" [post]="post" class="post-tmpl" [showFull]="false"></app-post>
+                    </ng-container>
+                </div>
+            </section>
+            <section>
+                <div class="paper-third-post-container">
+                    <ng-container *ngFor="let post of scrollPosts, let i = index">
+                        <app-post *ngIf="(i > (secondIndex-1))" [post]="post" class="post-tmpl" [showFull]="false"></app-post>
+                    </ng-container>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

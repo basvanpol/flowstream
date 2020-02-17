@@ -1,0 +1,62 @@
+<div class="left-menu-container selected" [ngClass]="{'selected': isOpen}"  (mouseenter)="isOpen = true" (mouseleave)="isOpen = false">
+    <div class="menu-left-container">
+        <div class="close-button">
+            <app-icon-font (click)="isOpen = false" [iconClass]="'icon-close'"></app-icon-font>
+        </div>
+        <div class="lateral-slide-menu-left">
+            <nav class="lateral-slide-menu left">
+                <div class="lateral-slide-menu-scrollable-container">
+                    <div class="toggle-menu-container">
+                        <div ng-switch="$ctrl.selectedMenu" class="left-container-scroll">
+                            <div ng-switch-when="feeds" class="feeds-menu-container">
+                                <div class="feeds-menu">
+                                    <div class="burger-holder" [ngStyle]="{'top': headerTop+'px'}">
+                                        <app-icon-font iconClass="icon-burger" class="icon-burger"></app-icon-font>
+                                    </div>
+                                    <div class="frontpage-button" (click)="goHome()">
+                                        <div>
+                                            <app-icon-font iconClass="icon-frontpage"></app-icon-font>
+                                        </div>
+                                        <div>
+                                            <a>Frontpage</a>
+                                        </div>
+                                    </div>
+                                    <div class="filter-menu-container">
+                                        <mat-accordion [multi]="true">
+                                            <mat-expansion-panel [@.disabled]="true" *ngFor="let group of mappedSubscriptions, let i = index" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title>
+                                                        <app-icon-font [iconClass]="group[0]._group.icon.value"></app-icon-font>
+                                                        <a>{{group[0]._group.title}}</a>
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                <ul class="feeds-menu__list">
+                                                    <li *ngFor="let subscription of group" class="feeds-menu__list-item">
+                                                        <div class="feeds-menu__feed-container">
+                                                            <app-feed-resource-thumb class="feeds-menu__feed-thumb" [thumb]="subscription._feed.feedIcon"></app-feed-resource-thumb>
+                                                            <a (click)="onOpenFeed(subscription._feed)">
+                                                                <p>{{subscription._feed.feedName}}</p>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </mat-expansion-panel>
+                                        </mat-accordion>
+                                    </div>
+                                </div>
+                                <div class="sidebar-footer">
+                                    <div (click)="openAddFeedDialog()" class="btn-red menu-left">
+                                        <span>Add new feed</span>
+                                    </div>
+                                    <div class="add-feed-plus-button" (click)="openAddFeedDialog()">
+                                        <app-icon-font [iconClass]="'icon-add'"></app-icon-font>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>

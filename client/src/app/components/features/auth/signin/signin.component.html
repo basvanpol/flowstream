@@ -1,0 +1,16 @@
+<mat-card class="signin-container">
+  <div class="signin__logo-container">
+      <div class="header__logo--large">
+      </div>
+  </div>
+  <!-- <form [formGroup]="signinForm" (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <mat-form-field class="signin-container-input-container" >
+      <input matInput placeholder="Enter your Email" [formControlName]="'email'">
+    </mat-form-field>
+    <mat-form-field class="signin-container-input-container" >
+      <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" [formControlName]="'password'">
+    </mat-form-field>
+    <button mat-raised-button class="a-button form" type="submit" [disabled]="!f.valid">Sign In</button>
+  </form> -->
+  <a class="twitter-button" href="{{twitterSignInUrl}}"><span>Signin with Twitter</span></a>
+</mat-card>

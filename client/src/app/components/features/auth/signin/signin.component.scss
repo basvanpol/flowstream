@@ -1,0 +1,27 @@
+@import "../../../../../styles/shared-flowstream-style/variables";
+
+.signin-container{
+  width: 400px;
+  height:300px;
+  text-align: center;
+  position: absolute;
+  left: calc(50% - 200px);
+  top: calc(50% - 150px);
+  border-radius: $card-border-radius-default;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+
+}
+
+.signin__logo-container{
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.signin-container-input-container{
+  width:100%;
+}
+

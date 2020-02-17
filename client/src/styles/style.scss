@@ -1,0 +1,48 @@
+/* libraries. */
+@import '../../node_modules/bootstrap/scss/bootstrap-reboot';
+@import '../../node_modules/bootstrap/scss/bootstrap-grid';
+
+/* shared styling from library.*/
+
+@import './../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import './shared-flowstream-style/style';
+
+
+/* You can add custom application related styles to this file */
+@viewport {
+  orientation: landscape;
+}
+
+html {
+  font-size: $default-text-size;
+  height: 100%;
+}
+
+body {
+    background-color: $default-background-color;
+    color: $default-text-color;
+    font-family: $font-family-primary;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-size: $default-text-size;
+    font-weight: 400;
+    height: 100%;
+}
+
+.highcharts-credits{
+  display: none !important;
+}
+
+.blur-on-load {
+  transition: filter .3s ease;
+
+  &.loading {
+    filter: blur(10px);
+  }
+}
+
+
+.hide{
+  display: none;
+}

@@ -1,0 +1,21 @@
+@import 'popup';
+.add-post{
+    &__container{
+        @include popup-container;
+    }
+
+    &__header{
+        @include popup-header;
+    }
+
+    &__footer{
+        @include popup-footer;
+    }
+}
+
+.added-post-holder{
+    float: left;
+    background-color: #f5f5f5;
+    width: 100%;
+}
+

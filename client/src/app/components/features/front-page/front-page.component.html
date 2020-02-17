@@ -1,0 +1,19 @@
+<div class="frontpage-view-container">
+  <div class="frontpage-view" *ngFor="let entity of frontpageEntities">
+    <div class="frontpage-container" >
+      <div class="frontpage-title">
+        <span>
+          {{entity.title}}
+        </span>
+      </div>
+      <div class="frontpage-center">
+        <section>
+          <div class="frontpage-post-container">
+            <app-post *ngFor="let post of entity.posts, let i = index" class="post-tmpl image landscape" [ngClass]="{'first': i == 0, 'second': i == 1}" [post]="post" [showFull]="false">
+            </app-post>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

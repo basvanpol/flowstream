@@ -1,0 +1,139 @@
+@import "variables";
+
+.header__navbar--bottom {
+
+    action-menu {
+        position: relative;
+        float: left;
+        margin: 16px 0 0 84px;
+        width: 80px;
+
+        .fs-dropdown-menu {
+            height: 0 !important;
+        }
+
+        @media screen and (max-width: $screen-tablet) {
+            width: 80px;
+        }
+    }
+
+    .publish-button-container {
+        @media screen and (max-width: $screen-tablet) {
+            display: none;
+        }
+    }
+}
+
+
+.header__pref-menu-container {
+    position: relative;
+    float: left;
+    height: 40px;
+    margin: 7px 0;
+    padding: 5px 0 0 0;
+    background-color: $EDITOR_BACKGROUND;
+    border-radius: 4px;
+
+    ul {
+        list-style: none;
+        margin: 0 auto;
+        padding: 0;
+
+        li {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            padding: 3px 8px;
+            cursor: pointer;
+            float: left;
+            box-shadow: none;
+
+            .icon {
+                position: relative;
+                float: left;
+                color: $EDITOR_ICON_DEFAULT;
+                @include text-select-none();
+            }
+
+            &:hover {
+                .dropdown-toggle .icon {
+                    color: $EDITOR_DARK_GREY;
+                }
+
+                .dropdown-menu {
+                    li:not(.selected) {
+                        &:hover {
+                            .icon {
+                                color: $EDITOR_DARK_GREY;
+                            }
+                        }
+                    }
+
+                    li {
+                        &.selected {
+                            .icon {
+                                color: $EDITOR_DARK_GREY;
+                                cursor: initial;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+.header__view-options-menu-container {
+    position: relative;
+    float: left;
+    margin: 0;
+    padding: 0;
+
+    .fs-dropdown-menu {
+        position: relative;
+        float: left;
+        width: 40px;
+        margin: 0 auto;
+
+        ul {
+            &.dropdown-menu {
+                top: 30px;
+                width: 40px;
+                min-width: 40px;
+                left: -8px;
+                margin: 0;
+                padding: 0;
+
+                background: none repeat scroll 0 0 $EDITOR_WHITE;
+                border: 0 solid #686868;
+                border-radius: 4px 4px 4px 4px;
+                box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+                moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+                webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+                /* rounded corners and shadow in IE 6,7,8 */
+                behavior: url("/FWWeb/css/PIE.htc");
+
+                li {
+                    position: relative;
+                    float: left;
+                    list-style: none;
+                    width: 30px;
+                    height: 30px;
+                    margin: 0px 0px 9px 3px;
+                    padding: 3px 5px;
+
+                    &:first-child {
+                        margin: 9px 0px 9px 3px;
+                    }
+
+                    div {
+                        margin: 0;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+}

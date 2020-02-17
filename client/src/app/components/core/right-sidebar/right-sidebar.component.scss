@@ -1,0 +1,108 @@
+@import 'variables';
+@import 'list';
+
+.ruby-holder {
+    background: none;
+    border: none;
+    right: 272px;
+
+    .icon-burger {
+        position: fixed;
+        top: 19px;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.5s linear;
+    }
+}
+
+.sidebar__ruby-holder{
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index:1001;
+  width: 60px;
+  height: 60px;
+}
+
+.sidebar__ruby-button{
+  padding: 15px;
+  cursor: pointer;
+}
+
+.right-menu-container {
+    position: fixed;
+    top: 0px;
+    width: 0;
+    bottom: 0;
+    padding-bottom:60px;
+    right: 0;
+    margin: 0 auto;
+    z-index: 9999999;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    //  border-top: 1px solid #fff;
+
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    transition: all .3s ease;
+
+    background: $EDITOR_SUPER_LIGHT_BACKGROUND;
+
+    .close-button {
+        display: none;
+    }
+
+    .sidebar-footer {
+        position: absolute;
+        bottom: 0;
+        height: 60px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+
+        .btn-red {
+            margin: 10px auto;
+            min-width: 190px;
+        }
+
+        .add-flow-plus-button {
+            opacity: 1;
+        }
+    }
+
+
+    &.selected {
+        width: 272px;
+        z-index: 2000;
+
+        //   @media screen and (max-width: $screen-phone) {
+        //     width: 100%;
+
+        //     .close-button {
+        //       display: block;
+        //       position: absolute;
+        //       right: 0px;
+        //       top: 20px;
+        //       width: 40px;
+        //       height: 40px;
+        //       z-index: 9999;
+        //     }
+        //   }
+    }
+
+    .right-container-scroll {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100%;
+    }
+}
+
+.filter-menu-container {
+    @include vertical-list;
+}

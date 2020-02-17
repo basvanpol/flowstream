@@ -1,0 +1,8 @@
+<div class="select-list__container">
+  <ul>
+      <li *ngFor="let item of listData">
+          <mat-checkbox (change)="onChange($event)" value="{{item._id}}" id="{{item.title}}" [checked]="selectedIdsOnLoaded.includes(item._id)"></mat-checkbox>
+          <div><p>{{ item.title }}</p></div>
+      </li>
+  </ul>
+</div>

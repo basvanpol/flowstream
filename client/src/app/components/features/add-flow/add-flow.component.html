@@ -1,0 +1,21 @@
+<div class="profile-form__form-container">
+  <div class="modal__header">
+    <span class="modal__title">Add Flow</span>
+  </div>
+  <div class="modal__content flex-grow-1">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit(f)" #f="ngForm">
+      <div class="col-md-12 col-sm-12">
+        <mat-form-field class="mat-form-input d-flex" appearance="outline">
+          <input matInput placeholder="Choose a title" [formControlName]="'title'">
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <div class="modal__footer">
+    <div class="modal__footer-button-container">
+      <div class="ok-button" (click)="onSubmit(f)"><span>Save</span></div>
+      <div class="cancel-button" (click)="onResetAndClose()"><span>Cancel</span></div>
+    </div>
+  </div>
+  <!-- <app-spinner *ngIf="showSpinner" class="signin-spinner"></app-spinner> -->
+</div>

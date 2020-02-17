@@ -1,0 +1,16 @@
+@import 'variables';
+@import 'buttons';
+
+.add-feed{
+    &__subscribe-button{
+      @include small-button;
+  
+      &.selected {
+        border: 1px solid $EDITOR_GREEN;
+    
+        &:hover {
+          border: 1px solid $EDITOR_RED;
+        }
+      }
+    }
+  }

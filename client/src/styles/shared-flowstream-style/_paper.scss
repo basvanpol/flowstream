@@ -1,0 +1,190 @@
+@import "variables";
+@import "post-mixins";
+
+.paper-view-container {
+    position: relative;
+    float: left;
+    top: 95px;
+    width: 100%;
+    min-height: 700px;
+    margin: 0 auto;
+    padding: 0 60px 100px 120px;
+    text-align: center;
+}
+
+.paper-view {
+    position: static;
+    float: left;
+    padding-top: 15px;
+    left: 8%;
+    right: 8%;
+    width: 100%;
+    max-width: 1499px;
+    margin: 12px auto;
+    padding-bottom: 100px;
+
+    @media(max-width: $paper-screen-desktop) {
+        left: 0;
+        right: 0;
+        width: 100%;
+    }
+
+    .paper-center {
+        position: static;
+        float: left;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        bottom: 0;
+        padding: 0;
+        background: #fff;
+        text-align: center;
+
+        .post-tmpl {
+            position: relative;
+            float: left;
+            overflow: hidden;
+            @include paper-post-default($paper-width-third, $paper-thumb-height-small);
+        }
+
+        /** start first section with first and second container **/
+        section:first-child {
+            display: flex;
+
+            .paper-post-container {
+                flex: 1;
+                padding: 0;
+                width: 100%;
+                height: auto;
+                @include post-drop-shadow(0, 0, 0, 0, rgba(241, 241, 241, 0));
+
+                .post-tmpl {
+
+                    &:first-child,
+                    &:nth-child(2) {
+                        @include paper-post-large-image($paper-thumb-height-medium, $paper-width-half);
+                        border-left: 1px solid #f1f1f1;
+                    }
+
+                    &:nth-child(n+3) {
+                        @include paper-post-grid-image($paper-thumb-height-small, $paper-width-third);
+                        border-top: 1px solid #f1f1f1;
+                        border-left: 1px solid #f1f1f1;
+                    }
+
+                    @media(max-width: $paper-screen-desktop) {
+                        &:first-child {
+                            @include paper-post-large-image($paper-thumb-height-small, $paper-width-full);
+                        }
+
+                        &:nth-child(2) {
+                            @include paper-post-large-image($paper-thumb-height-small, $paper-width-half);
+                        }
+
+                        &:nth-child(n+3) {
+                            @include paper-post-grid-image($paper-thumb-height-small, $paper-width-half);
+                        }
+                    }
+
+                    @media(max-width: $paper-screen-tablet) {
+
+                        &:first-child,
+                        &:nth-child(2) {
+                            @include paper-post-large-image($paper-thumb-height-medium, $paper-width-half);
+                        }
+
+                        &:nth-child(n+3) {
+                            @include paper-post-grid-image($paper-thumb-height-small, $paper-width-third);
+                        }
+                    }
+
+                    @media(max-width: $paper-screen-phone) {
+
+                        &:first-child,
+                        &:nth-child(2) {
+                            @include paper-post-large-image($paper-thumb-height-small, $paper-width-full);
+                        }
+
+                        &:nth-child(n+3) {
+                            @include paper-post-grid-image($paper-thumb-height-small, $paper-width-full);
+                        }
+                    }
+
+                    @media(max-width: $paper-screen-mini) {
+
+                        &:first-child,
+                        &:nth-child(2) {
+                            @include paper-post-large-image($paper-thumb-height-medium, $paper-width-full);
+                        }
+
+                        &:nth-child(n+3) {
+                            @include paper-post-grid-image($paper-thumb-height-medium, $paper-width-full);
+                        }
+                    }
+                }
+            }
+
+            .paper-secondary-post-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                border-left: 1px solid #f1f1f1;
+                width: 30%;
+
+                @media(max-width: $paper-screen-desktop) {
+                    width: 35%;
+                }
+
+                @media(max-width: $paper-screen-tablet) {
+                    display: none;
+                }
+
+                .post-tmpl {
+                    margin: 0;
+                    padding-bottom: 0;
+                    @include paper-post-info-image(auto, $paper-width-full);
+
+                    &:not(:nth-child(5)) {
+                        .post-media {
+                            border-bottom: 1px solid $EDITOR_BORDER_LIGHTGREY;
+                        }
+                    }
+                }
+            }
+        }
+
+        /** end first section with first and second container **/
+
+        /** start second section with third container **/
+        section:not(first-child) {
+            width: 100%;
+            display: flex;
+
+            .paper-third-post-container {
+                padding: 0;
+                width: 100%;
+                height: auto;
+                flex: 1;
+                border-top: 1px solid #f1f1f1;
+
+                .post-tmpl {
+                    @include paper-post-grid-text($paper-thumb-height-small, $paper-width-quarter, block, none);
+
+                    @media(max-width: $paper-screen-desktop) {
+                        @include paper-post-grid-text($paper-thumb-height-small, $paper-width-third, block, none);
+                    }
+
+                    @media(max-width: $paper-screen-tablet) {
+                        @include paper-post-grid-text($paper-thumb-height-small, $paper-width-half, block, none);
+                    }
+
+                    @media(max-width: $paper-screen-phone) {
+                        @include paper-post-grid-text($paper-thumb-height-medium, $paper-width-full, block, none);
+                    }
+                }
+            }
+        }
+
+        /** end second section with third container **/
+    }
+}

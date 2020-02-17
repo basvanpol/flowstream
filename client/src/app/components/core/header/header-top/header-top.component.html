@@ -1,0 +1,27 @@
+<header *ngIf="showHeader" id="navbar_top" class="header header__navbar header__navbar--top"
+    [ngStyle]="{'top': headerTop+'px'}">
+    <div class="header__logo-container">
+        <div (click)="goHome()" class="header__logo--large"
+            [ngClass]="{'header__logo--selected': selectedState === 'home'}">
+        </div>
+    </div>
+    <div class="header__menu-container">
+        <!-- <user-options></user-options> -->
+        <div (click)="onAddPost()" class="header__add-post-button">
+            <app-icon-font [iconClass]="'icon-plus'" class="header__add-post-button-icon"></app-icon-font>
+        </div>
+        <app-dropdown class="dropdown--header-profile dropdown--right">
+            <ng-container selector>
+                <div class="dropdown__selector">
+                    <app-icon-font [iconClass]="'icon-profile'" class="header__add-post-button-icon"></app-icon-font>
+                </div>
+            </ng-container>
+            <ng-container list>
+                <ul>
+                    <li><a (click)="onLogOut()">Sign out</a></li>
+                </ul>
+            </ng-container>
+        </app-dropdown>
+        <!-- <button mat-button disableRipple class="a-button" (click)="onSignInGoogle()">Auth google foto's</button> -->
+    </div>
+</header>

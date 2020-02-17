@@ -1,0 +1,70 @@
+.mat-form-input {
+  width: 100%;
+  .mat-form-field-wrapper {
+    width: 100%;
+    .mat-form-field-flex {
+      width: 100%;
+      .mat-form-field-infix {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.form-wrapper {
+  padding: 15px 20px;
+}
+
+.form-wrapper input:not([type="checkbox"]) {
+  position: relative;
+  float: left;
+  height: 42px;
+  padding: 10px;
+  vertical-align: middle;
+  border: 1px solid rgba(91, 90, 90, 0.3);
+  background: #fff;
+  border-radius: 2px;
+  -webkit-appearance: textarea;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 2px 0 hsla(0, 0%, 66%, 0.01);
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.mat-form-field-flex {
+  height: 50px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-end !important;
+}
+
+.mat-form-field-flex,
+.mat-form-field-outline {
+  &:hover,
+  &:focus,
+  &:active {
+    .mat-form-field-outline-start,
+    .mat-form-field-outline-gap,
+    .mat-form-field-outline-end {
+      border-width: 1px !important;
+      border-color: grey !important;
+    }
+  }
+}
+
+.mat-form-field-outline {
+  .mat-form-field-outline-start,
+  .mat-form-field-outline-gap,
+  .mat-form-field-outline-end {
+    border-width: 1px !important;
+  }
+}
+
+.mat-form-field-appearance-outline .mat-form-field-wrapper {
+  margin: 0;
+  padding: 0;
+}

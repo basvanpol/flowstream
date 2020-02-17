@@ -1,0 +1,33 @@
+<div ng-show="false" class="sidebar__ruby-holder">
+    <div (click)="isOpen = true" class="sidebar__ruby-button">
+        <app-icon-font [iconClass]="'icon-ruby'"></app-icon-font>
+    </div>
+</div>
+<div class="right-menu-container" [ngClass]="{'selected': isOpen}" (mouseleave)="isOpen = false">
+    <div class="right-container-scroll">
+        <div class="filter-menu-container">
+            <ul>
+                <li *ngFor="let flow of flows" >
+                    <a (click)="onSelectFlow(flow._id)">{{flow.title}}</a>
+                    <app-dropdown class="dropdown--header-profile dropdown--right">
+                        <ng-container selector>
+                            <div>
+                                <app-icon-font [iconClass]="'icon-more'" class="header__add-post-button-icon"></app-icon-font>
+                            </div>
+                        </ng-container>
+                        <ng-container list>
+                            <ul>
+                                <li><a (click)="onDeleteFlow(flow._id)">Delete flow</a></li>
+                            </ul>
+                        </ng-container>
+                    </app-dropdown>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="sidebar-footer">
+        <div (click)="openAddFlowDialog()" class="btn-red menu-right">
+            <span>Add new flow</span>
+        </div>
+    </div>
+</div>

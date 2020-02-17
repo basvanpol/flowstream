@@ -1,0 +1,176 @@
+@import "variables";
+
+/********************************************** post tmpl */
+.post-tmpl {
+  position: relative;
+  float: left;
+  margin: 10px 8px 10px 8px;
+  padding: 0 0 18px 0;
+  cursor: pointer;
+
+  @include post-background($EDITOR_WHITE);
+  @include post-radius(5px);
+  @include post-drop-shadow(0, 1px, 1px, 0, rgba(0, 0, 0, 0.075));
+
+  @media screen and (max-width: $screen-tablet) {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .post-padding {
+    margin: 0 auto;
+    padding: 0;
+
+    .post-header {
+      width: 100%;
+      max-height: 60px;
+      padding-left: 20px;
+
+      &.solo {
+        display: block;
+      }
+
+      &.media {
+        display: none;
+      }
+
+
+
+      @include post-radius(5px);
+
+      .post-feed-thumb {
+        position: relative;
+        float: left;
+        
+
+        img {
+          margin: 18px 12px 5px 0px;
+          width: 30px;
+          height: 30px;
+          @include post-radius(50%);
+          @include post-drop-shadow(0, 1px, 0px, 0, rgba(0, 0, 0, 0.05));
+
+          &.favicon {
+            width: auto;
+            height: auto;
+            max-width: 30px;
+            max-height: 30px;
+          }
+        }
+      }
+
+      .post-author-container {
+        float: left;
+        width: calc(100% - 60px);
+
+        .post-feed-name {
+          float: left;
+          margin: 0;
+          padding: 14px 0 0 0;
+          width: 100%;
+          box-sizing: border-box;
+          text-align: left;
+
+          a {
+            @include thumb-feed-text($EDITOR_TEXT_DARKGREY, 10pt);
+            margin: 0 !important;
+            padding: 0 !important;
+            font-weight: 600;
+            line-height: $DEFAULT_TEXT_LINE_HEIGHT;
+            overflow: hidden;
+            text-decoration: none;
+            position: relative;
+            z-index: 5;
+
+            &:hover {
+              text-decoration: underline;
+            }
+
+          }
+
+          p {
+            display: none;
+          }
+        }
+
+        .post-feed-icon {
+          position: relative;
+          float: left;
+
+          .icon {
+            position: relative;
+            float: left;
+            top: 4px;
+          }
+        }
+
+        .post-feed-date {
+          position: relative;
+          float: left;
+
+          .icon {
+            position: relative;
+            float: left;
+            top: 4px;
+          }
+
+          p {
+            @include thumb-feed-text($EDITOR_TEXT_GREY, 9pt);
+            margin: 0;
+            float: left;
+            font-weight: 300;
+            padding: 0 0 0 3px;
+          }
+        }
+      }
+    }
+
+
+    .post-media {
+      position: relative;
+      float: left;
+      display: flex;
+      flex-direction: column;
+      top: 0px;
+      width: 100%;
+      padding: 15px 0 0 0;
+      margin: 0;
+      overflow: hidden;
+      border-radius: 0 0 5px 5px;
+      background: $EDITOR_WHITE;
+
+    }
+  }
+
+  .post-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0 auto;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    float: left;
+
+    .post__thumb-options {
+      display: none;
+    }
+
+    &:hover {
+      .post__thumb-options {
+        display: block;
+      }
+    }
+  }
+}
+
+.scrape-post-title{
+  font-weight: bold;
+  font-size: $font-size-large;
+}
+
+.add-post{
+  padding-bottom: 20px !important;
+}

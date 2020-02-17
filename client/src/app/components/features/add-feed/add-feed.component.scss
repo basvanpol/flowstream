@@ -1,0 +1,145 @@
+@import "card";
+@import "popup";
+@import "variables";
+@import "buttons";
+
+.add-feed-header__container {
+  @include popup-header;
+  margin: 0;
+  width: 100%;
+  padding: 12px $default-element-padding-large;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+}
+
+.add-feed-sub-header__container {
+  margin: 0;
+  display: flex;
+  width: 100%;
+  padding: 5px 0 10px;
+  height: 0px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: flex-end;
+}
+
+.add-feed__close {
+  margin: 0;
+  margin-right: -15px;
+  cursor: pointer;
+}
+
+.add-feed-component__holder {
+  position: fixed;
+  z-index: 999;
+  overflow-y: scroll;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.add-feed__icon-container {
+  display: flex;
+}
+
+.add-feed__search-header-bar {
+  margin-right: $default-element-margin;
+}
+
+.search-twitter-feeds__form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.search-feed__container {
+  z-index: 2;
+
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0 !important;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin-top: 0 !important;
+    display: inline-flex;
+    align-items: baseline;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 15px !important;
+  }
+}
+
+.add-feed__search-result-container,
+.add-feed__group-feeds-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: auto;
+}
+
+.add-feed__item-card {
+  @extend .fs-card;
+
+  p {
+    color: #464646;
+    text-align: center;
+    text-decoration: none;
+    line-height: 20px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+
+  &.selected {
+    background: #fff;
+    border: none;
+
+    &:hover {
+      .external-feed-subscribe {
+        /* Rectangle 5: */
+        background-image: -o-linear-gradient(-89deg, rgba(236, 236, 236, 0.5) 0%, #ffffff 28%);
+        background-image: -moz-linear-gradient(-89deg, rgba(236, 236, 236, 0.5) 0%, #ffffff 28%);
+        background-image: -ms-linear-gradient(-89deg, rgba(236, 236, 236, 0.5) 0%, #ffffff 28%);
+        background-image: linear-gradient(-179deg, rgba(236, 236, 236, 0.5) 0%, #ffffff 28%);
+        border: 1px solid #a2a7a8;
+
+        &:hover {
+          border: 1px solid red;
+
+          p {
+            content: "Unsubscribe";
+          }
+        }
+      }
+    }
+  }
+}
+
+.add-feed__manage-buttons-holder {
+  background: none;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+}
+
+.add-feed__categories-button {
+  @include small-text-button;
+  margin-top: 20px;
+  span {
+    color: $EDITOR_TEXT_GREY !important;
+  }
+
+  &:hover {
+    span {
+      color: $EDITOR_TEXT_DARKGREY !important;
+    }
+  }
+}

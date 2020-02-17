@@ -1,0 +1,483 @@
+
+
+
+
+$font-family-primary: 'Noto Sans', sans-serif;
+$font-family-roboto: 'Roboto', sans-serif;
+
+$font-weight-normal: 500;
+$font-weight-bold: 700;
+
+$default-text-size: 14px;
+
+// Media queries breakpoints
+// --------------------------------------------------
+
+// Mini screen / phone
+// Note: Deprecated $screen-xs and $screen-phone as of v3.0.1
+$screen-xxs: 320px;
+$screen-xxs-min: $screen-xxs;
+$screen-mini: $screen-xxs-min;
+
+// Extra small screen / phone
+$screen-xs: 480px;
+$screen-xs-min: $screen-xs;
+$screen-phone: $screen-xs-min;
+
+// Small screen / tablet
+$screen-sm: 849px;
+$screen-sm-min: $screen-sm;
+$screen-tablet: $screen-sm-min;
+
+// Medium screen / desktop
+$screen-md: 1099px;
+$screen-md-min: $screen-md;
+$screen-desktop: $screen-md-min;
+
+// Large screen / wide desktop
+$screen-lg: 1299px;
+$screen-lg-min: $screen-lg;
+$screen-lg-desktop: $screen-lg-min;
+
+// slide menu
+$ap-menu-main-duration: 320ms;
+$ap-menu-z-index: 99999;
+$ap-menu-close-effect: -250px;
+$ap-menu-transition-transform-opacity-duration: ($ap-menu-main-duration * .5);
+$ap-menu-transition-opacity: 0.5;
+$ap-menu-width: 292px;
+
+/*************
+******************************** less colors
+**********************************************************
+*******************************************************************************/
+$EDITOR_GREEN: #31bf6a;
+$EDITOR_GREEN_HOVER: #33b467;
+$EDITOR_GREEN_MILD: #31bf66;
+$EDITOR_GREEN_MEDIUM: #15ab61;
+$EDITOR_RED: #ee4d37;
+$EDITOR_GREEN_OPACITY: rgba(95, 222, 176, 0.19);
+$EDITOR_ORANGE: #ff8a00;
+$EDITOR_AZURI: #0095f4;
+$EDITOR_PURPLE: #8c3be8;
+
+$EDITOR_WHITE: #ffffff;
+$EDITOR_GREY: #C6CED1;
+$EDITOR_BLACK: #000000;
+$EDITOR_DARK_GREY: #464646;
+$EDITOR_DARKER_GREY: #A2A7A8;
+$EDITOR_SUPER_LIGHTGREY: #f5f5f5;
+$EDITOR_VERY_LIGHTGREY: #f1f1f1;
+$EDITOR_LIGHTGREY: #dddddd;
+
+$EDITOR_ICON_WHITE: #ffffff;
+$EDITOR_ICON_GREY: #333333;
+$EDITOR_ICON_DEFAULT: #d3cfc8;
+$EDITOR_ICON_HEADER: #b7b7b7;
+$EDITOR_ICON_DARK: #000000;
+
+$EDITOR_BORDER_LIGHTGREY: #efefef;
+$EDITOR_DARKGREY: #464646;
+$EDITOR_MENU_SELECTED: #EA6055;
+
+$EDITOR_BACK_BODY: #f7f8f8;
+$EDITOR_BACK_DARKGREY: #7a7978;
+$EDITOR_BACK_GREY: #7a7978;
+$EDITOR_BACKGROUND: #f1f1f1;
+$EDITOR_BACKGROUND_WHITE: #ffffff;
+$EDITOR_SUPER_LIGHT_BACKGROUND: #fafafa;
+$EDITOR_DROPDOWN_BACKGROUND: #f8f8f8;
+$EDITOR_BACKGROUND_OPACITY: rgba(241, 241, 241, 0.79);
+$EDITOR_BACKGROUND_OPACITY_LIGHT: rgba(241, 241, 241, 0.19);
+$EDITOR_STRIP_BACKGROUND: #f6f6ee;
+$HEADER_BORDER_GREY: #e7e7e7;
+
+$EDITOR_TEXT_WHITE: #ffffff;
+$EDITOR_TEXT_GREEN: #ed1b24;
+$EDITOR_TEXT_GREY: #bababa;
+$EDITOR_TEXT_DARK: #232323;
+$EDITOR_TEXT_LIGHTGREY: #d1d1d1;
+$EDITOR_TEXT_DARKGREY: #181818;
+$EDITOR_TEXT_BLACK: #121212;
+$EDITOR_TEXT_GREY_BOLD: #bababa;
+$EDITOR_TEXT_BLUE: #0020fb;
+$EDITOR_TEXT_BLUE_TITLE: #26a7e0;
+$EDITOR_GRADIENT_GREEN1: #91dcc5;
+$EDITOR_GRADIENT_GREEN2: #5fdeb0;
+$EDITOR_DEFAULT_BUTTON_TEXT_COLOR: rgba(116, 119, 121, 0.8);
+$EDITOR_DEFAULT_BUTTON_TEXT_HOVER_COLOR: rgba(85, 89, 91, 0.9);
+
+$EDITOR_BUTTON_YELLOW: #f6d300;
+$EDITOR_BUTTON_YELLOW_ALPHA: rgba(246, 211, 0, 0.45);
+$EDITOR_BUTTON_YELLOW_HOVER: #edcb00;
+$EDITOR_BUTTON_BLUE: rgba(40, 71, 232, 0.93);
+$EDITOR_BUTTON_BLUE_HOVER: #445fad;
+$EDITOR_BUTTON_GREEN: #25C067;
+$EDITOR_BUTTON_GREEN_HOVER: #1FBB61;
+$EDITOR_BUTTON_RED_ALPHA: rgba(244, 68, 47, 0.85);
+$EDITOR_BUTTON_RED: rgba(244, 68, 47, 0.93);
+$EDITOR_BUTTON_RED_HOVER: rgba(233, 53, 31, 0.93);
+$EDITOR_BUTTON_BLUE: rgba(61, 86, 244, 0.93);
+$EDITOR_BUTTON_BLUE_HOVER: rgba(38, 72, 247, 0.93);
+$EDITOR_BUTTON_GREY: #d1d1d1;
+$EDITOR_BUTTON_DISABLED: #c1c1c1;
+$TWITTER_BLUE: #00aced;
+$TWITTER_BLUE_HOVER: #0084b4;
+
+$EDITOR_DROPDOWN_RADIUS: 5px;
+$EDITOR_BUTTON_RADIUS: 50px;
+
+$FOOTER_BACKGROUND: #f6f6ee;
+$PAPER-FONT: $font-family-primary;
+
+$DEFAULT_TEXT_LINE_HEIGHT: 1.6;
+
+$FOOTER_BACKGROUND: #f6f6ee;
+
+$BASE-FONT: $font-family-primary;
+
+$DEFAULT_TEXT_LINE_HEIGHT: 1.5;
+$DEFAULT_BUTTON_TEXT_SIZE: 12pt;
+$default_button-height: 45px;
+
+$default-background-color: #f1f1f1;
+$lightGrey  : rgba(172,192,206,1);
+$card-border-radius-default: 8px !default;
+$default-text-color: $EDITOR_TEXT_DARKGREY;
+$default-border-color: #cecece;
+$default-element-padding: 15px;
+$default-element-padding-large: 30px;
+$default-element-margin: 15px;
+$default-element-margin-large: 30px;
+
+/** mixins **/
+@mixin background-clip() {
+  border: none;
+  background: none;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+}
+
+@mixin background-box() {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+@mixin post-border($thickness: 1px, $type: solid, $color: #ffffff) {
+  border: $thickness $type $color;
+}
+
+@mixin post-background($color: #ffffff) {
+  background: $color;
+}
+
+@mixin post-background-size($size: 32px, $color: #ffffff) {
+  background: $color;
+  background-size: $size $size !important;
+  -o-background-size: $size $size !important;
+  -moz-background-size: $size $size !important;
+  -webkit-background-size: $size $size !important;
+}
+
+@mixin custom-border($thickness: 1px, $top: rgba(255, 255, 255, 1), $right: rgba(83, 195, 155, 1), $bottom: rgba(83, 195, 155, 1), $left: rgba(255, 255, 255, 1)) {
+  border-left: $thickness solid $left;
+  border-top: 2px solid rgba(255, 255, 255, 1);
+  border-right: 2px solid rgba(83, 195, 155, 1);
+  border-bottom: 2px solid rgba(83, 195, 155, 1);
+}
+
+@mixin post-radius($radius: 4px) {
+  border-radius: $radius; /* Opera 10.50, IE and CSS3 */
+  -moz-border-radius: $radius; /* Firefox */
+  -khtml-border-radius: $radius; /* Linux browsers */
+  -webkit-border-radius: $radius; /* Safari and Chrome */
+}
+
+@mixin custom-border-radius($topLeft: 0px, $topRight: 0px, $bottomRight: 0px, $bottomLeft: 0px) {
+  border-top-left-radius: $topLeft; /* Opera 10.50, IE and CSS3 */
+  -moz-border-top-left-radius: $topLeft; /* Firefox */
+  -khtml-border-top-left-radius: $topLeft; /* Linux browsers */
+  -webkit-border-top-left-radius: $topLeft; /* Safari and Chrome */
+
+  border-top-right-radius: $topRight;
+  -moz-border-top-right-radius: $topRight;
+  -khtml-border-top-right-radius: $topRight;
+  -webkit-border-top-right-radius: $topRight;
+
+  border-bottom-right-radius: $bottomRight;
+  -moz-border-bottom-right-radius: $bottomRight;
+  -khtml-border-bottom-right-radius: $bottomRight;
+  -webkit-border-bottom-right-radius: $bottomRight;
+
+  border-bottom-left-radius: $bottomLeft;
+  -moz-border-bottom-left-radius: $bottomLeft;
+  -khtml-border-bottom-left-radius: $bottomLeft;
+  -webkit-border-bottom-left-radius: $bottomLeft;
+}
+
+/* box-shadow: h-shadow v-shadow blur spread color inset; */
+@mixin post-drop-shadow($hor: 1px, $ver: 1px, $blur: 0px, $spread: 0px, $color: #000000) {
+  box-shadow: $hor $ver $blur $spread $color;
+  -moz-box-shadow: $hor $ver $blur $spread $color;
+  -webkit-box-shadow: $hor $ver $blur $spread $color;
+  filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=$hor, Direction=45, Color=$color)"; /* For IE 5.5 - 7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=$hor, Direction=45, Color=$color)"; /* For IE 8 */
+}
+
+@mixin insetShadow($x:0, $y:0, $blur:0, $color:#010000) {
+  box-shadow: inset $x $y $blur $color;
+  -o-box-shadow: inset $x $y $blur $color;
+  -webkit-box-shadow: inset $x $y $blur $color;
+  -moz-box-shadow: inset $x $y $blur $color;
+}
+
+@mixin thumb-drop-shadow($hor: 1px, $ver: 1px, $blur: 0px, $color: #000000) {
+  box-shadow: $hor $ver $blur $color;
+  -moz-box-shadow: $hor $ver $blur $color;
+  -webkit-box-shadow: $hor $ver $blur $color;
+  filter: 'progid:DXImageTransform.Microsoft.Shadow(Strength=$ver, Direction=45, Color=$color)'; /* For IE 5.5 - 7 */
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Shadow(Strength=$ver, Direction=45, Color=$color)'; /* For IE 8 */
+}
+
+@mixin thumb-background($size: 32px) {
+  background-size: $size $size !important;
+  -o-background-size: $size $size !important;
+  -moz-background-size: $size $size !important;
+  -webkit-background-size: $size $size !important;
+}
+
+@mixin popup-radius($radius: 4px) {
+  border-radius: $radius; /* Opera 10.50, IE and CSS3 */
+  -moz-border-radius: $radius; /* Firefox */
+  -khtml-border-radius: $radius; /* Linux browsers */
+  -webkit-border-radius: $radius; /* Safari and Chrome */
+}
+
+/* box-shadow: h-shadow v-shadow blur spread color inset; */
+@mixin popup-drop-shadow($hor: 1px, $ver: 1px, $blur: 0px, $color: #000000) {
+  box-shadow: $hor $ver $blur $color;
+  -moz-box-shadow: $hor $ver $blur $color;
+  -webkit-box-shadow: $hor $ver $blur $color;
+  filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=$hor, Direction=45, Color=$color)"; /* For IE 5.5 - 7 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=$hor, Direction=45, Color=$color)"; /* For IE 8 */
+}
+
+@mixin background-opacity($opacity: 0.2) {
+  opacity: $opacity;
+  -moz-opacity: $opacity;
+  -khtml-opacity: $opacity;
+  -ms-filter: 'alpha(opacity=20)';
+  filter: alpha(opacity=20);
+  filter: 'progid:DXImageTransform.Microsoft.Alpha(opacity=$opacity)';
+}
+
+@mixin header-title-text($color: #333333, $size: 11pt) {
+  margin: 0;
+  padding: 0px;
+
+  color: $color;
+  font-size: $size;
+  font-family: 'Noto Sans', sans-serif;
+  line-height: 1.0;
+  font-weight: 400;
+  text-align: left;
+  text-indent: 0px;
+  text-decoration: none;
+  outline: none;
+}
+
+@mixin button-label-text($color: #333333, $size: 11pt) {
+  @include text-select-none();
+  margin: 0;
+  padding: 0px;
+  color: $color;
+  font-size: $size;
+  font-family: $font-family-primary;
+  line-height: 1.5;
+  font-weight: 400;
+  text-align: left;
+  text-indent: 0px;
+}
+
+@mixin thumb-title-text($color: #333333, $size: 10pt) {
+  margin: 0;
+  padding: 0px;
+  color: $color;
+  font-size: $size;
+  font-family: $font-family-primary;
+  line-height: 1.8;
+  font-weight: 400;
+  text-align: left;
+}
+
+@mixin thumb-platform-text($color: #333333, $size: 14pt) {
+  margin: 0;
+  padding: 0px;
+
+  color: $color;
+  font-size: $size;
+  font-family: $font-family-primary;
+  line-height: 1.8;
+  font-weight: 400;
+  text-align: left;
+  text-indent: 0px;
+}
+
+@mixin thumb-feed-text($color: #313131, $size: 8pt) {
+  @include text-select-none();
+  margin: 0;
+  padding: 0px;
+
+  color: $color;
+  font-size: $size;
+  font-family: $font-family-primary;
+  line-height: 1.5;
+  font-weight: 400;
+  text-align: left;
+  text-indent: 0px;
+}
+
+@mixin textarea-box-shadow {
+  border: 1px solid rgba(91, 90, 90, 0.3);
+  background: rgba(255, 255, 255, 1);
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-appearance: textarea;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(168, 168, 168, 0.01) inset;
+  -moz-box-shadow: 0px 1px 2px 0px rgba(168, 168, 168, 0.01) inset;
+  box-shadow: 0px 1px 2px 0px rgba(168, 168, 168, 0.01) inset;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+
+}
+
+@mixin text-select-none {
+  user-select: none;
+  -ms-user-select: none; /* IE10+ */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -webkit-touch-callout: none;
+}
+
+@mixin thumb-column($columns) {
+  -moz-column-count: $columns;
+  -webkit-column-count: $columns;
+  -moz-column-gap: 4em;
+  -webkit-column-gap: 4em;
+  -moz-column-rule-style: solid;
+  -moz-column-rule-color: #fff;
+  -moz-column-rule-width: 2px;
+  -webkit-column-rule-style: solid;
+  -webkit-column-rule-color: #fff;
+  -webkit-column-rule-width: 5px;
+}
+
+@mixin thumb-option-icon-btn(
+      $backgroundColorDefault, $iconFillColorDefault,
+      $backgroundColorHover, $iconFillColorHover,
+      $backgroundColorLiked, $iconFillColorLiked,
+      $backgroundColorLikedHover, $iconFillColorLikedHover){
+
+  .icon {
+    fill: $iconFillColorDefault;
+  }
+
+  &:hover {
+    background: $backgroundColorHover;
+
+    .icon {
+      fill: $iconFillColorHover;
+    }
+  }
+
+  &.liked {
+    background: $backgroundColorDefault;
+    background: $backgroundColorLiked;
+    border: none;
+    box-shadow: none !important;
+    margin: -1px -1px 0 1px;
+    padding: 10px;
+
+    &:hover {
+      background: $backgroundColorLikedHover;
+    }
+
+    .icon {
+      fill: $iconFillColorLiked;
+    }
+  }
+
+}
+
+@mixin map-background {
+  /* background:url('your_transparent.png'); */
+  /*IE conditional*/
+
+  /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='your_transparent.png', sizingMethod='scale');*/
+  background: none !important;
+}
+
+[class^="pre-"],
+[class*="pre-"] {
+  font-family: $font-family-primary;
+  speak: none;
+  font-size: 9pt;
+  color: $EDITOR_TEXT_GREY;
+  font-style: normal;
+  line-height: 14pt !important;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  float: right;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+//== NAVIGATION Menu mixins
+//
+//##
+
+@mixin transform($value) {
+  -webkit-transform: $value;
+  -ms-transform: $value;
+  -o-transform: $value;
+  transform: $value;
+}
+
+@mixin translateX($pixels) {
+  -webkit-transform: translateX($pixels);
+  -ms-transform: translateX($pixels); // IE9 only
+  -o-transform: translateX($pixels);
+  transform: translateX($pixels);
+}
+
+@mixin translateY($pixels) {
+  -webkit-transform: translateY($pixels);
+  -ms-transform: translateY($pixels); // IE9 only
+  -o-transform: translateY($pixels);
+  transform: translateY($pixels);
+}
+
+@mixin transition-transform-opacity($transition, $opacity) {
+  -webkit-transition: -webkit-transform $transition, opacity $opacity;
+  -moz-transition: -moz-transform $transition, opacity $opacity;
+  -o-transition: -o-transform $transition, opacity $opacity;
+  transition: transform $transition, opacity $opacity;
+}
+
+@mixin opacity-compatibility($opacity) {
+  -khtml-opacity: $opacity;
+  -moz-opacity: $opacity;
+  //@include opacity($opacity);
+}

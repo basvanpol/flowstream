@@ -1,0 +1,9 @@
+@mixin popup-drop-shadow($hor: 1px, $ver: 1px, $blur: 0px, $color: #000000) {
+    box-shadow: $hor $ver $blur $color;
+    -moz-box-shadow: $hor $ver $blur $color;
+    -webkit-box-shadow: $hor $ver $blur $color;
+    filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=$hor, Direction=45, Color=$color)";
+    /* For IE 5.5 - 7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=$hor, Direction=45, Color=$color)";
+    /* For IE 8 */
+}

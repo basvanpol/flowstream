@@ -1,0 +1,8 @@
+<ng-container>
+  <div (click)="toggleMenu()">
+    <ng-content select=[selector]></ng-content>
+  </div>
+  <div *ngIf="showMenu" class="dropdown__list">
+    <ng-content select=[list]></ng-content>
+  </div>
+</ng-container>

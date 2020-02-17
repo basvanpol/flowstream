@@ -1,0 +1,55 @@
+<div class="post__thumb-options">
+    <div uib-dropdown-toggle class="dropdown-button"></div>
+    <ul class="post__thumb-options-list">
+        <li (click)="addToFlow($event)" class="post__thumb-options-list-item post__thumb-options-list-item--bright">
+            <app-icon-font [iconClass]="'icon-ruby'" class="header__add-post-button-icon"></app-icon-font>
+        </li>
+        <!-- <li class="icon-rollout-holder">
+                <ul icon-rollout-directive rollout-options="likeOptions" *ngIf="post.liked === undefined" roll-enabled="(post.liked != undefined) ? ((post.liked) ? false : true) : true">
+                <ul>
+                    <li (click)="likePost('flushed')" class="vote flushed">
+                        <app-icon-font [iconClass]="icon-flush" class="icon-option"></app-icon-font>
+                    </li>
+                    <li (click)="likePost('down')" class="vote down">
+                        <app-icon-font [iconClass]="icon-vote-down" class="icon-option"></app-icon-font>
+                    </li>
+                    <li (click)="likePost('up')" class="vote up">
+                        <app-icon-font [iconClass]="icon-vote-up" class="icon-option"></app-icon-font>
+                    </li>
+                    <li (click)="likePost('like')" class="vote like">
+                        <app-icon-font [iconClass]="icon-like" class="icon-option"></app-icon-font>
+                    </li>
+                    <li (click)="likePost('boost')" class="vote boost">
+                        <app-icon-font [iconClass]="icon-boost" class="icon-option"></app-icon-font>
+                    </li>
+                </ul>
+                <ul ng-show="post.liked">
+                    <li class="vote liked" [ngClass]="post.vote">
+                        <app-icon-font [iconClass]="icon-flush" class="icon-option" *ngIf="post.vote==='flushed'"></app-icon-font>
+                        <app-icon-font [iconClass]="icon-vote-down" class="icon-option" *ngIf="post.vote==='down'"></app-icon-font>
+                        <app-icon-font [iconClass]="icon-vote-up" class="icon-option" *ngIf="post.vote==='up'"></app-icon-font>
+                        <app-icon-font [iconClass]="icon-boost" class="icon-option" *ngIf="post.vote==='boost'"></app-icon-font>
+                        <app-icon-font [iconClass]="icon-like" class="icon-option" *ngIf="post.vote==='like' || post.vote===undefined"></app-icon-font>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li class="icon-rollout-holder">
+                <ul icon-rollout-directive rollout-options="$ctrl.shareOptions" class="share-icon-holder" roll-enabled="true">
+                    <li (click)="sharePost()">
+                        <app-icon-font [iconClass]="icon-facebook-outline" class="icon-facebook-outline"></app-icon-font>
+                    </li>
+                    <li (click)="sharePost()">
+                        <app-icon-font [iconClass]="icon-twitter-outline" class="icon-twitter-outline"></app-icon-font>
+                    </li>
+                    <li (click)="$ctrl.sharePost()">
+                        <app-icon-font [iconClass]="icon-send-mail-outline" class="icon-send-mail-outline"></app-icon-font>
+                    </li>
+                    <li (click)="$ctrl.sharePost()">
+                        <app-icon-font [iconClass]="icon-share" class="icon-share"></app-icon-font>
+                    </li>
+                </ul>
+            </li> -->
+    </ul>
+</div>

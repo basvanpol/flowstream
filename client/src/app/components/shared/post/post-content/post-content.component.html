@@ -1,0 +1,34 @@
+<div [ngSwitch]="content.mainType">
+    <!-- thumb -->
+    <div *ngSwitchCase="'THUMB'" class="postGalleryImage thumb" [ngClass]="content.platformClass" (metaScraped)="onMetaScraped($event)">
+        <app-image-loaded [source]="content.source" ></app-image-loaded>
+    </div>
+    <!-- image -->
+    <div *ngSwitchCase="'IMAGE'" class="postGalleryImage">
+        <app-image-loaded [scrapeLink]="(content.scrapeLink)? content.scrapeLink : ''"
+            [promisedImage]="content.isPromisedImage" [source]="content.source"
+            [showFull]="showFull" (metaScraped)="onMetaScraped($event)"></app-image-loaded>
+    </div>
+    <div class="post-content-text-holder">
+        <!-- text -->
+        <ng-container *ngIf="content.htmlContent != '' || content.htmlSummaryContent !== ''">
+            <div *ngSwitchCase="'TEXT'" class="postContentHtml" [ngClass]="content.platformClass">
+                <div *ngIf="showFull" [innerHTML]="content.htmlContent"></div>
+                <div *ngIf="!showFull" [innerHTML]="content.htmlSummaryContent"></div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!!content.description || !!content.source ">
+            <div *ngSwitchCase="'TEXT_EXT'" class="postContentHtml" [ngClass]="content.platformClass">
+                <div>{{content.source}}</div>
+                <div *ngIf="showFull" [innerHTML]="content.description"></div>
+            </div>
+        </ng-container>
+        <!-- link -->
+        <div *ngSwitchCase="'LINK'" class="postContentLink" [ngClass]="content.platformClass">
+            <a href="{{content.source }}" target="_blank" title="{{content.source}}"
+                title="{{ content.source}}">
+                {{content.location}}
+            </a>
+        </div>
+    </div>
+</div>

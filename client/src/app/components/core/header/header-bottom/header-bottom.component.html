@@ -1,0 +1,19 @@
+<div class="header header__navbar header__navbar--bottom" *ngIf="showHeader" >
+  <!-- <channel-title></channel-title>
+  <action-menu></action-menu> -->
+  <div class="header__pref-menu-container" *ngIf="showOptions">
+      <ul>
+          <li>
+              <!-- <date-picker-component></date-picker-component> -->
+          </li>
+          <li>
+              <!-- <view-options></view-options> -->
+          </li>
+      </ul>
+  </div>
+  <div *ngIf="showPublishButton" class="header__publish-button-container">
+      <div ng-click="$ctrl.openEmbedPopup()" class="header__publish-button btn-clear header-share-button">
+          <span>Publish</span>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,324 @@
+@import "variables";
+
+@mixin paper-post-gradient($top: 18px, $bottom: 0px) {
+  @include background-gradient();
+  opacity: 0.75;
+  position: absolute;
+  height: auto;
+  display: table-cell;
+  top: $top;
+  left: 0;
+  right: 0;
+  bottom: $bottom;
+  z-index: 0;
+}
+
+@mixin background-gradient() {
+  background: #444; /* For browsers that do not support gradients */
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+39,000000+62,000000+63,000111+100&0+39,0.55+63,0.55+63,1+100 */
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.2) 39%, rgba(0, 0, 0, 0.53) 62%, rgba(0, 0, 0, 0.55) 63%, rgba(0, 1, 17, 1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.2) 39%, rgba(0, 0, 0, 0.53) 62%, rgba(0, 0, 0, 0.55) 63%, rgba(0, 1, 17, 1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 39%, rgba(0, 0, 0, 0.53) 62%, rgba(0, 0, 0, 0.55) 63%, rgba(0, 1, 17, 1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#000111', GradientType=0); /* IE6-9 */
+}
+
+@mixin paper-post-header($width, $display-solo, $display-media) {
+  width: $width;
+  padding-left: 0;
+  order: 0;
+
+  &.solo {
+    display: $display-solo;
+  }
+
+  &.media {
+    display: $display-media;
+  }
+}
+
+/* text */
+@mixin post-title-size() {
+  p, a, p a {
+    font-size: $font-size-large;
+
+    @media(max-width: $paper-screen-desktop) {
+      font-size: $font-size-medium;
+    }
+
+    @media (max-width: $screen-tablet) {
+      font-size: $font-size-small;
+    }
+
+    @media (max-width: $screen-phone) {
+      font-size: $font-size-mini;
+    }
+  }
+}
+
+@mixin post-title-size-medium() {
+  p, a, p a {
+    font-size: $font-size-medium;
+
+    @media(max-width: $paper-screen-desktop) {
+      font-size: $font-size-small;
+    }
+
+    @media (max-width: $screen-tablet) {
+      font-size: $font-size-mini;
+    }
+
+    @media (max-width: $screen-phone) {
+      font-size: $font-size-mini;
+    }
+  }
+}
+
+@mixin default-post-title{
+  p, a, p a {
+    font-size: $font-size-large;
+    font-weight: 500;
+
+    @media(max-width: $paper-screen-desktop) {
+      font-size: $font-size-medium;
+    }
+
+    @media (max-width: $screen-tablet) {
+      font-size: $font-size-small;
+    }
+
+    @media (max-width: $screen-phone) {
+      font-size: $font-size-mini;
+    }
+  }
+}
+
+@mixin paper-post-title() {
+  order: 1;
+  background: none;
+  position: relative;
+  z-index: 6;
+  padding: 5px 0 0;
+  @include post-title-size();
+}
+
+@mixin paper-post-title-medium() {
+  order: 1;
+  background: none;
+  position: relative;
+  z-index: 6;
+  padding: 5px 0 0;
+  @include post-title-size-medium();
+}
+
+@mixin paper-post-title-portrait() {
+  position: static;
+  float: left;
+  width: 33.3334%;
+  padding: 0 10px 0 0;
+
+  p {
+    color: $EDITOR_TEXT_DARK;
+    padding: 0;
+  }
+}
+
+@mixin paper-post-title-grid() {
+  @include post-title-size();
+
+  p, a, p a {
+    margin: 0;
+    padding: 0;
+    color: $EDITOR_TEXT_DARK;
+    text-align: left;
+    font-family: $BASE-FONT;
+  }
+}
+
+@mixin paper-post-title-absolute() {
+  @include post-title-size();
+  background: none;
+  color: #fff;
+  padding: 0 10px;
+
+  p, a {
+    z-index: 3;
+    color: #fff;
+    position: relative;
+    padding: 0 5px;
+  }
+
+  a {
+    z-index: 9999;
+  }
+
+  @media (max-width: $screen-phone) {
+    p, a, p a {
+      //font-size: $font-size-mini;
+    }
+  }
+}
+
+/* content container */
+@mixin paper-post-content($width: 100%) {
+  position: relative;
+  width: $width;
+  order: 2;
+  padding: 0;
+  bottom: auto;
+  left: auto;
+}
+
+@mixin paper-post-content-absolute($width: 100%) {
+  width: $width;
+  order: 2;
+  background: none;
+  position: absolute;
+  bottom: 70px;
+  left: 20px;
+}
+
+@mixin paper-post-content-portrait($width: 100%) {
+  position: absolute;
+  width: $width;
+  bottom: 110px;
+}
+
+/* link */
+@mixin paper-post-link($width: 100%) {
+  position: relative;
+  width: $width;
+  padding: 0;
+  margin: 0;
+  bottom: auto;
+  left: auto;
+}
+
+@mixin paper-post-link-absolute($width: 100%) {
+  padding: 0;
+  z-index: 999;
+  width: $width;
+  height: auto;
+  position: absolute;
+  bottom: 46px;
+  left: 20px;
+
+  a,
+  a:hover {
+    color: $EDITOR_TEXT_GREY;
+  }
+}
+
+@mixin paper-post-link-portrait($width: 100%) {
+  position: absolute;
+  width: $width;
+  bottom: 86px;
+  left: 20px;
+
+  a,
+  a:hover {
+    color: $EDITOR_TEXT_GREY;
+  }
+}
+
+@mixin paper-post-link-absolute-image() {
+  position: absolute;
+  bottom: 42px;
+  left: 8px;
+  width: calc(100% - 20px);
+  background: none !important;
+
+  a,
+  a:hover {
+    color: $EDITOR_TEXT_WHITE;
+  }
+}
+
+/* gallery image */
+@mixin paper-post-gallery-image($width, $height, $max-height) {
+  order: 5;
+  float: right;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: $width;
+  height: $height;
+  max-height: $max-height;
+  margin: 18px 0;
+  padding: 0 0 0 16px;
+
+  .post-header{
+    order:1;
+  }
+
+  img {
+    top: 0;
+    bottom: 50px;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@mixin paper-post-gallery-image-portrait($image-height) {
+  height: $image-height;
+  max-height: $image-height;
+  padding-bottom: 0;
+
+  img {
+    height: $image-height;
+    padding-bottom: 0;
+  }
+}
+
+@mixin paper-post-gallery-image-absolute($image-height) {
+  padding-bottom: 100%;
+  padding-top: 0;
+  height: calc(#{$image-height} - 60px);
+  max-height: calc(#{$image-height} - 60px);
+  max-width: 100%;
+
+  img {
+    top: 0;
+    bottom: 50px;
+    object-fit: cover;
+    width: 100%;
+    height: $image-height;
+  }
+}
+
+@mixin paper-post-options-cover() {
+  background: none;
+  bottom: 0;
+  left: 0;
+}
+
+@mixin paper-post-options-cover-absolute() {
+  background: none;
+  bottom: 20px;
+  left: 20px;
+}
+
+@mixin paper-post-cta($width: 100%, $bottom: 0, $right: 0) {
+  display: block;
+  position: absolute;
+  width: $width;
+  bottom: $bottom;
+  right: $right;
+}
+
+@mixin post-counter-container() {
+  position: absolute;
+  border-bottom: none;
+  top: -45px;
+  right: 2px;
+}
+
+@mixin post-counter-container-portrait() {
+  top: -38px;
+}
+
+@mixin post-counter-container-absolute() {
+  right: 12px;
+  top: -56px;
+}

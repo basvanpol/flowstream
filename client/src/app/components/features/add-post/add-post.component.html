@@ -1,0 +1,45 @@
+<div class="add-post__container">
+  <header>
+    <div class="add-post__header">
+      <p>Add Post</p>
+    </div>
+  </header>
+  <form [formGroup]="formGroup" #f="ngForm">
+    <section *ngIf="addPostStep == 0">
+      <div class="form-wrapper">
+          <fieldset>
+            <div class="">
+                <input name="postUrl" formControlName="postUrl" placeholder="Enter a url of a webpage you wish to save">
+            </div>
+            <label class="error hide" style="display:none">n/a</label>
+          </fieldset>
+      </div>
+    </section>
+    <section *ngIf="addPostStep == 1" class="added-post-holder">
+      <!-- <post-thumb-directive id="post_{{ $ctrl.post.id }}" class="post-tmpl" ng-class="{'preloaded': !$ctrl.postParsed}" post="$ctrl.post" show-full="false" add-post="true">
+      </post-thumb-directive> -->
+      <app-post [post]="post" class="post-tmpl add-post" [ngClass]="{'first': i === 0, 'second': i === 1}" [showFull]="showFull" [showOverlay]="false"></app-post>
+    </section>
+    <section *ngIf="addPostStep === 2" class="wrapper clearfix popup__form-content">
+      <app-select-list [listData]="flows" [selectedIdsOnLoaded]="selectedIdsOnLoaded" (selectedItemsEmitter)="onSelectedList($event)"></app-select-list>
+    </section>
+    <footer class="add-post__footer">
+      <div class="footer-menu-container">
+        <div class="footer-button-container full">
+          <div *ngIf="addPostStep == 0" (click)="!postIsParsing && f.valid && next()" class="ok-button" >
+            <span>Next</span>
+          </div>
+          <div *ngIf="addPostStep == 1" (click)="postParsed && next()" class="ok-button" >
+            <span>Next</span>
+          </div>
+          <div (click)="save()" class="ok-button" *ngIf="addPostStep == 2">
+            <span>Save</span>
+          </div>
+          <div (click)="!postIsParsing && cancel()" class="cancel-button">
+            <span>Cancel</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </form>
+</div>

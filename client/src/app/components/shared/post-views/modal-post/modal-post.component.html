@@ -1,0 +1,8 @@
+<ng-container *ngIf="post">
+    <div class="popup__background"></div>
+    <div class="popup__content">
+        <app-post [post]="post" class="post-tmpl" showFull="true"></app-post>
+        <app-icon-font icon-class="icon-close"></app-icon-font>
+    </div>
+</ng-container>
+

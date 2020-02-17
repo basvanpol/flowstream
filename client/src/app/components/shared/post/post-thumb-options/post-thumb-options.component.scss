@@ -1,0 +1,206 @@
+@import "variables";
+@import "dropdown";
+
+.ruby {
+    background: $EDITOR_BUTTON_YELLOW_ALPHA;
+
+    &:hover {
+        background: $EDITOR_BUTTON_YELLOW;
+    }
+
+    &.published {
+        background: $EDITOR_BUTTON_YELLOW;
+        border: none;
+
+        &:hover {
+            background: $EDITOR_BUTTON_YELLOW_HOVER;
+        }
+
+        .icon-ruby,
+        .icon-bookmark {
+            fill: $EDITOR_ICON_WHITE;
+        }
+    }
+}
+
+.icon-ruby {
+    fill: $EDITOR_ICON_WHITE;
+}
+
+.fs-dropdown-menu {
+    // @extend %dropdown-menu;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    margin: 0;
+
+    .dropdown-menu {
+        left: -25px;
+        top: -16px;
+    }
+
+    ul {
+        list-style: none;
+
+        li {
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+            moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+            webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+            border: none;
+
+            &.icon-rollout-holder {
+                .vote {
+
+                    &.flushed {
+                        @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_LIGHTGREY, //normal
+                        $EDITOR_WHITE, $EDITOR_PURPLE, //hover
+                        $EDITOR_PURPLE, $EDITOR_ICON_WHITE, // liked
+                        $EDITOR_PURPLE, $EDITOR_ICON_WHITE // liked and hover
+                        );
+                        margin: -1px -1px 0 1px;
+                        padding: 10px !important;
+                    }
+
+                    &.down {
+                        @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_LIGHTGREY, //normal
+                        $EDITOR_WHITE, $EDITOR_AZURI, //hover
+                        $EDITOR_AZURI, $EDITOR_ICON_WHITE, // liked
+                        $EDITOR_AZURI, $EDITOR_ICON_WHITE // liked and hover
+                        );
+                        margin: -1px -1px 0 1px;
+                        padding: 10px 9px !important;
+                    }
+
+                    &.up {
+                        @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_LIGHTGREY, //normal
+                        $EDITOR_WHITE, $EDITOR_GREEN, //hover
+                        $EDITOR_GREEN, $EDITOR_ICON_WHITE, // liked
+                        $EDITOR_GREEN, $EDITOR_ICON_WHITE // liked and hover
+                        );
+                        margin: -1px -1px 0 1px;
+                        padding: 10px 9px !important;
+                    }
+
+                    &.boost {
+                        @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_BLACK,
+                        $EDITOR_WHITE, $EDITOR_ORANGE, //hover
+                        $EDITOR_ORANGE, $EDITOR_ICON_WHITE, // liked
+                        $EDITOR_ORANGE, $EDITOR_ICON_WHITE); // liked and hover
+                        margin: -1px -1px 0 0 !important;
+                        padding: 9px 11px 0 8px !important;
+
+                        .icon-boost {
+                            width: 22px;
+                            height: 22px;
+                        }
+                    }
+
+                    &.like {
+                        @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_LIGHTGREY, //normal
+                        $EDITOR_WHITE, $EDITOR_BUTTON_RED, //hover
+                        $EDITOR_BUTTON_RED, $EDITOR_ICON_WHITE, // liked
+                        $EDITOR_BUTTON_RED, $EDITOR_ICON_WHITE // liked and hover
+                        );
+                        margin: -1px !important;
+                        padding: 11px 10px !important;
+                    }
+                }
+
+                .icon-share {
+                    @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_BLACK, //normal
+                    $EDITOR_WHITE, $EDITOR_BLACK, //hover
+                    $EDITOR_WHITE, $EDITOR_BLACK, // liked
+                    $EDITOR_WHITE, $EDITOR_BLACK); // liked and hover
+                }
+
+                .share-icon-holder {
+                    height: 40px;
+                    margin-top: 0px;
+
+                    li {
+                        padding: 0px 12px !important;
+                        background: none;
+
+                        .icon-facebook-outline,
+                        .icon-twitter-outline {
+                            height: 24px;
+
+                            .icon {
+                                width: 24px;
+                                height: 24px;
+                            }
+
+                            @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_GREY, //normal
+                            $EDITOR_WHITE, $EDITOR_BLACK, //hover
+                            $EDITOR_WHITE, $EDITOR_BLACK, // liked
+                            $EDITOR_WHITE, $EDITOR_BLACK); // liked and hover
+                        }
+
+                        .icon-send-mail-outline {
+                            height: 24px;
+                            margin-top: 3px;
+
+                            .icon {
+                                width: 26px;
+                                height: 26px;
+                            }
+
+                            @include thumb-option-icon-btn($EDITOR_WHITE, $EDITOR_GREY, //normal
+                            $EDITOR_WHITE, $EDITOR_BLACK, //hover
+                            $EDITOR_WHITE, $EDITOR_BLACK, // liked
+                            $EDITOR_WHITE, $EDITOR_BLACK); // liked and hover
+                        }
+
+                        .icon-share {
+                            height: 26px;
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+.post__thumb-options {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    margin: 0;
+    z-index: 5;
+}
+
+.post__thumb-options-list {
+    list-style: none;
+}
+
+.post__thumb-options-list-item {
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    border: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+    line-height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+        background: -moz-linear-gradient(center top, #fbfbfb, #fbfbfb) repeat scroll 0 0 transparent;
+    }
+
+    &--bright {
+        fill: $EDITOR_WHITE;
+        background: $EDITOR_BUTTON_YELLOW;
+
+        &:hover {
+            background: $EDITOR_BUTTON_YELLOW_HOVER;
+        }
+    }
+
+
+}

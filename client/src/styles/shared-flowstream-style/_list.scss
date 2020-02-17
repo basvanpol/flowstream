@@ -1,0 +1,43 @@
+@import 'variables';
+
+@mixin vertical-list {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    li {
+        @include vertical-list-item();
+    }
+  }
+}
+
+@mixin vertical-list-item {
+    color: black;
+    font-family: $font-family-primary;
+    padding: 15px;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    a {
+    display: inline-block;
+    cursor: pointer;
+    color: $EDITOR_DARKGREY;
+    font-size: 11pt;
+    font-weight: 400;
+    text-decoration: none;
+    text-align: left;
+    width: 100%;
+    line-height: 1;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
