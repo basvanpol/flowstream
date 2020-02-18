@@ -1,0 +1,12 @@
+sudio: required
+services: 
+    - docker
+      
+before_install:
+    - docker build -t basvanpol/fs-client ./client
+    - docker build -t basvanpol/fs-server ./server
+    # login to docker cli
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # push these images to docker hub
+    - docker push basvanpol/fs-client
+    - docker push basvanpol/fs-server
