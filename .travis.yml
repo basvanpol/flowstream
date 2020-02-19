@@ -8,8 +8,10 @@ script:
     # login to docker cli
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # push these images to docker hub
-    - docker push basvanpol/fs-client
-    - docker push basvanpol/fs-server
+    - docker tag basvanpol/fs-client:latest
+    - docker tag basvanpol/fs-server:latest
+    - docker push basvanpol/fs-client:latest
+    - docker push basvanpol/fs-server:latest
 
 deploy:
     edge: true

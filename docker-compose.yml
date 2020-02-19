@@ -2,7 +2,7 @@ version: '3' # specify docker-compose version
 
 # Define the services/containers to be run
 services:
-  angular: # name of the first service
+  client: # name of the first service
     build: 
         context: ./client # specify the directory of the Dockerfile
         dockerfile: Dockerfile

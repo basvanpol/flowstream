@@ -17,6 +17,7 @@ export class SigninComponent implements OnInit {
     path = '';
 
     constructor(private router: Router, private route: ActivatedRoute, private store: Store<any>) {
+      console.log('aloha');
       console.log('${environment.webApiUrl', environment.webApiUrl);
     }
 
