@@ -2,11 +2,12 @@
     "AWSEBDockerrunVersion": 2,
     "containerDefinitions": [
         {
-            "name": "client",
+            "name": "angular",
             "image": "basvanpol/fs-client",
-            "hostname": "angular",
+            "hostname": "client",
             "essential": false,
             "links": ["server"],
+            "memory": 128,
             "portMappings": [
                 {
                     "hostPort": 8080,
@@ -19,6 +20,7 @@
             "image": "basvanpol/fs-server",
             "hostname": "server",
             "essential": false,
+            "memory": 128,
             "portMappings": [
                 {
                     "hostPort": 8090,
