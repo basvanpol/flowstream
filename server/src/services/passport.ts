@@ -30,7 +30,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new TwitterStrategy({
     consumerKey: keys.twitterConsumerKey,
     consumerSecret: keys.twitterConsumerSecret,
-    callbackURL: "http://localhost:8080/api/auth/twitter/callback",
+    callbackURL: "http://localhost:80/api/auth/twitter/callback",
     proxy: true
 },
     async (twitterToken, twitterTokenSecret, profile, done) => {

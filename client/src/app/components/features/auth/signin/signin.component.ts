@@ -11,7 +11,7 @@ import {Store} from '@ngrx/store';
 })
 export class SigninComponent implements OnInit {
 
-    twitterSignInUrl = `${environment.webApiUrl}/api/auth/twitter`;
+    twitterSignInUrl = `api/auth/twitter`;
     hide = true;
     signinForm: FormGroup;
     path = '';

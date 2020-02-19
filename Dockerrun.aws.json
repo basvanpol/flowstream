@@ -5,7 +5,7 @@
             "name": "client",
             "image": "basvanpol/fs-client",
             "hostname": "client",
-            "essential": true,
+            "essential": false,
             "links": ["server"],
             "memory": 128,
             "portMappings": [
@@ -27,6 +27,20 @@
                     "containerPort": 8090
                 }
             ]
+        },
+        {
+            "name": "nginx",
+            "image": "basvanpol/fs-nginx",
+            "hostname": "nginx",
+            "essential": true,
+            "memory": 128,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "links": ["client", "server"]
         }
     ]
 }

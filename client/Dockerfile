@@ -7,8 +7,9 @@ COPY . .
 RUN npm run build
 
 FROM nginx
+EXPOSE 8080
 
-COPY --from=builder /app/client/nginx.conf /etc/nginx
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=builder /app/client/dist /usr/share/nginx/html
 
