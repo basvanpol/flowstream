@@ -5,12 +5,12 @@
             "name": "angular",
             "image": "basvanpol/fs-client",
             "hostname": "client",
-            "essential": false,
+            "essential": true,
             "links": ["server"],
             "memory": 128,
             "portMappings": [
                 {
-                    "hostPort": 8080,
+                    "hostPort": 80,
                     "containerPort": 8080
                 }
             ]
@@ -19,7 +19,7 @@
             "name": "server",
             "image": "basvanpol/fs-server",
             "hostname": "server",
-            "essential": true,
+            "essential": false,
             "memory": 128,
             "portMappings": [
                 {
