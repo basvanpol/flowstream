@@ -8,8 +8,6 @@ module.exports = {
     //mongoURI: 'mongodb://bas:welkom@ds247347.mlab.com:47347/stuu-emaily-dev',
     mongoURI: 'mongodb+srv://basvanpol:SevNkDAOzL1wHtQy@mojomondo-5jyd3.mongodb.net/test?retryWrites=true&w=majority',
     cookieKey: 'hjhdahsjhasjdhasjdhsahdjsahdjsahdhsajdhjsahdas',
-    sendGridUsername: 'basvanpol',
-    sendGridPassword: 'Schatzinger2',
 };
 
 
