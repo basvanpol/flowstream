@@ -20,7 +20,7 @@
             "image": "basvanpol/fs-server",
             "hostname": "server",
             "essential": false,
-            "memory": 128,
+            "memory": 512,
             "portMappings": [
                 {
                     "hostPort": 8090,
