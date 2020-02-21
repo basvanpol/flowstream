@@ -6,7 +6,7 @@
             "image": "basvanpol/fs-client",
             "hostname": "client",
             "essential": false,
-            "links": ["server"],
+            "links": ["api"],
             "memory": 128,
             "portMappings": [
                 {

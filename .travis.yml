@@ -9,9 +9,9 @@ script:
     # login to docker cli
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # push these images to docker hub
-    - docker push basvanpol/fs-client
-    - docker push basvanpol/fs-api
-    - docker push basvanpol/fs-nginx
+    - docker push basvanpol/fs-client:latest
+    - docker push basvanpol/fs-api:latest
+    - docker push basvanpol/fs-nginx:latest
 
 deploy:
     edge: true
