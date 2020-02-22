@@ -20,7 +20,7 @@
             "image": "basvanpol/fs-api",
             "hostname": "api",
             "essential": false,
-            "memory": 256,
+            "memory": 512,
             "portMappings": [
                 {
                     "hostPort": 8090,
