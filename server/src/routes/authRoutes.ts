@@ -3,7 +3,7 @@ import * as passport from 'passport';
 import * as mongoose from 'mongoose';
 import *  as crypto from 'crypto';
 const path = require('path');
-const keys = require('../config/keys');
+// const keys = require('../config/keys');
 
 const User = mongoose.model('User');
 const Token = mongoose.model('Token');
@@ -55,66 +55,66 @@ export default (app) => {
         }
     );
 
-    app.post('/api/auth/local/signup', (req, res) => {
-        User.findOne({'local.email': req.body.email}, async(err, user) => {
-            if (err) {
-                res.status(500).send('Something broke!')
-            }
+    // app.post('/api/auth/local/signup', (req, res) => {
+    //     User.findOne({'local.email': req.body.email}, async(err, user) => {
+    //         if (err) {
+    //             res.status(500).send('Something broke!')
+    //         }
 
-            if (user) {
-                res.send({signUpFail: true, message: 'that user exists already'});
-            } else {
-                const newUser = await new User();
+    //         if (user) {
+    //             res.send({signUpFail: true, message: 'that user exists already'});
+    //         } else {
+    //             const newUser = await new User();
 
-                newUser.local.email = req.body.email;
-                newUser.local.password = newUser.generatePasswordHash(req.body.password);
-                newUser.isVerified = false;
-                // send email with activation link
-                newUser.save((err) => {
-                    if (err) {
-                        console.log(' errrr ', err);
-                        return res.status(500).send({msg: err.message});
-                    }
+    //             newUser.local.email = req.body.email;
+    //             newUser.local.password = newUser.generatePasswordHash(req.body.password);
+    //             newUser.isVerified = false;
+    //             // send email with activation link
+    //             newUser.save((err) => {
+    //                 if (err) {
+    //                     console.log(' errrr ', err);
+    //                     return res.status(500).send({msg: err.message});
+    //                 }
 
-                    // Create a verification token for this user
-                    const newToken = new Token();
-                    newToken._userId = newUser._id;
-                    newToken.token = crypto.randomBytes(16).toString('hex');
-                    newToken.tokenType = 'verification';
+    //                 // Create a verification token for this user
+    //                 const newToken = new Token();
+    //                 newToken._userId = newUser._id;
+    //                 newToken.token = crypto.randomBytes(16).toString('hex');
+    //                 newToken.tokenType = 'verification';
 
-                    // Save the verification token
-                    newToken.save(function (err) {
-                        if (err) {
-                            return res.status(500).send({msg: err.message});
-                        }
+    //                 // Save the verification token
+    //                 newToken.save(function (err) {
+    //                     if (err) {
+    //                         return res.status(500).send({msg: err.message});
+    //                     }
 
-                        // Send the email
-                        var transporter = nodemailer.createTransport({
-                            service: 'Sendgrid',
-                            auth: {
-                                user: keys.sendGridUsername,
-                                pass: keys.sendGridPassword
-                            }
-                        });
-                        var mailOptions = {
-                            from: 'basvanpol@gmail.com',
-                            to: newUser.local.email,
-                            subject: 'Account Verification Token',
-                            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api\/auth\/local\/authorisation\/' + newToken.token + '.\n'
-                        };
-                        transporter.sendMail(mailOptions, function (err) {
-                            if (err) {
-                                return res.status(500).send({msg: err.message});
-                            }
-                            res.status(200).send('A verification email has been sent to ' + user.email + '.');
-                        });
+    //                     // Send the email
+    //                     var transporter = nodemailer.createTransport({
+    //                         service: 'Sendgrid',
+    //                         auth: {
+    //                             user: keys.sendGridUsername,
+    //                             pass: keys.sendGridPassword
+    //                         }
+    //                     });
+    //                     var mailOptions = {
+    //                         from: 'basvanpol@gmail.com',
+    //                         to: newUser.local.email,
+    //                         subject: 'Account Verification Token',
+    //                         text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api\/auth\/local\/authorisation\/' + newToken.token + '.\n'
+    //                     };
+    //                     transporter.sendMail(mailOptions, function (err) {
+    //                         if (err) {
+    //                             return res.status(500).send({msg: err.message});
+    //                         }
+    //                         res.status(200).send('A verification email has been sent to ' + user.email + '.');
+    //                     });
 
-                        res.status(200).send('A verification email has been sent to ' + newUser.local.email + '.');
-                    });
-                });
-            }
-        });
-    });
+    //                     res.status(200).send('A verification email has been sent to ' + newUser.local.email + '.');
+    //                 });
+    //             });
+    //         }
+    //     });
+    // });
 
 
     app.post('/api/auth/local/signin',
@@ -173,59 +173,59 @@ export default (app) => {
         res.status(200).send(currentUser);
     });
 
-    app.post('/api/auth/local/forgotPassword', (req, res, next) => {
-        const email = req.body.email
-        User.findOne({'local.email': req.body.email}, async(err, user) => {
-            if (err) {
-                res.status(500).send('Something broke!')
-            }
+    // app.post('/api/auth/local/forgotPassword', (req, res, next) => {
+    //     const email = req.body.email
+    //     User.findOne({'local.email': req.body.email}, async(err, user) => {
+    //         if (err) {
+    //             res.status(500).send('Something broke!')
+    //         }
 
-            if (user) {
-                // Create a verification token for this user
-                const newToken = new Token();
-                newToken._userId = user._id;
-                newToken.token = crypto.randomBytes(16).toString('hex');
-                newToken.tokenType = 'resetPassword';
+    //         if (user) {
+    //             // Create a verification token for this user
+    //             const newToken = new Token();
+    //             newToken._userId = user._id;
+    //             newToken.token = crypto.randomBytes(16).toString('hex');
+    //             newToken.tokenType = 'resetPassword';
 
-                newToken.save(function (err) {
-                    if (err) { return res.status(500).send({ msg: err.message }); }
+    //             newToken.save(function (err) {
+    //                 if (err) { return res.status(500).send({ msg: err.message }); }
 
-                    //after token has been saved, create email with token in it
+    //                 //after token has been saved, create email with token in it
 
-                    var transporter = nodemailer.createTransport({
-                        service: 'Sendgrid',
-                        auth: {
-                            user: keys.sendGridUsername,
-                            pass: keys.sendGridPassword
-                        }
-                    });
-                    var mailOptions = {
-                        from: 'basvanpol@gmail.com',
-                        to: user.local.email,
-                        subject: 'Reset your Cycly Password',
-                        text: 'Hello,\n\n' + 'Reset your password by clicking the link: \nhttp:\/\/' + req.headers.host + '\/user\/resetPassword\/?hash=' + newToken.token + '.\n'
-                    };
-                    transporter.sendMail(mailOptions, function (err) {
-                        if (err) {
-                            return res.status(500).send({msg: err.message});
-                        }
+    //                 var transporter = nodemailer.createTransport({
+    //                     service: 'Sendgrid',
+    //                     auth: {
+    //                         user: keys.sendGridUsername,
+    //                         pass: keys.sendGridPassword
+    //                     }
+    //                 });
+    //                 var mailOptions = {
+    //                     from: 'basvanpol@gmail.com',
+    //                     to: user.local.email,
+    //                     subject: 'Reset your Cycly Password',
+    //                     text: 'Hello,\n\n' + 'Reset your password by clicking the link: \nhttp:\/\/' + req.headers.host + '\/user\/resetPassword\/?hash=' + newToken.token + '.\n'
+    //                 };
+    //                 transporter.sendMail(mailOptions, function (err) {
+    //                     if (err) {
+    //                         return res.status(500).send({msg: err.message});
+    //                     }
 
-                        res.send({
-                            tokenFail: false,
-                            message: 'An email has been send to ' + user.local.email + 'with instructions to reset your password'
-                        });
-                    });
+    //                     res.send({
+    //                         tokenFail: false,
+    //                         message: 'An email has been send to ' + user.local.email + 'with instructions to reset your password'
+    //                     });
+    //                 });
 
 
-                });
-            } else {
-                res.send({
-                    tokenFail: true,
-                    message: 'that e-mail address doesn\'t exist in our database'
-                });
-            }
-        });
-    });
+    //             });
+    //         } else {
+    //             res.send({
+    //                 tokenFail: true,
+    //                 message: 'that e-mail address doesn\'t exist in our database'
+    //             });
+    //         }
+    //     });
+    // });
 
 
     app.post('/api/auth/local/resetPassword', (req, res, next) => {

@@ -1,10 +1,11 @@
+require('dotenv').config();
 import * as mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
 import * as express from 'express';
 import * as cookieSession from 'cookie-session';
 import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
-const keys = require('./config/keys');
+// const keys = require('./config/keys');
 import * as cors from 'cors';
 const fs = require('fs');
 const path = require('path');
@@ -39,7 +40,7 @@ const corsOptions = {
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(keys.mongoURI, {
+mongoose.connect(process.env.mongoURI, {
     keepAlive: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -66,7 +67,7 @@ app.use(cors({
 app.use(
     cookieSession({
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        keys: [keys.cookieKey]
+        keys: [process.env.cookieKey]
     })
 );
 

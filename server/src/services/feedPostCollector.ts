@@ -3,7 +3,7 @@ require('./../models/Subscription');
 require('./../models/User');
 require('./../models/Post');
 const OAuth = require('oauth');
-const keys = require('./../config/keys');
+// const keys = require('./../config/keys');
 const Subscription = mongoose.model('Subscription');
 const Token = mongoose.model('Token');
 const User = mongoose.model('User');
@@ -54,8 +54,8 @@ const getFeedPosts = async () => {
                         const oauth = new OAuth.OAuth(
                             'https://api.twitter.com/oauth/request_token',
                             'https://api.twitter.com/oauth/access_token',
-                            keys.twitterConsumerKey,
-                            keys.twitterConsumerSecret,
+                            process.env.twitterConsumerKey,
+                            process.env.twitterConsumerSecret,
                             '1.0A',
                             null,
                             'HMAC-SHA1'

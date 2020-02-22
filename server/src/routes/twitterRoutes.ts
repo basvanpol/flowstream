@@ -1,13 +1,13 @@
 import * as OAuth from 'oauth';
-const keys = require('./../config/keys');
+// const keys = require('./../config/keys');
 
 export default (app) => {
 
     const oauth = new OAuth.OAuth(
         'https://api.twitter.com/oauth/request_token',
         'https://api.twitter.com/oauth/access_token',
-        keys.twitterConsumerKey,
-        keys.twitterConsumerSecret,
+        process.env.twitterConsumerKey,
+        process.env.twitterConsumerSecret,
         '1.0A',
         null,
         'HMAC-SHA1'

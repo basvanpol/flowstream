@@ -3,7 +3,7 @@ import { Strategy as TwitterStrategy } from 'passport-twitter';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as LocalStrategy } from 'passport-local';
 import * as mongoose from 'mongoose';
-const keys = require('../config/keys');
+// const keys = require('../config/keys');
 const User = mongoose.model('User');
 const Token = mongoose.model('Token');
 
@@ -28,9 +28,9 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(new TwitterStrategy({
-    consumerKey: keys.twitterConsumerKey,
-    consumerSecret: keys.twitterConsumerSecret,
-    callbackURL: "http://flowstream-env.gtxneud6cc.ap-southeast-2.elasticbeanstalk.com/api/auth/twitter/callback",
+    consumerKey: process.env.twitterConsumerKey,
+    consumerSecret: process.env.twitterConsumerSecret,
+    callbackURL: process.env.twitterCallbackUrl,
     proxy: true
 },
     async (twitterToken, twitterTokenSecret, profile, done) => {
@@ -93,8 +93,8 @@ passport.use(new TwitterStrategy({
 //   profile), and invoke a callback with a user object.
 passport.use(
     new GoogleStrategy({
-        clientID: keys.googleClientID,
-        clientSecret: keys.googleClientSecret,
+        clientID: process.env.googleClientID,
+        clientSecret: process.env.googleClientSecret,
         callbackURL: '/api/auth/google/callback',
         proxy: true
         //proxy: true needed for deploying on heroku on prod, since it acts as a proxy, and google auth callback will fail. other option is to                       //add a full callback url path instead of relative
