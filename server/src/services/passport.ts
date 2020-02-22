@@ -30,7 +30,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new TwitterStrategy({
     consumerKey: process.env.twitterConsumerKey,
     consumerSecret: process.env.twitterConsumerSecret,
-    callbackURL: process.env.twitterCallbackUrl,
+    callbackURL: 'http://flowstream-env.gtxneud6cc.ap-southeast-2.elasticbeanstalk.com',
     proxy: true
 },
     async (twitterToken, twitterTokenSecret, profile, done) => {
