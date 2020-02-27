@@ -16,7 +16,7 @@ export const initialState: IAuthState = {
 export function AuthReducer(state = initialState, action: AuthActions.AuthActions): IAuthState {
   switch (action.type) {
     case AuthActions.AuthActionTypes.SET_USER:
-    console.log('set user ', action.payload);
+
       return {
         ...action.payload,
         authenticated: (action.payload !== null) ? true : false

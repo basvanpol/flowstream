@@ -41,8 +41,8 @@ export class AddPostComponent implements OnInit, OnDestroy {
       this.flows = flows;
       // this.selectedIdsOnLoaded = this.flows.map(flowVM => flowVM._id);
       this.selectedIdsOnLoaded = [];
-      console.log('flowssss', this.flows);
-      console.log('this.selectedIdsOnLoaded', this.selectedIdsOnLoaded);
+
+
     });
     this.authStateSubscription$ = this.authFacade.authState$.pipe(untilDestroyed(this)).subscribe((authState: IAuthState) => {
       this.authState = authState;
@@ -95,7 +95,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
     this.postIsParsing = true;
     this.parserService.scrapeMeta(url).then((body) => {
       const metaData: any = body;
-      console.log('scraped image', body);
+
       const description = metaData.description;
       // const imageUrl = this.parseSrc(metaData.imageUrl);
       const imageUrl = metaData.imageUrl;
@@ -108,14 +108,14 @@ export class AddPostComponent implements OnInit, OnDestroy {
       this.addPostStep = this.addPostStep + 1;
 
     }, (err) => {
-      console.warn("Failed to retrieve meta ");
+
     });
 
   }
 
   onSelectedList(items: any) {
     this.selectedItems = items;
-    console.log('this slectd items', this.selectedItems);
+
   }
 
   ngOnDestroy() { }

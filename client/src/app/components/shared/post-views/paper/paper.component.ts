@@ -31,10 +31,10 @@ export class PaperComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('changes', changes);
+
     // this.setPosts();
 
-    console.log('posts', this.posts);
+
     this.setSize();
   }
 

@@ -56,22 +56,20 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
 
     this.twitterSubscription = this.store.select('twitter')
       .subscribe((state: TwitterState) => {
-        console.log('search feed result', state.searchFeedsResult);
         this.searchFeedsData = state.searchFeedsResult.data;
       });
 
     this.authSubscription = this.store.select('auth')
       .subscribe((state: IAuthState) => {
         this.authState = state;
-        console.log('this.authState', state);
         this.mapFeedSubscriptions(this.authState.feedSubscriptions);
+        this.setSubscribed();
       });
 
 
     this.groupsSubscription = this.store.select('group').subscribe((state: GroupState) => {
       this.groupState = state;
       this.selectedAdminGroup = this.groupState.selectedAdminGroup;
-      console.log('this.selectedAdminGroup', this.selectedAdminGroup);
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
 
       if (this.saveGroupSuccess) {
@@ -96,6 +94,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
       this.adminGroups = this.groupState.adminGroups;
       if (this.featuredFeeds && this.selectedAdminGroup) {
         this.filterGroupFeeds();
+        this.setSubscribed();
       }
     });
 
@@ -107,6 +106,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
         this.featuredFeeds = this.feedState.featuredFeeds;
         if (this.featuredFeeds && this.selectedAdminGroup) {
           this.filterGroupFeeds();
+          this.setSubscribed();
         }
       }
     });
@@ -119,35 +119,37 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   mapFeedSubscriptions(feedSubscriptions: IUserFeedSubscription[]) {
     const groups = {};
     feedSubscriptions.forEach((subscription) => {
-      if(!!subscription._group){
+      if (!!subscription._group) {
         const groupId = subscription._group._id;
         groups[groupId] = groups[groupId] || [];
         groups[groupId].push(subscription._feed.feedId);
       }
     });
     this.groupedSubscriptions = groups;
-    console.log('this.groupedSubscriptions', this.groupedSubscriptions);
   }
 
   filterGroupFeeds() {
-    console.log('this.featuredFeeds', this.featuredFeeds);
     if (this.featuredFeeds && this.featuredFeeds.length > 0) {
       this.groupFeeds = this.featuredFeeds.filter((feed) => {
         return feed._group === this.selectedAdminGroup._id;
-      }).map((feed) => {
-        return {
-          ...feed,
-          subscribed: this.checkSubscribed(feed)
-        }
       });
     } else {
       this.groupFeeds = [];
     }
-    console.log('this.groupFeeds', this.groupFeeds);
+  }
+
+  setSubscribed() {
+    if (this.groupFeeds && this.groupFeeds.length > 0) {
+      this.groupFeeds = this.groupFeeds.map((feed) => {
+        return {
+          ...feed,
+          subscribed: this.checkSubscribed(feed)
+        };
+      });
+    }
   }
 
   checkSubscribed(feed: FeedVM) {
-    console.log('this.groupedSubscriptions', this.groupedSubscriptions);
     const groupSubsriptions = this.groupedSubscriptions[this.selectedAdminGroup._id];
     if (groupSubsriptions && groupSubsriptions.length > 0) {
       return groupSubsriptions.includes(feed._feed.feedId);
@@ -166,7 +168,6 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
 
   filterFeedGroups(feed: FeedFeedVM): string[] {
     let feedGroups: string[] = [];
-    console.log('this.featuredFeeds', this.featuredFeeds);
     if (this.featuredFeeds && this.featuredFeeds.length > 0) {
       feedGroups = this.featuredFeeds.filter((featuredFeed) => {
         return featuredFeed._feed.feedId === feed.feedId;
@@ -209,7 +210,6 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
       // get model portfolio data
       // this.store.dispatch(new FeedActions.GetFeatureFeeds(group));
     }
-    console.log(' on select group ', item);
   }
 
   onSelectGroup(event: any) {
@@ -218,8 +218,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
     }
   }
 
-  onDeleteGroup(event: any){
-    console.log('groupId', event);
+  onDeleteGroup(event: any) {
     this.store.dispatch(new GroupActions.DeleteGroup(event.groupId));
   }
 
@@ -235,7 +234,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   }
 
   subscribeToFeed(feed: any) {
-    console.log('feed -- ', feed);
+
     const subscriptionRequestObject: FeedSubscription = {
       feedType: 'TWITTER',
       feed:
@@ -256,7 +255,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   }
 
   unsubscribeFromFeed(feed: any) {
-    console.log('feed', feed);
+
     const subscriptionRequestObject: FeedSubscription = {
       feedType: 'TWITTER',
       feed:
@@ -277,7 +276,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   }
 
   addTofeatureList(feed: any) {
-    console.log('add to feature list', feed);
+
     const featureRequestObject: FeedSubscription = {
       feedType: 'TWITTER',
       feed: {

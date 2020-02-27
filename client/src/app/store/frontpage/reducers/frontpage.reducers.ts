@@ -13,7 +13,6 @@ export const initialState = {
 export function FrontPageReducer (state = initialState, action: FrontPageActions.FrontPageActions) {
     switch (action.type) {
         case FrontPageActions.GET_FRONTPAGE_POSTS_SUCCESS:
-        console.log('GET_FRONTPAGE_POSTS_SUCCESS', action.payload);
             return {
                 ...state,
                 frontPageEntities: action.payload

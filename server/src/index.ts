@@ -21,6 +21,7 @@ import './models/Flow';
 import './models/Feed';
 import './models/FeedFeature';
 import './models/User';
+import './models/UserSubscription';
 import './models/Group';
 import './services/passport';
 import authRoutes from './routes/authRoutes';

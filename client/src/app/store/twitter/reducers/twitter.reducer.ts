@@ -16,7 +16,6 @@ export const initialState: TwitterState = {
 export function TwitterReducer (state = initialState, action: TwitterActions.TwitterActions) {
     switch (action.type) {
         case TwitterActions.SET_SEARCH_FEEDS_RESULT:
-        console.log('TwitterActions.SET_SEARCH_FEEDS_RESULT', action.payload );
             return {
                 ...state,
                 searchFeedsResult: action.payload

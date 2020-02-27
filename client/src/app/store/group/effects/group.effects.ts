@@ -20,9 +20,9 @@ export class GroupEffects {
       return this.groupService.saveGroup(<GroupVM>action.payload)
         .pipe(
           map((res: any) => {
-            console.log('SaveGroupSuccess 1', res);
+
             if (res) {
-              console.log('SaveGroupSuccess');
+
               return new GroupActions.SaveGroupSuccess(res);
             }
           })
@@ -42,9 +42,9 @@ export class GroupEffects {
       return this.groupService.deleteGroup(<number>action.payload)
         .pipe(
           map((res: any) => {
-            console.log('SaveGroupSuccess 1', res);
+
             if (res) {
-              console.log('SaveGroupSuccess');
+
               return new GroupActions.DeleteGroupSuccess(res);
             }
           })
@@ -64,7 +64,7 @@ export class GroupEffects {
       return this.groupService.loadAdminGroups()
         .pipe(
           map((res: any) => {
-            console.log('get admin groups success', res);
+
             if (res) {
               return new GroupActions.LoadAdminGroupsSuccess(res);
             }

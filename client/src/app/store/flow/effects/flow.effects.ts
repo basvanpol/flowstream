@@ -43,11 +43,11 @@ export class FlowEffects {
         .pipe(
             ofType(FlowActions.DELETE_FLOW),
             switchMap((action: FlowActions.DeleteFlow) => {
-                console.log('delete flow');
+
                 return this.flowService.deleteFlow(<number>action.payload)
                     .pipe(
                         map((res: any) => {
-                            console.log('flow deleted ', res);
+
                             if (res) {
                                 return new FlowActions.DeleteFlowResult(res.data.flows);
                             }
@@ -66,11 +66,11 @@ export class FlowEffects {
         .pipe(
             ofType(FlowActions.RETRIEVE_FLOWS),
             switchMap((action: FlowActions.RetrieveFlows) => {
-                console.log('delete flow');
+
                 return this.flowService.retrieveFlows()
                     .pipe(
                         map((res: any) => {
-                            console.log('flow retrieved ', res);
+
                             if (res) {
                                 return new FlowActions.RetrieveFlowsSuccess(res.data.flows);
                             }
@@ -89,11 +89,11 @@ export class FlowEffects {
         .pipe(
             ofType(FlowActions.RETRIEVE_FLOW_POSTS),
             switchMap((action: FlowActions.RetrieveFlowPosts) => {
-                console.log('retrieve flow posts');
+
                 return this.flowService.retrieveFlowPosts(<number>action.payload)
                     .pipe(
                         map((res: any) => {
-                            console.log('flow posts retrieved ', res);
+
                             if (res) {
                                 return new FlowActions.RetrieveFlowPostsSuccess(res.data);
                             }

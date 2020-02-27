@@ -29,7 +29,7 @@ export class FeedPageComponent implements OnInit {
   }
 
   onLoadMore(loadMore: boolean) {
-    console.log('onLoadMore', loadMore);
+
     if (!!this.newSinceDate && !!loadMore) {
       if (this.currentSinceDate !== this.newSinceDate) {
         this.currentSinceDate = this.newSinceDate;

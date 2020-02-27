@@ -17,12 +17,10 @@ export class DropdownComponent {
     }
   }
 
-  constructor(private eref: ElementRef) {
-    console.log('eref', this.eref)
-  }
+  constructor(private eref: ElementRef) {}
 
   toggleMenu() {
-    this.showMenu = !this.showMenu
+    this.showMenu = !this.showMenu;
   }
 
 }

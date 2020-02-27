@@ -18,10 +18,16 @@ passport.serializeUser((user, done) => {
 // this is called when for example a call is made to the db, get some posts or so. the cookie is send,
 // and from that encoded cookie a user is retrieved (magic!, hence the key), after that it is turned into a user model, bam!
 // user is known, fancy shanzy, do something
+// passport.deserializeUser((id, done) => {
+//     User.findById(id)
+//         .populate('feedSubscriptions._feed')
+//         .populate('feedSubscriptions._group')
+//         .exec(async (err, userModel) => {
+//             done(null, userModel);
+//         })
+// });
 passport.deserializeUser((id, done) => {
     User.findById(id)
-        .populate('feedSubscriptions._feed')
-        .populate('feedSubscriptions._group')
         .exec(async (err, userModel) => {
             done(null, userModel);
         })
@@ -30,7 +36,7 @@ passport.deserializeUser((id, done) => {
 passport.use(new TwitterStrategy({
     consumerKey: process.env.twitterConsumerKey,
     consumerSecret: process.env.twitterConsumerSecret,
-    callbackURL: 'http://flowstream-env.gtxneud6cc.ap-southeast-2.elasticbeanstalk.com',
+    callbackURL: process.env.twitterCallbackUrl,
     proxy: true
 },
     async (twitterToken, twitterTokenSecret, profile, done) => {

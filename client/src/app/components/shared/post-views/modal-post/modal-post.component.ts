@@ -20,7 +20,6 @@ export class ModalPostComponent implements OnInit, OnDestroy {
     this.postsSubscription$ = this.store.pipe(untilDestroyed(this), select('posts')).subscribe((postsState: PostsState) => {
       if (postsState.selectedPost && this.post !== postsState.selectedPost) {
         this.post = postsState.selectedPost;
-        console.log('this.post', this.post);
       }
     });
   }

@@ -21,7 +21,6 @@ export class PostComponent implements OnInit {
 
   @Input() set post(value: IPost) {
     this._post = value;
-    console.log('set post', this._post);
     this._post.postType = this.parserService.parsePostType(this._post);
     this._post.contents = this.filterService.filterSortContent(this._post.contents);
     this._post.contents = this.parserService.parseContent(this._post, this.showFull);
@@ -85,8 +84,6 @@ export class PostComponent implements OnInit {
     }
   }
   onImageUpdated(content: any) {
-    console.log('this.post', this._post);
-    console.log('content', content);
     this.store.dispatch(new PostsActions.UpdatePost(this._post));
   }
 

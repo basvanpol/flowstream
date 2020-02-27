@@ -21,7 +21,6 @@ export default (app) => {
             (e, data, result) => {
                 if (e) console.error(e);
                 const parsedData = parseData(data);
-                //console.log('res', res);   
                 res.status(200).send({ data: parsedData, message: 'ok' });
             });
     });

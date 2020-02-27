@@ -18,13 +18,13 @@ export class ImageLoadedComponent implements OnInit {
     } else {
       this.parserService.scrapeMeta(this.scrapeLink).then((body) => {
         const metaData: any = body;
-        console.log('scraped image', body);
+
         this.imageUrl = this.parseSrc(metaData.imageUrl);
         // this.$scope.$emit("meta:scraped", { source: metaData });
         this.metaScraped.emit({ source: metaData });
 
       }, (err) => {
-        console.warn("Failed to scrape image ", this.scrapeLink);
+
       });
     }
   }

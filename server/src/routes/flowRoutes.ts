@@ -6,7 +6,7 @@ const Post = mongoose.model('Post');
 export default (app) => {
 
     app.post('/api/flows/', (req, res) => {
-        console.log(' create flow ', req.body);
+        
         if (req.body && (req.body.title || req.body.flowTitle)) {
             Flow.findOne({ '_Id': req.body.flowId }, async (err, flow) => {
                 if (err) {
@@ -16,13 +16,13 @@ export default (app) => {
                 //     const feedObjectId = flow._id;
                 //     // save flow
                 // } else {
-                console.log('req.user', req.user);
+                
                 const newFlow = await new Flow();
                 newFlow._id = new mongoose.Types.ObjectId();
                 newFlow._user = req.user._id;
                 newFlow.title = (req.body.title) ? req.body.title : req.body.flowTitle;
                 // newFlow.flowViewType = req.body.flowViewType;
-                console.log('newflow', newFlow);
+                
                 await newFlow.save(async (err) => {
                     if (err) {
                         return res.status(500).send({ msg: err.message });
@@ -115,7 +115,7 @@ export default (app) => {
             //         }
             //     }
             //     if (posts) {
-            //         console.log('posts: ')
+            //         
             //         res.status(200).send({
             //             'message': 'posts flowing through', data: {
             //                 posts: posts
@@ -128,15 +128,15 @@ export default (app) => {
 
 
     app.delete('/api/flows/:flowId', (req, res) => {
-        console.log(' delete flow ', req.params);
+        
         if (req.params && req.params.flowId ) {
             Flow.findOne({ '_id': req.params.flowId }, async (err, flow) => {
                 if (err) {
                     res.status(500).send('Something broke!')
                 }
-                console.log(' found flow!', flow);
+                
                 if(flow){
-                    console.log('found flow!', flow);
+                    
                     Flow.deleteOne({ '_id': req.params.flowId }, function (err) {
                         if (err) {
                             res.status(500).send('delete fail!')

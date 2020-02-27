@@ -17,8 +17,6 @@ export class SigninComponent implements OnInit {
     path = '';
 
     constructor(private router: Router, private route: ActivatedRoute, private store: Store<any>) {
-      console.log('aloha');
-      console.log('${environment.webApiUrl', environment.webApiUrl);
     }
 
     ngOnInit() {
@@ -34,7 +32,7 @@ export class SigninComponent implements OnInit {
         //     ...form.value
         // };
 
-        // console.log(aUser);
+        //
         // this.store.dispatch(new AuthActions.UserSignin(aUser));
     }
 

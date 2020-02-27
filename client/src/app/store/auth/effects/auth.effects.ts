@@ -15,7 +15,7 @@ export class AuthEffects {
     getUser = this.actions$
         .ofType(AuthActions.AuthActionTypes.GET_USER)
         .pipe(switchMap((action: AuthActions.GetUser) => {
-            console.log(' go get it!');
+
             return this.http.get('/api/current_user', {
                 observe: 'body',
                 responseType: 'json'
@@ -23,6 +23,7 @@ export class AuthEffects {
         }),
             take(1),
             switchMap((result) => {
+
                 return [
                     new AuthActions.SetUser(result !== null ? result : null),
                     new AuthActions.SignInRedirect()

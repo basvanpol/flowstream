@@ -30,7 +30,7 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.flows$ = this.flowFacade.flows$.pipe(untilDestroyed(this)).subscribe((flows: FlowVM[]) => {
-      console.log('flows', flows);
+
       this.flows = flows;
     });
   }
@@ -41,10 +41,10 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/flow']);
   }
 
-  onDeleteFlow(flowId: number){
+  onDeleteFlow(flowId: number) {
     this.flowFacade.deleteFlow(flowId);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
 }

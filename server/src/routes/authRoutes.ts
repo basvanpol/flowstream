@@ -7,6 +7,7 @@ const path = require('path');
 
 const User = mongoose.model('User');
 const Token = mongoose.model('Token');
+const UserSubscription = mongoose.model('UserSubscription');
 
 export default (app) => {
 
@@ -15,9 +16,9 @@ export default (app) => {
 
     app.get('/api/auth/twitter', (req, res, next) => {
         this.isExtension = false;
-        console.log('auth twitter');
+        
         passport.authenticate('twitter', (err, user, info) => {
-            console.log('user', user);
+            
             // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
         },{ display: 'popup' })(req, res, next);
       });
@@ -25,7 +26,7 @@ export default (app) => {
     app.get('/api/auth/twitterextension', (req, res, next) => {
         this.isExtension = true;
         passport.authenticate('twitter', (err, user, info) => {
-            console.log('user', user);
+            
             // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
         },{ display: 'popup' })(req, res, next);
       });
@@ -35,11 +36,11 @@ export default (app) => {
         passport.authenticate('twitter'),
         (req, res) => {
             if(this.isExtension){
-                console.log(' this is the extension loggin in');
+                
                 // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
                 res.redirect(`http://localhost:4200/static/authcallbackredirect.html?userId=${req.user._id}`);
             } else {
-                console.log(" this isn't the extension loggin in");
+                
                 res.redirect(`/connect/?twitter=ok&userId=${req.user._id}`);
             }
         }
@@ -72,7 +73,7 @@ export default (app) => {
     //             // send email with activation link
     //             newUser.save((err) => {
     //                 if (err) {
-    //                     console.log(' errrr ', err);
+    //                     
     //                     return res.status(500).send({msg: err.message});
     //                 }
 
@@ -144,7 +145,7 @@ export default (app) => {
     );
 
     app.get('/api/auth/local/authorisation/:token',  (req, res) => {
-        console.log(req.params.token);
+        
         Token.findOne({ token: req.params.token, tokenType: 'verification' }, (err, token) => {
             if (!token) return res.status(400).send({ type: 'not-verified', message: 'We were unable to find a valid token.' });
 
@@ -162,15 +163,25 @@ export default (app) => {
     });
 
     app.get('/api/logout', (req, res) => {
-        console.log('logout!');
+        
         req.logout();
         res.status(200).send({'isLoggedOut': true});
     });
 
     app.get('/api/current_user', (req, res) => {
         let currentUser = (req.user !== undefined )? req.user : null;
-        // console.log('currentUser', currentUser);
-        res.status(200).send(currentUser);
+        // res.status(200).send(currentUser);
+        if(!!currentUser) {
+            UserSubscription.find({ '_user': req.user.id })
+            .populate('_feed')
+            .populate('_group')
+            .exec(async (err, userSubscriptions) => {
+                currentUser.feedSubscriptions = userSubscriptions;
+                
+                
+                res.status(200).send(currentUser);
+            });
+        }
     });
 
     // app.post('/api/auth/local/forgotPassword', (req, res, next) => {

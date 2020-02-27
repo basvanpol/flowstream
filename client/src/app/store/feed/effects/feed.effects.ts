@@ -21,7 +21,7 @@ export class FeedEffects {
         .pipe(
             ofType(FeedActions.SUBSCRIBE_TO_FEED),
             switchMap((action: FeedActions.SubscribeTofeed) => {
-                console.log('kumbaya');
+
                 return this.feedService.subscribeToFeed(<FeedSubscription>action.payload)
                     .pipe(
                         switchMap((res) => {
@@ -39,7 +39,7 @@ export class FeedEffects {
                             }
                         })
                         , catchError((err) => {
-                            console.log('err', err);
+
                             return of(
                                 new FeedActions.FeedDataError(this.errorMessage)
                             );
@@ -54,7 +54,7 @@ export class FeedEffects {
         .pipe(
             ofType(FeedActions.UNSUBSCRIBE_FROM_FEED),
             switchMap((action: FeedActions.UnsubscribeFromFeed) => {
-                console.log('unsubscribe');
+
                 return this.feedService.unsubscribeFromFeed(<FeedSubscription>action.payload)
                     .pipe(
                         switchMap((res) => {
@@ -85,7 +85,7 @@ export class FeedEffects {
         .pipe(
             ofType(FeedActions.ADD_TO_FEATURE_LIST),
             switchMap((action: FeedActions.AddToFeatureList) => {
-                console.log('kumbaya', action.payload);
+
                 return this.feedService.addToFeatureList(<FeedSubscription>action.payload)
                     .pipe(
                         switchMap((res) => {
@@ -117,7 +117,7 @@ export class FeedEffects {
         .pipe(
             ofType(FeedActions.GET_FEATURE_FEEDS),
             switchMap((action: FeedActions.GetFeatureFeeds) => {
-                console.log('get featured feeds');
+
                 return this.feedService.getFeaturedFeeds()
                     .pipe(
                         switchMap((res) => {

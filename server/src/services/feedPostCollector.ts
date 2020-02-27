@@ -40,7 +40,7 @@ const getFeedPosts = async () => {
     if (tokens && tokens.length > 0) {
         Subscription.find({ memberCount: { $gt: 0 } }, async (err, subscriptions) => {
             if (err) {
-                console.log('something went wrong when searching subscription');
+                
             }
             subQueue = subscriptions;
             let tokenIndex = 0;
@@ -63,7 +63,7 @@ const getFeedPosts = async () => {
                         const since_id = (currentSubscription.sinceId) ? currentSubscription.sinceId : '';
                         const max_id = (currentSubscription.maxId) ? currentSubscription.maxId : '';
                         const feed_id = (currentSubscription.feed.feedId) ? currentSubscription.feed.feedId : '';
-                        // console.log('currentSubscription.feed', currentSubscription.feed);
+                        // 
                         if (feed_id) {
                             if (since_id) {
                                 await oauth.get(
@@ -71,8 +71,8 @@ const getFeedPosts = async () => {
                                     token.token, //test user token
                                     token.tokenSecret, //test user secret            
                                     (err, data, result) => {
-                                        // console.log('with since id', feed_id);
-                                        if (err) console.error(err);
+                                        // 
+                                        if (err) 
                                         parseTwitterPostsData(currentSubscription, feed_id, data);
                                     });
                                     
@@ -82,8 +82,8 @@ const getFeedPosts = async () => {
                                     '378751182-osBanchlb3uXld55fvplBW6weEChmQBbOrhmPb2r', //test user token
                                     'QxPyt7u4cx25kH0KHnZWCfbk2kxceYALhtyAasw4kNk', //test user secret            
                                     (err, data, result) => {
-                                        // console.log('without since id', feed_id);
-                                        if (err) console.error(err);
+                                        // 
+                                        if (err) 
                                         
                                         parseTwitterPostsData(currentSubscription, feed_id, data);
                                     });
@@ -110,22 +110,22 @@ const getFeedPosts = async () => {
         }
         let i = 0;
         let newestPostIndex = oData.length - 1;
-        console.log('data length ', oData.length);
+        
         for (let key in oData) {
-            // console.log(`if ${oData[key].id_str} !== ${subscription.sinceId}`)
+            // 
             if(oData[key].id_str !== subscription.sinceId){
-                // console.log('oData[key]', oData[key]);
+                // 
     
                 let aContent = [];
                 if (oData[key].text) {
                     const oText = { "mainType": "TEXT", "type": "TEXT_TWITTER", "source": oData[key].text, "date": null, "location": null, "thumb": null }
                     aContent.push(oText);
                 }
-                    console.log('oData[key]', oData[key]);
+                    
                 const entities = oData[key].entities;
                 
                 if (entities.urls) {
-                    console.log('urls: ', entities.urls);
+                    
                     const urls = entities.urls;
                     const firstUrl = entities.urls[0];
                     if (firstUrl && firstUrl.expanded_url) {
@@ -155,12 +155,12 @@ const getFeedPosts = async () => {
                 // save feed post
                 await newPost.save((err) => {
                     if (err) {
-                        console.log(' errrr ', err);
-                        if (err) { console.log(err) }
+                        
+                        if (err) {  }
                     }
                 })    
             } else {
-                console.log(' hey maar, toch n dubbele!' , oData[key].text);
+                
             }
 
             if (i === newestPostIndex) {
@@ -171,11 +171,11 @@ const getFeedPosts = async () => {
                 } else{
                     subscription.sinceId = sinceId;
                     await subscription.save((err) => {
-                        if (err) { console.log(err) }
+                        if (err) {  }
                     })
                 }
-                console.log('sinceId ', sinceId);
-                console.log(' the latest I presume: ', oData[key].urls);
+                
+                
                 
                 
             };

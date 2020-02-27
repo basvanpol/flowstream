@@ -31,7 +31,7 @@ export class PostThumbOptionsComponent implements OnInit, OnDestroy {
     private flowFacade: FlowFacade,
     private authFacade: AuthFacade) {
     this.flowSubscription$ = this.flowFacade.flows$.pipe(untilDestroyed(this)).subscribe((flows: FlowVM[]) => {
-      console.log('flows', flows);
+
       this.flows = flows;
     });
     this.authStateSubscription$ = this.authFacade.authState$.pipe(untilDestroyed(this)).subscribe((authState: IAuthState) => {
@@ -53,22 +53,22 @@ export class PostThumbOptionsComponent implements OnInit, OnDestroy {
         // selectedIdsOnLoaded: this.flows.map(flowVM => flowVM._id),
         selectedIdsOnLoaded: [],
         callback: (selectedItems: FlowVM[]) => {
-          console.log('selectedItems', selectedItems);
-          console.log(' this.post', this.post);
+
+
           let toBeSavedPost: IPost;
           if (this.userInPost()) {
             toBeSavedPost = {
               ...this.post,
               flows: [
-                ...selectedItems.map((selectedItem: FlowVM ) => selectedItem._id)
+                ...selectedItems.map((selectedItem: FlowVM) => selectedItem._id)
               ]
             };
             if (selectedItems.length > 0) {
-              console.log('update post', toBeSavedPost);
+
               this.store.dispatch(new PostsActions.UpdatePost(toBeSavedPost));
             } else {
               // TODO: should be delete post
-              console.log('delete post', toBeSavedPost);
+
               this.store.dispatch(new PostsActions.DeletePost(toBeSavedPost));
             }
           } else {
@@ -78,7 +78,7 @@ export class PostThumbOptionsComponent implements OnInit, OnDestroy {
                 this.authState._id
               ],
               flows: [
-                ...selectedItems.map((selectedItem: FlowVM ) => selectedItem._id)
+                ...selectedItems.map((selectedItem: FlowVM) => selectedItem._id)
               ]
             };
             this.store.dispatch(new PostsActions.SavePost(toBeSavedPost));
@@ -89,9 +89,9 @@ export class PostThumbOptionsComponent implements OnInit, OnDestroy {
   }
 
   userInPost() {
-    console.log('this.post.users', this.post.users);
-    console.log('this.authState._id', this.authState._id);
-    console.log('exist? ', this.post.users.includes(this.authState._id));
+
+
+
     return this.post.users.includes(this.authState._id);
   }
 

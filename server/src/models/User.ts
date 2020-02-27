@@ -22,14 +22,7 @@ const userSchema = new Schema({
     },
     isVerified: Boolean,
     forgotPasswordToken: String,
-    feedSubscriptions: [{
-        _feed: { type: Schema.ObjectId, ref: 'Feed' },
-        _group: { type: Schema.ObjectId, ref: 'Group' },
-        frontPage: {
-            type: Boolean,
-            default: true
-        }
-    }]
+    feedSubscriptions: [{}]
 });
 
 

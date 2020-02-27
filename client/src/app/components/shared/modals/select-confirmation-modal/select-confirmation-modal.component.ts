@@ -25,12 +25,12 @@ export class SelectConfirmationModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any | FeedSubscription,
     private store: Store<any>,
     private dialogRef: MatDialogRef<SelectConfirmationModalComponent>) {
-      this.listData = data.selectionList;
-      this.actionType = data.actionType;
-      this.requestObject = {
-        ...data.requestObject
-      };
-      this.selectedIdsOnLoaded = data.selectedIdsOnLoaded;
+    this.listData = data.selectionList;
+    this.actionType = data.actionType;
+    this.requestObject = {
+      ...data.requestObject
+    };
+    this.selectedIdsOnLoaded = data.selectedIdsOnLoaded;
   }
 
   ngOnInit() {
@@ -38,12 +38,12 @@ export class SelectConfirmationModalComponent implements OnInit {
 
   onSelectedList(items: any) {
     this.selectedItems = items;
-    console.log('this slectd items', this.selectedItems);
+
   }
 
   onConfirm() {
     if (this.data.callback) {
-      console.log('this.selectedItems', this.selectedItems);
+
       if (this.selectedItems) {
         this.data.callback(this.selectedItems);
       }

@@ -17,7 +17,7 @@ export class FrontPageComponent implements OnInit, OnDestroy {
   constructor(private frontPageFacade: FrontPageFacade) {
     this.frontPagePostsSubscription$ = this.frontPageFacade.frontPagePosts$.pipe(untilDestroyed(this)).subscribe((frontpageEntities: IFrontPageEntity[]) => {
       this.frontpageEntities = frontpageEntities;
-      console.log('this.frontpageEntities', this.frontpageEntities);
+
     });
   }
 

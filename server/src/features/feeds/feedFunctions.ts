@@ -4,6 +4,7 @@ const Feed = mongoose.model('Feed');
 const FeedFeature = mongoose.model('FeedFeature');
 const User = mongoose.model('User');
 const Subscription = mongoose.model('Subscription');
+const UserSubscription = mongoose.model('UserSubscription');
 
 export class FeedFunctions {
 
@@ -27,7 +28,7 @@ export class FeedFunctions {
         const requestFeed = {
             ...req.body.feed
         };
-        console.log('requestFeed', requestFeed);
+        
         return new Promise((resolve, reject) => {
             Feed.findOne({ 'feedId': requestFeed.feedId }, async (err, feed) => {
                 if (err) {
@@ -42,13 +43,13 @@ export class FeedFunctions {
                     resolve('found feed');
                 } else {
                     const newFeed = await new Feed();
-                    newFeed._id = new mongoose.Types.ObjectId(),
+                    newFeed._id = new mongoose.Types.ObjectId();
                     newFeed.feedName = requestFeed.feedName;
                     newFeed.feedId = requestFeed.feedId;
                     newFeed.feedType = req.body.feedType;
                     newFeed.feedIcon = req.body.feedIcon;
 
-                    console.log('newfeed', newFeed);
+                    
 
                     this.feedObjectId = newFeed._id;
                     await newFeed.save((err) => {
@@ -139,7 +140,7 @@ export class FeedFunctions {
                             }
                         } else {
                             const newFeedFeature = await new FeedFeature();
-                            newFeedFeature._id = new mongoose.Types.ObjectId(),
+                            newFeedFeature._id = new mongoose.Types.ObjectId();
                             newFeedFeature._feed = this.feedObjectId;
                             newFeedFeature._user = this.userId;
                             newFeedFeature._group = groupId;
@@ -178,96 +179,145 @@ export class FeedFunctions {
                 }
 
                 if (user) {
-                    let oldNumFeedSubscriptions = user.feedSubscriptions.length;
-                    let newNumFeedSubscriptions = 0;
+                    // let oldNumFeedSubscriptions = user.feedSubscriptions.length;
+                    // let newNumFeedSubscriptions = 0;
+                    let userSubscription;
                     this.groups.forEach(async (groupId) => {
                         // add user subscriptions
                         if (req.body.actionType === 'subscribe' || req.body.actionType === 'feature') {
-                            user = await this.subscribeFeedToUser(user, groupId)
+                            // user = await this.subscribeFeedToUser(user, groupId);
+                            userSubscription = await this.createUserSubscription(user, groupId, res);
                         } else if (req.body.actionType === 'unsubscribe') {
-                            user = await this.unsubscribeFeedFromUser(user, groupId)
+                            // user = await this.unsubscribeFeedFromUser(user, groupId)
+                            userSubscription = await this.removeUserSubscription(user, groupId, res);
                         }
                     });
 
                     if (req.body.actionType === 'feature') {
-                        if (user.feedSubscriptions && user.feedSubscriptions.length > 0) {
-                            user.feedSubscriptions = user.feedSubscriptions.filter((feed) => {
-                                return (feed._feed.toString() === this.feedObjectId.toString() && this.groups.includes(feed._group.toString())) || feed._feed.toString() !== this.feedObjectId.toString();
-                            })
-                            newNumFeedSubscriptions = user.feedSubscriptions.length;
-                        }
+                        // if (user.feedSubscriptions && user.feedSubscriptions.length > 0) {
+                        //     user.feedSubscriptions = user.feedSubscriptions.filter((feed) => {
+                        //         return (feed._feed.toString() === this.feedObjectId.toString() && this.groups.includes(feed._group.toString())) || feed._feed.toString() !== this.feedObjectId.toString();
+                        //     })
+                        //     newNumFeedSubscriptions = user.feedSubscriptions.length;
+                        // }
                     } else if (req.body.actionType === 'subscribe' || req.body.actionType === 'unsubscribe') {
-                        if (user.feedSubscriptions && user.feedSubscriptions.length > 0) {
-                            const userFeedSubscriptions = user.feedSubscriptions.find((feed) => {
-                                return (feed._feed.toString() === this.feedObjectId.toString());
-                            })
-                            newNumFeedSubscriptions = user.feedSubscriptions.length;
-                        }
+                        // if (user.feedSubscriptions && user.feedSubscriptions.length > 0) {
+                        //     const userFeedSubscriptions = user.feedSubscriptions.find((feed) => {
+                        //         return (feed._feed.toString() === this.feedObjectId.toString());
+                        //     })
+                        //     newNumFeedSubscriptions = user.feedSubscriptions.length;
+                        // }
                     }
 
-                    await user.save((err) => {
-                        if (err) {
-                            if (!this.errorSend) {
-                                this.errorSend = true;
-                                reject(err.message);
-                                res.status(500).send({ msg: err.message });
-                            }
-                        }
-                        
-                        this.numFeedSubscriptionMutation = newNumFeedSubscriptions - oldNumFeedSubscriptions;
-                        this.updatedUser = user;
-                        resolve('handle user done');
-                    });
+                    // UserSubscription.find({ '_user': this.userId })
+                    //     .populate('_feed')
+                    //     .populate('_group')
+                    //     .exec(async (err, userSubscriptions) => {
+                    //         user.feedSubscriptions = [];
+
+                    //         await user.save((err) => {
+                    //             if (err) {
+                    //                 if (!this.errorSend) {
+                    //                     this.errorSend = true;
+                    //                     reject(err.message);
+                    //                     res.status(500).send({ msg: err.message });
+                    //                 }
+                    //             }
+
+                    //             // this.numFeedSubscriptionMutation = newNumFeedSubscriptions - oldNumFeedSubscriptions;
+                    //             this.updatedUser = user;
+                    //             
+                    //             resolve('handle user done');
+                    //         });
+
+                    //     });
+
+                    resolve('handle user done');
+
                 }
             });
         })
     }
 
-    subscribeFeedToUser(user, groupId) {
-        if (user.feedSubscriptions) {
-            let subscribedGroupFeed;
-            if (user.feedSubscriptions.length > 0) {
-                subscribedGroupFeed = user.feedSubscriptions.find((feed) => {
-                    return feed._group.toString() === groupId.toString() && feed._feed.toString() === this.feedObjectId.toString();
-                })
-            }
-            if (subscribedGroupFeed === undefined) {
-                let newFeed = {
-                    _group: groupId,
-                    frontpage: true,
-                    _feed: this.feedObjectId
+    createUserSubscription(user, groupId, res) {
+        
+        return new Promise((resolve, reject) => {
+            UserSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userSubscription) => {
+                if (!userSubscription) {
+                    const userSubscription = await new UserSubscription();
+                    userSubscription._id = new mongoose.Types.ObjectId();
+                    userSubscription._feed = this.feedObjectId;
+                    userSubscription._user = this.userId;
+                    userSubscription._group = groupId;
+                    await userSubscription.save((err) => {
+                        if (err) {
+                            reject('err.message')
+                        }
+                        resolve(userSubscription);
+                    });
                 }
-                user.feedSubscriptions.push(newFeed);
-            }
-        } else {
-            user.feedSubscriptions =
-                [
-                    {
-                        _group: groupId,
-                        frontPage: true,
-                        _feed: this.feedObjectId
-                    }
-                ]
 
-        }
-
-        return user;
+            })
+        });
     }
 
-    unsubscribeFeedFromUser(user, groupId) {
-        if (user.feedSubscriptions) {
-            let subscribedGroupFeedIndex;
-            if (user.feedSubscriptions.length > 0) {
-                subscribedGroupFeedIndex = user.feedSubscriptions.findIndex((feed) => {
-                    return feed._group.toString() === groupId.toString() && feed._feed.toString() === this.feedObjectId.toString();
-                })
-            }
-            if (subscribedGroupFeedIndex !== -1) {
-                user.feedSubscriptions.splice(subscribedGroupFeedIndex, 1);
-            }
-        }
-        return user;
+
+    removeUserSubscription(user, groupId, res) {
+        return new Promise((resolve, reject) => {
+            UserSubscription.deleteOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err) => {
+                if (err) {
+                    reject('error deleting subscription');
+                }
+                resolve(null);
+            })
+        });
     }
+
+    // subscribeFeedToUser(user, groupId) {
+    //     if (user.feedSubscriptions) {
+    //         let subscribedGroupFeed;
+    //         if (user.feedSubscriptions.length > 0) {
+    //             subscribedGroupFeed = user.feedSubscriptions.find((feed) => {
+    //                 return feed._group.toString() === groupId.toString() && feed._feed.toString() === this.feedObjectId.toString();
+    //             })
+    //         }
+    //         if (subscribedGroupFeed === undefined) {
+    //             let newFeed = {
+    //                 _group: groupId,
+    //                 frontpage: true,
+    //                 _feed: this.feedObjectId
+    //             }
+    //             user.feedSubscriptions.push(newFeed);
+    //         }
+    //     } else {
+    //         user.feedSubscriptions =
+    //             [
+    //                 {
+    //                     _group: groupId,
+    //                     frontPage: true,
+    //                     _feed: this.feedObjectId
+    //                 }
+    //             ]
+
+    //     }
+
+    //     return user;
+    // }
+
+    // unsubscribeFeedFromUser(user, groupId) {
+    //     if (user.feedSubscriptions) {
+    //         let subscribedGroupFeedIndex;
+    //         if (user.feedSubscriptions.length > 0) {
+    //             subscribedGroupFeedIndex = user.feedSubscriptions.findIndex((feed) => {
+    //                 return feed._group.toString() === groupId.toString() && feed._feed.toString() === this.feedObjectId.toString();
+    //             })
+    //         }
+    //         if (subscribedGroupFeedIndex !== -1) {
+    //             user.feedSubscriptions.splice(subscribedGroupFeedIndex, 1);
+    //         }
+    //     }
+    //     return user;
+    // }
 
     handleSubscription = (req, res, finalCB) => {
         this.processedGroups = 0;
@@ -281,7 +331,8 @@ export class FeedFunctions {
                     }
                 }
                 if (subscription) {
-                    const memberCount = subscription.memberCount + this.numFeedSubscriptionMutation;
+                    // const memberCount = subscription.memberCount + this.numFeedSubscriptionMutation;
+                    const memberCount = 1;
                     await subscription.update({
                         '$set': { 'memberCount': memberCount }
                     }, (err, result) => {
@@ -294,9 +345,10 @@ export class FeedFunctions {
                     resolve('subscription updated');
                 } else {
                     const newSubscription = await new Subscription();
-                    newSubscription._id = new mongoose.Types.ObjectId(),
-                        newSubscription.feed = this.feedObjectId;
-                    newSubscription.memberCount = this.numFeedSubscriptionMutation;
+                    newSubscription._id = new mongoose.Types.ObjectId();
+                    newSubscription.feed = this.feedObjectId;
+                    // newSubscription.memberCount = this.numFeedSubscriptionMutation;
+                    newSubscription.memberCount = 1;
                     await newSubscription.save((err) => {
                         if (err) {
                             if (!this.errorSend) {
@@ -316,7 +368,7 @@ export class FeedFunctions {
     getAllFeaturedFeeds = (req, res) => {
         this.userId = req.user._id;
         return new Promise((resolve, reject) => {
-            FeedFeature.find({'_user': {$in: [mongoose.Types.ObjectId('5ca1c4f08dc2b8039f960a31'), mongoose.Types.ObjectId(req.user._id)]}, 'active': true }).
+            FeedFeature.find({ '_user': { $in: [mongoose.Types.ObjectId('5e572e9024a3eaa2cfef89bf'), mongoose.Types.ObjectId(req.user._id)] }, 'active': true }).
                 populate('_feed').
                 exec((err, featuredFeeds) => {
                     if (err) {
@@ -329,8 +381,6 @@ export class FeedFunctions {
                     if (featuredFeeds) {
 
                         User.findOne({ '_id': this.userId })
-                            .populate('feedSubscriptions._feed')
-                            .populate('feedSubscriptions._group')
                             .exec((err, user) => {
                                 if (err) {
                                     if (!this.errorSend) {
@@ -340,14 +390,21 @@ export class FeedFunctions {
                                     }
                                 }
                                 if (user) {
-                                    this.updatedUser = user;
-                                    resolve('handle user done');
-                                    res.status(200).send({
-                                        'message': 'all good in the hood', data: {
-                                            user: this.updatedUser,
-                                            featuredFeeds: featuredFeeds
-                                        }
-                                    });
+                                    UserSubscription.find({ '_user': req.user.id })
+                                        .populate('_feed')
+                                        .populate('_group')
+                                        .exec(async (err, userSubscriptions) => {
+                                            user.feedSubscriptions = userSubscriptions;
+                                            // res.status(200).send(currentUser);
+                                            this.updatedUser = user;
+                                            res.status(200).send({
+                                                'message': 'all good in the hood', data: {
+                                                    user: this.updatedUser,
+                                                    featuredFeeds: featuredFeeds
+                                                }
+                                            });
+                                        });
+
                                 }
                             })
 

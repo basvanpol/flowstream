@@ -20,7 +20,7 @@ export class PostsEffects {
                 return this.postsService.getFeedPosts(action.payload)
                     .pipe(
                         switchMap((res) => {
-                            console.log('result: ', res);
+
                             if (res && res.data) {
                                 return [new PostsActions.LoadFeedPostsSuccess(res.data)];
                             } else {
@@ -71,7 +71,7 @@ export class PostsEffects {
                     .pipe(
                         mergeMap((res) => {
                             if (res) {
-                                console.log('new post saved successfully', res);
+
                                 return [new PostsActions.SavePostSuccessful('new post updated successfully')];
                             } else {
                                 return [];
@@ -95,7 +95,7 @@ export class PostsEffects {
                     .pipe(
                         mergeMap((res) => {
                             if (res) {
-                                console.log('delete post successful', res);
+
                                 return [new PostsActions.DeletePostSuccessful('delete post successful')];
                             } else {
                                 return [];

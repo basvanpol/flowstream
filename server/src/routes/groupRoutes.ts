@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 const Group = mongoose.model('Group');
+const UserSubscription = mongoose.model('UserSubscription');
 
 export default (app) => {
 
@@ -42,12 +43,15 @@ export default (app) => {
                     if (err) {
                         res.status(500).send('delete fail!')
                     }
-                    Group.find({ '_user' : '5e072c058967b6760cbab66f' }, async (err, groups) => {
-                        if (err) {
-                            res.status(500).send('Something broke!')
-                        }
-                        res.status(200).send({msg : 'all admin groups' , groups: groups } );
-                    });
+                });
+                UserSubscription.deleteMany({ 'group': req.params.groupId })
+                .then(result => console.log(`Deleted ${result.deletedCount} item(s).`))
+                .catch(err => console.error(`Delete failed with error: ${err}`));
+                Group.find({ '_user' : '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
+                    if (err) {
+                        res.status(500).send('Something broke!')
+                    }
+                    res.status(200).send({msg : 'all admin groups' , groups: groups,  } );
                 });
             } 
         });
@@ -55,7 +59,7 @@ export default (app) => {
 
     app.get('/api/admingroups', (req, res) => {
         // get groups 
-        Group.find({ '_user' : '5e072c058967b6760cbab66f' }, async (err, groups) => {
+        Group.find({ '_user' : '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
             if (err) {
                 res.status(500).send('Something broke!')
             }

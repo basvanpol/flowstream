@@ -12,7 +12,7 @@ export class FeedResourceThumbComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('thumb ', this.thumb);
+
   }
 
 }

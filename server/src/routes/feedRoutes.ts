@@ -31,5 +31,7 @@ export default (app) => {
         await feedFunctions.getAllFeaturedFeeds(req, res)
     })
 
+    // app.get('/api/feeds/usersubscriptions', async(req, res))
+
 
 }

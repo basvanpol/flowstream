@@ -13,7 +13,6 @@ export interface FeedSubscription {
 }
 
 export interface IUserFeedSubscription {
-        frontPage: boolean;
         _feed: FeedFeedVM;
         _group: GroupVM;
         _id: string;

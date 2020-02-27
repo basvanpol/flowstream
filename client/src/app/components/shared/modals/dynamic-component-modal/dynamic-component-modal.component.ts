@@ -33,11 +33,8 @@ export class DynamicComponentModalComponent implements OnDestroy, AfterViewInit 
     private componentFactoryResolver: ComponentFactoryResolver,
     private store: Store<any>,
     private renderer: Renderer2) {
-      console.log("ALOHA!");
     this.generalSelectionSubscription$ = this.store.pipe(untilDestroyed(this), select('general-selection')).subscribe((generalSelectionState: IGeneralSelectionState) => {
       this.generalSelectionState = generalSelectionState;
-      console.log(' this.generalSelectionState.showDynamicComponent ', this.generalSelectionState.showDynamicComponent)
-      console.log(' this.generalSelectionState.dynamicComponent ', this.generalSelectionState.dynamicComponent)
       if (this.generalSelectionState.showDynamicComponent && this.generalSelectionState.dynamicComponent) {
         if (this.loadedComponent !== this.generalSelectionState.dynamicComponent) {
           this.loadComponent(this.generalSelectionState.dynamicComponent);
@@ -51,7 +48,7 @@ export class DynamicComponentModalComponent implements OnDestroy, AfterViewInit 
   }
 
   public loadComponent(component: any, data: any = null) {
-    console.log(' load component');
+
     if (component) {
       const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
       const viewContainerRef: ViewContainerRef = (this.dynamicComponentModalHost) ? this.dynamicComponentModalHost.viewContainerRef : null;
@@ -72,7 +69,7 @@ export class DynamicComponentModalComponent implements OnDestroy, AfterViewInit 
 
   onOpen() {
     // this.drillDownContainerElement = this.drilldownWrapper.nativeElement.querySelectorAll('.drill-down__container')[0];
-    console.log('this.drillDownContainerElement', this.drillDownWrapperElement);
+
     this.showComponent = true;
     this.renderer.setStyle(document.body, 'overflow-y', 'hidden');
     setTimeout(() => {

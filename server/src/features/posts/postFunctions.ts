@@ -13,7 +13,7 @@ export class PostFunctions {
 
     savePost = (req, res) => {
         const reqPost = req.body.newPost;
-        console.log('reqPost: ', reqPost);
+        
         return new Promise(async (resolve, reject) => {
             const newPost = await new Post();
             newPost._id = new mongoose.Types.ObjectId();
@@ -33,18 +33,18 @@ export class PostFunctions {
                         this.errorSend = true;
                     }
                 }
-                console.log('post saved: ', newPost);
+                
                 resolve(' saved post');
             });
         })
     }
 
     getFrontPagePosts = (req, res) => {
-        // console.log(req.body)
+        // 
         const groups = {};
         const feedSubscriptions = req.body.feedSubscriptions
         feedSubscriptions.forEach((subscription) => {
-            console.log('feedSubscriptions', feedSubscriptions);
+            // 
             if(!!subscription._group){
                 const groupId = subscription._group._id;
                 groups[groupId] = groups[groupId] || [];
@@ -56,7 +56,7 @@ export class PostFunctions {
         });
         return new Promise(async (resolve, reject) => {
             let facetQuery = {};
-            console.log('mappedSubscriptions')
+            // 
             mappedSubscriptions.forEach((groupFeeds) => {
                 const groupFeedIds = groupFeeds.map((groupFeed) => groupFeed._feed.feedId);
                 facetQuery = {
@@ -66,19 +66,19 @@ export class PostFunctions {
             })
             const groupFeeds = mappedSubscriptions[0];
             const groupFeedIds = groupFeeds.map((groupFeed) => groupFeed._feed.feedId);
-            // console.log('groupFeedIds', groupFeedIds);
+            // 
             // const posts = await Post.find({
             //     feedId: {
             //         $in: groupFeedIds
             //     }
             // }).limit(15);
-            console.log('facetQuery ', facetQuery)
+            // 
             const posts = await Post.aggregate([
                 {
                     $facet: facetQuery
                 }
             ])
-            // console.log('posts', posts);
+            // 
             resolve(posts);
         })
     }

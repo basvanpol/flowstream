@@ -26,10 +26,10 @@ export class FrontPageEffects {
                 return this.frontPageService.getFrontPagePosts(<IUserFeedSubscription[]>action.payload)
                     .pipe(
                         map((res: any) => {
-                            console.log('get frontpage posts success', res);
+
                             if (res) {
                                 const frontPageEntities: IFrontPageEntity[] = this.parseEntitiesObjectArraytoArray(res.data);
-                                console.log('frontPageEntities', frontPageEntities);
+
                                 return new FrontPageActions.GetFrontPagePostsSuccess(frontPageEntities);
                             }
                         })
@@ -44,7 +44,7 @@ export class FrontPageEffects {
 
 
     parseEntitiesObjectArraytoArray(entityObjectArray: IFrontPageEntityObject[]): IFrontPageEntity[] {
-        console.log('parse', entityObjectArray);
+
         const entityObject: IFrontPageEntityObject = entityObjectArray[0];
         const keysObject =  Object.keys(entityObject);
         const frontpageEntities: IFrontPageEntity[] = [];
@@ -55,7 +55,7 @@ export class FrontPageEffects {
             };
             frontpageEntities.push(frontPageEntity);
         }
-        console.log('frontpageEntities', frontpageEntities);
+
         return frontpageEntities;
     }
 
