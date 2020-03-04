@@ -21,6 +21,10 @@ export class FrontPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadFeedsPosts(entity: IFrontPageEntity) {
+    console.log(entity);
+  }
+
   ngOnInit() {
     // this.frontPageFacade.getFrontPagePosts();
   }

@@ -297,6 +297,12 @@
             }
         }
     }
+
+    .feed-menu__title-link{
+      &:hover{
+        text-decoration:underline;
+      }
+    }
 }
 
 .feeds-menu__feed-container {

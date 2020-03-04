@@ -20,7 +20,6 @@ export class PostsEffects {
                 return this.postsService.getFeedPosts(action.payload)
                     .pipe(
                         switchMap((res) => {
-
                             if (res && res.data) {
                                 return [new PostsActions.LoadFeedPostsSuccess(res.data)];
                             } else {

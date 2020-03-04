@@ -25,9 +25,9 @@
                                         <mat-accordion [multi]="true">
                                             <mat-expansion-panel [@.disabled]="true" *ngFor="let group of mappedSubscriptions, let i = index" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                                                 <mat-expansion-panel-header>
-                                                    <mat-panel-title>
+                                                    <mat-panel-title >
                                                         <app-icon-font [iconClass]="group[0]._group.icon.value"></app-icon-font>
-                                                        <a>{{group[0]._group.title}}</a>
+                                                        <a (click)="onOpenFeedGroup($event, group)" class="feed-menu__title-link">{{group[0]._group.title}}</a>
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
                                                 <ul class="feeds-menu__list">

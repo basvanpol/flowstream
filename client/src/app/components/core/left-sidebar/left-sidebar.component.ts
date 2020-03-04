@@ -1,3 +1,4 @@
+import { FeedVM } from './../../../models/feed';
 import { Router } from '@angular/router';
 import { AddFeedComponent } from '../../features/add-feed/add-feed.component';
 import * as FeedPostsActions from '../../../store/posts/actions/posts.actions';
@@ -21,13 +22,15 @@ export class LeftSidebarComponent implements OnInit {
   userSubscription: Subscription;
   authState: IAuthState;
   mappedSubscriptions: {
-      groupId: string,
-      groupTitle: string,
-      feedSubscriptions: any[]
+    groupId: string,
+    groupTitle: string,
+    feedSubscriptions: any[]
   }[];
 
+  feedGroups: {};
 
-  constructor(public dialog: MatDialog, private store: Store<IAuthState|PostsState>, private router: Router) { }
+
+  constructor(public dialog: MatDialog, private store: Store<IAuthState | PostsState>, private router: Router) { }
 
   openAddFeedDialog() {
     const dialogRef = this.dialog.open(AddFeedComponent, {
@@ -39,24 +42,36 @@ export class LeftSidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.userSubscription = this.store.select('auth').subscribe((state: IAuthState) => {
-        this.authState = state;
-        this.mapFeedSubscriptions(this.authState.feedSubscriptions);
-      });
+    this.userSubscription = this.store.select('auth').subscribe((state: IAuthState) => {
+      this.authState = state;
+      this.mapFeedSubscriptions(this.authState.feedSubscriptions);
+    });
   }
 
   mapFeedSubscriptions(feedSubscriptions: IUserFeedSubscription[]) {
-    const groups = {};
-    feedSubscriptions.forEach(( subscription ) => {
-      if(!!subscription._group){
+    this.feedGroups = {};
+    feedSubscriptions.forEach((subscription) => {
+      if (!!subscription._group) {
         const groupId = subscription._group._id;
-        groups[groupId] = groups[groupId] || [];
-        groups[groupId].push(subscription);
+        this.feedGroups[groupId] = this.feedGroups[groupId] || [];
+        this.feedGroups[groupId].push(subscription);
       }
     });
-    this.mappedSubscriptions = Object.keys(groups).map(( group ) => {
-      return groups[group];
+    this.mappedSubscriptions = Object.keys(this.feedGroups).map((group) => {
+      return this.feedGroups[group];
     });
+  }
+
+  onOpenFeedGroup($event: Event, feedSubscriptionGroup: []) {
+    $event.stopPropagation();
+    const payload = {
+      feedIds: feedSubscriptionGroup.map((feedSubscription: FeedVM) => {
+        return feedSubscription._feed.feedId;
+      }),
+      newSinceDate: null
+    };
+    this.store.dispatch(new FeedPostsActions.LoadFeedPosts(payload));
+    this.router.navigate(['/feed']);
   }
 
   onOpenFeed(feed: FeedFeedVM) {

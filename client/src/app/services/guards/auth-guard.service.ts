@@ -35,7 +35,6 @@ export class AuthGuard implements CanActivate {
         return this.store.select('auth')
             .pipe(
                 tap((state: fromAuth.IAuthState) => {
-                    console.log(' guard 1', state);
                     if (state.authenticated) {
                         return of(true);
                     } else {
@@ -43,7 +42,6 @@ export class AuthGuard implements CanActivate {
                     }
                 }),
                 tap((result: fromAuth.IAuthState) => {
-                    console.log(' guard 2', result);
                     if (result && result.authenticated && result._id) {
                         return result;
                     } else {

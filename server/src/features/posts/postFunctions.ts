@@ -13,7 +13,7 @@ export class PostFunctions {
 
     savePost = (req, res) => {
         const reqPost = req.body.newPost;
-        
+
         return new Promise(async (resolve, reject) => {
             const newPost = await new Post();
             newPost._id = new mongoose.Types.ObjectId();
@@ -33,10 +33,39 @@ export class PostFunctions {
                         this.errorSend = true;
                     }
                 }
-                
+
                 resolve(' saved post');
             });
         })
+    }
+
+    getFeedPosts = async (req, res): Promise<any[]> => {
+
+        let feedIds = req.query.feedId;
+        let feedIdArray: string[];
+        if(typeof(feedIds) === "string") {
+            feedIdArray = [feedIds];
+        } else{
+            feedIdArray = feedIds;
+        }
+
+        const sinceDate = req.query.newSinceDate;
+        let searchQuery;
+
+        if (sinceDate !== 'null') {
+            searchQuery = [{ $match: { feedId: { $in: feedIdArray }, 'date': { $lte: new Date(sinceDate * 1000) } } }, { $sort: { '_id': -1 } }, { $limit: 51 }]
+        } else {
+            searchQuery = [{ $match: { feedId: { $in: feedIdArray } } }, { $sort: { '_id': -1 } }, { $limit: 51 }]
+        }
+
+        return new Promise(async (resolve, reject) => {
+            const posts: any[] = await Post.aggregate(searchQuery);
+            if(!!posts){
+                resolve(posts);
+            } else {
+                reject('no posts');
+            }
+        });
     }
 
     getFrontPagePosts = (req, res) => {
@@ -45,7 +74,7 @@ export class PostFunctions {
         const feedSubscriptions = req.body.feedSubscriptions
         feedSubscriptions.forEach((subscription) => {
             // 
-            if(!!subscription._group){
+            if (!!subscription._group) {
                 const groupId = subscription._group._id;
                 groups[groupId] = groups[groupId] || [];
                 groups[groupId].push(subscription);
@@ -61,7 +90,7 @@ export class PostFunctions {
                 const groupFeedIds = groupFeeds.map((groupFeed) => groupFeed._feed.feedId);
                 facetQuery = {
                     ...facetQuery,
-                    [groupFeeds[0]._group.title]: [{ $match: { feedId: { $in: groupFeedIds } } },{ $sort: { date: -1 }}, {$limit: 7}]
+                    [groupFeeds[0]._group.title]: [{ $match: { feedId: { $in: groupFeedIds } } }, { $sort: { date: -1 } }, { $limit: 7 }]
                 }
             })
             const groupFeeds = mappedSubscriptions[0];

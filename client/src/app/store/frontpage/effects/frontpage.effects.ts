@@ -26,10 +26,8 @@ export class FrontPageEffects {
                 return this.frontPageService.getFrontPagePosts(<IUserFeedSubscription[]>action.payload)
                     .pipe(
                         map((res: any) => {
-
                             if (res) {
                                 const frontPageEntities: IFrontPageEntity[] = this.parseEntitiesObjectArraytoArray(res.data);
-
                                 return new FrontPageActions.GetFrontPagePostsSuccess(frontPageEntities);
                             }
                         })
