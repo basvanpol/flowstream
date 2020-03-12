@@ -25,7 +25,9 @@ export class PostsService extends BaseHttpService {
                 queryParamString = queryParamString + '&feedId=' + feedId;
             }
         });
-        queryParamString = queryParamString + '&newSinceDate=' + payload.newSinceDate;
+
+        const newSinceDateString = (!!payload.newSinceDate) ? '&newSinceDate=' + payload.newSinceDate : '';
+        queryParamString = queryParamString + newSinceDateString;
         const url = `${environment.webApiUrl}/api/posts/${queryParamString}`;
         return this.http.get(url, {
             observe: 'body',
@@ -35,7 +37,6 @@ export class PostsService extends BaseHttpService {
     }
 
     public savePost(post: IPost): Observable<any> {
-        console.log('post', post);
         const url = `${environment.webApiUrl}/api/posts/`;
         return this.http.post(url, {newPost: post}, {
             observe: 'body',
@@ -45,7 +46,6 @@ export class PostsService extends BaseHttpService {
     }
 
     public updatePost(post: IPost): Observable<any> {
-        console.log(' update post');
         const url = `${environment.webApiUrl}/api/updatedpost/`;
         return this.http.post(url, post, {
             observe: 'body',

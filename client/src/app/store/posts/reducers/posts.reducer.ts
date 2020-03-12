@@ -23,7 +23,8 @@ export function postsReducer (state = initialState, action: PostsActions.PostsAc
       return {
         ...state,
         currentPosts: (!action.payload.newSinceDate) ? { posts: [] } : state.currentPosts,
-        selectedFeedIds: action.payload.feedIds
+        selectedFeedIds: action.payload.feedIds,
+        newSinceDate: action.payload.newSinceDate
       };
     case PostsActions.PostsActionTypes.LOAD_FEED_POSTS_SUCCESS:
       return {

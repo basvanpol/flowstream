@@ -52,10 +52,10 @@ export class PostFunctions {
         const sinceDate = req.query.newSinceDate;
         let searchQuery;
 
-        if (sinceDate !== 'null') {
+        if (!!sinceDate) {
             searchQuery = [{ $match: { feedId: { $in: feedIdArray }, 'date': { $lte: new Date(sinceDate * 1000) } } }, { $sort: { '_id': -1 } }, { $limit: 51 }]
         } else {
-            searchQuery = [{ $match: { feedId: { $in: feedIdArray } } }, { $sort: { '_id': -1 } }, { $limit: 51 }]
+            searchQuery = [{ $match: { feedId: { $in: feedIdArray }, 'date': { $lte: new Date() } } }, { $sort: { '_id': -1 } }, { $limit: 51 }]
         }
 
         return new Promise(async (resolve, reject) => {

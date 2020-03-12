@@ -16,10 +16,10 @@ export class PostsEffects {
     loadFeedPosts$ = this.actions$
         .pipe(
             ofType(PostsActions.PostsActionTypes.LOAD_FEED_POSTS),
-            switchMap((action: PostsActions.LoadFeedPosts) => {
+            mergeMap((action: PostsActions.LoadFeedPosts) => {
                 return this.postsService.getFeedPosts(action.payload)
                     .pipe(
-                        switchMap((res) => {
+                        mergeMap((res) => {
                             if (res && res.data) {
                                 return [new PostsActions.LoadFeedPostsSuccess(res.data)];
                             } else {

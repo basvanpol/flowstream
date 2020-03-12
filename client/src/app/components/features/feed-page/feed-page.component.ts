@@ -1,9 +1,11 @@
+import { areArraysUnequal } from './../../../utils/comparative.methods';
 import * as PostsActions from './../../../store/posts/actions/posts.actions';
 import { PostsState } from '../../../store/posts/reducers/posts.reducer';
 import { Store } from '@ngrx/store';
 import { IPost } from '../../../models/post';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-feed-page',
@@ -18,12 +20,16 @@ export class FeedPageComponent implements OnInit {
   currentSinceDate: number;
   selectedFeedIds: string[];
 
-  constructor(private store: Store<PostsState>) { }
+  constructor(@Inject(DOCUMENT) private document: Document, private store: Store<PostsState>) { }
 
   ngOnInit() {
     this.feedPostsSubscription = this.store.select('posts').subscribe((state: PostsState) => {
       this.currentFeedPosts = state.currentPosts.posts;
       this.newSinceDate = state.newSinceDate;
+      if ((this.selectedFeedIds && areArraysUnequal(this.selectedFeedIds, state.selectedFeedIds)) || !this.newSinceDate) {
+        window.scrollTo(0, 0);
+      }
+
       this.selectedFeedIds = state.selectedFeedIds;
     });
   }
