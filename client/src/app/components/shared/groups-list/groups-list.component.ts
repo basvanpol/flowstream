@@ -33,7 +33,7 @@ export class GroupsListComponent {
     });
   }
 
-  deleteGroup(groupId){
+  deleteTag(groupId){
     this.deleteItem.emit({
       groupId
     })

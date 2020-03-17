@@ -64,6 +64,13 @@
   }
 }
 
+.search-twitter-feeds__form {
+  .mat-form-field-appearance-outline .mat-form-field-outline{
+    top: 8px !important;
+    bottom: 4px !important;
+  }
+}
+
 .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0;
   padding: 0;

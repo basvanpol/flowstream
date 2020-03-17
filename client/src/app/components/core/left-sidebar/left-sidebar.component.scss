@@ -7,7 +7,7 @@
     position: absolute;
     top: 60px;
     bottom: 60px;
-    left: 0;
+    left: -5px;
     right: -40px;
 }
 .left-menu-container {
@@ -148,7 +148,7 @@
 
         >div:first-child {
             float: left;
-            margin: 20px 0 0 32px;
+            margin: 17px 0 0 31px;
             height: 24px;
             width: 30px;
         }
@@ -161,11 +161,10 @@
             padding: 22px 44px 0px 0px;
 
             a {
-                color: #464646;
-                font-family: 'Ek Mukta', sans-serif;
-                font-size: 11pt !important;
+                font-family: $font-family-primary;
+                font-size: 15px !important;
                 text-align: left;
-                font-weight: 300;
+                font-weight: 400;
                 text-decoration: none;
                 height: 20px;
                 width: 120px;
@@ -331,7 +330,7 @@
 
         a {
             color: $EDITOR_DARKGREY;
-            font-family: 'Ek Mukta', sans-serif;
+            font-family: $font-family-primary;
             font-size: 11pt !important;
             text-align: left;
             font-weight: 300;
@@ -350,7 +349,7 @@
 
         p {
             color: $EDITOR_TEXT_LIGHTGREY;
-            font-family: 'Noto Sans', sans-serif;
+            font-family: $font-family-primary;
 
             &.sub {
                 font-size: 9pt;
@@ -379,7 +378,7 @@
 
         p {
             color: $EDITOR_TEXT_LIGHTGREY;
-            font-family: 'Noto Sans', sans-serif;
+            font-family: $font-family-primary;
             font-size: 9pt !important;
             text-align: left;
             padding: 0 0 0 16px;
@@ -418,7 +417,7 @@
 
             p {
                 color: #757575;
-                font-family: 'Noto Sans', sans-serif;
+                font-family: $font-family-primary;
                 font-size: 10pt !important;
                 font-weight: 400;
                 text-align: left;

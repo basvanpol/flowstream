@@ -126,7 +126,7 @@
 
   p {
     @include thumb-title-text($EDITOR_TEXT_DARKGREY, 15px);
-    font-family: 'Ek Mukta', serif;
+    font-family: $font-family-primary;
     font-weight: 300;
   }
 }
@@ -305,7 +305,7 @@
 
   p {
     color: rgba(54, 54, 54, 0.88);
-    font-family: 'Noto Sans', sans-serif;
+    font-family: $font-family-primary;
     font-size: 12pt;
     line-height: 1.8;
     text-align: left;

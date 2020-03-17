@@ -19,29 +19,30 @@
       </div>
     </div>
   </div>
-  <mat-tab-group style="flex: 1;" [selectedIndex]="selectedTabIndex" [animationDuration]="'0ms'">
-    <mat-tab label="Categories" style="height: 100%;">
+  <mat-tab-group style="flex: 1;" [selectedIndex]="selectedTabIndex" [animationDuration]="'0ms'" disableRipple>
+    <mat-tab label="Categories" style="height: 100%;" disableRipple>
       <div style="display: flex; flex-direction: row; height:100%;">
         <app-groups-list [listItems]="adminGroups" [selectedId]="selectedAdminGroup._id"
           (selectItem)="onSelectGroup($event)" (deleteItem)="onDeleteGroup($event)"></app-groups-list>
         <div class="add-feed__content-container">
           <h2>{{selectedGroupName}}</h2>
           <div class="add-feed__group-feeds-container">
-            <div *ngFor="let feed of groupFeeds" class="add-feed__item-card">
+            <div *ngFor="let feed of groupFeeds" class="add-feed__item-card" [ngClass]="{selected: feed.subscribed}">
               <div class="add-feed__icon-container">
                 <img src="{{feed._feed.feedIcon}}" width="40" height="40" />
               </div>
               <p>{{(feed._feed) ? feed._feed.feedName : ''}}</p>
               <div class="add-feed__manage-buttons-holder">
                 <subscription-button (click)="handleSubscription(feed)" [feed]="feed"></subscription-button>
-                <div class="add-feed__categories-button" (click)="addTofeatureList(feed._feed)"><span>Choose categories</span></div>
+                <div class="add-feed__categories-button" (click)="addTofeatureList(feed._feed)"><span>Choose
+                    categories</span></div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </mat-tab>
-    <mat-tab label="Search Results" *ngIf="showSearchResults">
+    <mat-tab label="Search Results" *ngIf="showSearchResults" disableRipple>
       <div class="add-feed__content-container">
         <h2>{{selectedGroupName}}</h2>
         <div class="add-feed__result-container">

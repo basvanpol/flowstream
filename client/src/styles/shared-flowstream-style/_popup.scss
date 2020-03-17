@@ -58,7 +58,7 @@
         -moz-user-select: none;
         border: medium none;
         color: rgba(0, 0, 0, 0.7);
-        font-family: 'Ek Mukta', sans-serif;
+        font-family: $font-family-primary;
         font-size: 14pt;
         font-weight: 500;
         line-height: $DEFAULT_TEXT_LINE_HEIGHT;

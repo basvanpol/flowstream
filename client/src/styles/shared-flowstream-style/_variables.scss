@@ -2,7 +2,7 @@
 
 
 
-$font-family-primary: 'Noto Sans', sans-serif;
+$font-family-primary: 'Roboto', sans-serif;
 $font-family-roboto: 'Roboto', sans-serif;
 
 $font-weight-normal: 500;
@@ -279,7 +279,7 @@ $default-element-margin-large: 30px;
 
   color: $color;
   font-size: $size;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: $font-family-primary;
   line-height: 1.0;
   font-weight: 400;
   text-align: left;

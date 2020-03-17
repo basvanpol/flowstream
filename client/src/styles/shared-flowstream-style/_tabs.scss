@@ -1,4 +1,20 @@
-.mat-tab-label{
-    min-width: 100px !important;
-    padding: 0 $default-element-padding-large !important;
+.mat-tab-label {
+  min-width: 100px !important;
+  height: 52px !important;
+  padding: 2px $default-element-padding-large 2px $default-element-padding-large !important;
+}
+
+.mat-tab-label-active {
+  opacity: 1 !important;
+  .mat-tab-label-content {
+    color: $EDITOR_TEXT_DARK;
+  }
+}
+
+.mat-tab-labels {
+  height: 54px;
+}
+
+.mat-ink-bar {
+  display: none;
 }
