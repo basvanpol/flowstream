@@ -300,9 +300,10 @@ $font-size-mini: 9pt;
 }
 
 /* Image and text small grid post */
-@mixin paper-post-grid-text($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header) {
+@mixin paper-post-grid-text($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header, $max-thumb-height: 100%) {
   width: $thumb-width;
   height: $thumb-height;
+  max-height: $max-thumb-height;
   border-left: 1px solid #f1f1f1;
   border-bottom: 1px solid #f1f1f1;
   margin: 0;
@@ -635,7 +636,7 @@ $font-size-mini: 9pt;
     .postGalleryImage {
       order: 0;
       width: 100%;
-      max-height: $thumb-height;
+      max-height: 32vh;
       margin-bottom: 6px;
       padding-bottom: 0;
 
