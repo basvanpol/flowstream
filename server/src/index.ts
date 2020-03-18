@@ -55,9 +55,9 @@ if (cluster.isMaster) {
     cluster.fork();
     cluster.fork();
     cluster.fork();
-} else {
     collector.initFeedPostCollector();
-
+} else {
+    
     const app = express();
 
     // const certOptions = {
