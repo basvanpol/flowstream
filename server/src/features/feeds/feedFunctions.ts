@@ -4,7 +4,7 @@ const Feed = mongoose.model('Feed');
 const FeedFeature = mongoose.model('FeedFeature');
 const User = mongoose.model('User');
 const Subscription = mongoose.model('Subscription');
-const UserSubscription = mongoose.model('UserSubscription');
+const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 
 export class FeedFunctions {
 
@@ -181,15 +181,15 @@ export class FeedFunctions {
                 if (user) {
                     // let oldNumFeedSubscriptions = user.feedSubscriptions.length;
                     // let newNumFeedSubscriptions = 0;
-                    let userSubscription;
+                    let userFeedSubscription;
                     this.groups.forEach(async (groupId) => {
                         // add user subscriptions
                         if (req.body.actionType === 'subscribe' || req.body.actionType === 'feature') {
                             // user = await this.subscribeFeedToUser(user, groupId);
-                            userSubscription = await this.createUserSubscription(user, groupId, res);
+                            userFeedSubscription = await this.createUserSubscription(user, groupId, res);
                         } else if (req.body.actionType === 'unsubscribe') {
                             // user = await this.unsubscribeFeedFromUser(user, groupId)
-                            userSubscription = await this.removeUserSubscription(user, groupId, res);
+                            userFeedSubscription = await this.removeUserSubscription(user, groupId, res);
                         }
                     });
 
@@ -242,18 +242,18 @@ export class FeedFunctions {
     createUserSubscription(user, groupId, res) {
         
         return new Promise((resolve, reject) => {
-            UserSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userSubscription) => {
-                if (!userSubscription) {
-                    const userSubscription = await new UserSubscription();
-                    userSubscription._id = new mongoose.Types.ObjectId();
-                    userSubscription._feed = this.feedObjectId;
-                    userSubscription._user = this.userId;
-                    userSubscription._group = groupId;
-                    await userSubscription.save((err) => {
+            UserFeedSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userFeedSubscription) => {
+                if (!userFeedSubscription) {
+                    const userFeedSubscription = await new UserFeedSubscription();
+                    userFeedSubscription._id = new mongoose.Types.ObjectId();
+                    userFeedSubscription._feed = this.feedObjectId;
+                    userFeedSubscription._user = this.userId;
+                    userFeedSubscription._group = groupId;
+                    await userFeedSubscription.save((err) => {
                         if (err) {
                             reject('err.message')
                         }
-                        resolve(userSubscription);
+                        resolve(userFeedSubscription);
                     });
                 }
 
@@ -264,7 +264,7 @@ export class FeedFunctions {
 
     removeUserSubscription(user, groupId, res) {
         return new Promise((resolve, reject) => {
-            UserSubscription.deleteOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err) => {
+            UserFeedSubscription.deleteOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err) => {
                 if (err) {
                     reject('error deleting subscription');
                 }
@@ -390,7 +390,7 @@ export class FeedFunctions {
                                     }
                                 }
                                 if (user) {
-                                    UserSubscription.find({ '_user': req.user.id })
+                                    UserFeedSubscription.find({ '_user': req.user.id })
                                         .populate('_feed')
                                         .populate('_group')
                                         .exec(async (err, userSubscriptions) => {

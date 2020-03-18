@@ -9,11 +9,14 @@ const Token = mongoose.model('Token');
 const User = mongoose.model('User');
 const Post = mongoose.model('Post');
 
+let feedPostRequestCounter = 0;
+
+let feedPostTimer = 30000;
+
 const initFeedPostCollector = () => {
     // first get tokens
     getFeedPosts();
-    //setInterval((tokens) => getFeedPosts(tokens), 900000);
-    setInterval(() => getFeedPosts(), 30000);
+    setInterval(() => getFeedPosts(), feedPostTimer);
 }
 
 const getUser = async (id) => {
@@ -37,19 +40,22 @@ const getUser = async (id) => {
 const getFeedPosts = async () => {
     const tokens = await Token.find({}).limit(2);
     let subQueue = [];
+    let tooManyRequests = false;
     if (tokens && tokens.length > 0) {
         Subscription.find({ memberCount: { $gt: 0 } }, async (err, subscriptions) => {
             if (err) {
                 console.log('something went wrong when searching subscription');
             }
+            feedPostTimer = Math.floor((15*60*1000) / Math.floor(900 / subscriptions.length));
             subQueue = subscriptions;
             let tokenIndex = 0;
             if (subQueue.length > 0) {
+                
                 while (subQueue.length > 0) {
                     let token = tokens[tokenIndex];
                     let currentSubscription = subQueue.shift();
 
-                    if (token) {
+                    if (token && !tooManyRequests) {
                         // make the twitter call
                         const oauth = new OAuth.OAuth(
                             'https://api.twitter.com/oauth/request_token',
@@ -65,6 +71,7 @@ const getFeedPosts = async () => {
                         const feed_id = (currentSubscription.feed.feedId) ? currentSubscription.feed.feedId : '';
                         // console.log('currentSubscription.feed', currentSubscription.feed);
                         if (feed_id) {
+                            feedPostRequestCounter++;
                             if (since_id) {
                                 await oauth.get(
                                     `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${feed_id}&count=10&since_id=${since_id}`,
@@ -72,8 +79,11 @@ const getFeedPosts = async () => {
                                     token.tokenSecret, //test user secret            
                                     (err, data, result) => {
                                         // console.log('with since id', feed_id);
-                                        if (err) console.error(err);
-                                        parseTwitterPostsData(currentSubscription, feed_id, data);
+                                        if (err) {
+                                            // console.error(err);
+                                        } else {
+                                            parseTwitterPostsData(currentSubscription, feed_id, data);
+                                        }
                                     });
 
                             } else {
@@ -83,8 +93,11 @@ const getFeedPosts = async () => {
                                     'QxPyt7u4cx25kH0KHnZWCfbk2kxceYALhtyAasw4kNk', //test user secret            
                                     (err, data, result) => {
                                         // console.log('without since id', feed_id);
-                                        if (err) console.error(err);
-                                        parseTwitterPostsData(currentSubscription, feed_id, data);
+                                        if (err) {
+                                            // console.error(err);
+                                        } else {
+                                            parseTwitterPostsData(currentSubscription, feed_id, data);
+                                        }
                                     });
                             }
 
@@ -154,7 +167,6 @@ const getFeedPosts = async () => {
                 // save feed post
                 await newPost.save((err) => {
                     if (err) {
-                        console.log(' errrr ', err);
                         if (err) { console.log(err) }
                     }
                 })
@@ -173,8 +185,6 @@ const getFeedPosts = async () => {
                         if (err) { console.log(err) }
                     })
                 }
-                console.log('sinceId ', sinceId);
-                console.log(' the latest I presume: ', oData[key].urls);
             };
 
             i++;

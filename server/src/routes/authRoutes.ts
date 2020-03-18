@@ -7,7 +7,7 @@ const path = require('path');
 
 const User = mongoose.model('User');
 const Token = mongoose.model('Token');
-const UserSubscription = mongoose.model('UserSubscription');
+const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 
 export default (app) => {
 
@@ -172,13 +172,11 @@ export default (app) => {
         let currentUser = (req.user !== undefined )? req.user : null;
         // res.status(200).send(currentUser);
         if(!!currentUser) {
-            UserSubscription.find({ '_user': req.user.id })
+            UserFeedSubscription.find({ '_user': req.user.id })
             .populate('_feed')
             .populate('_group')
             .exec(async (err, userSubscriptions) => {
                 currentUser.feedSubscriptions = userSubscriptions;
-                
-                
                 res.status(200).send(currentUser);
             });
         }

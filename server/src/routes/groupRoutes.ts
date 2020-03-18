@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 const Group = mongoose.model('Group');
-const UserSubscription = mongoose.model('UserSubscription');
+const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 
 export default (app) => {
 
@@ -44,7 +44,7 @@ export default (app) => {
                         res.status(500).send('delete fail!')
                     }
                 });
-                UserSubscription.deleteMany({ 'group': req.params.groupId })
+                UserFeedSubscription.deleteMany({ 'group': req.params.groupId })
                 .then(result => console.log(`Deleted ${result.deletedCount} item(s).`))
                 .catch(err => console.error(`Delete failed with error: ${err}`));
                 Group.find({ '_user' : '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
