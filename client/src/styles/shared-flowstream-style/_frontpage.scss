@@ -2,14 +2,15 @@
 @import "post-mixins";
 
 .frontpage-view-container{
-    position: relative;
-    float: left;
-    top: 95px;
-    width: 100%;
-    min-height: 700px;
-    margin: 0 auto;
-    padding: 0 60px 100px 120px;
-    text-align: center;
+  position: relative;
+  /* float: left; */
+  top: 95px;
+  max-width: 1400px;
+  /* width: 100%; */
+  min-height: 700px;
+  margin: 0 auto;
+  padding: 0 60px 100px 120px;
+  text-align: center;
 }
 
 .frontpage-view {
