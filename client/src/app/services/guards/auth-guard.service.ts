@@ -2,8 +2,8 @@ import * as AuthActions from '../../store/auth/actions/auth.actions';
 import * as fromAuth from '../../store/auth/reducers/auth.reducer';
 import { Injectable } from '@angular/core';
 import {
-    Router, ActivatedRouteSnapshot,
-    RouterStateSnapshot, CanActivate
+  Router, ActivatedRouteSnapshot,
+  RouterStateSnapshot, CanActivate
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -17,38 +17,45 @@ import { IUser } from '../../models/user';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router, private http: HttpClient, private store: Store<fromAuth.IAuthState>) {
-    }
+  constructor(private router: Router, private http: HttpClient, private store: Store<fromAuth.IAuthState>) {
+  }
 
-    canActivate(): Observable<boolean> | boolean {
-        return this.getFromStoreOrApi()
-            .pipe(switchMap((result) => {
-                if (result) {
-                    return of(true);
-                } else {
-                    return of(false);
-                }
-            }));
-    }
+  canActivate(): Observable<boolean> | boolean {
+    return this.getFromStoreOrApi()
+      .pipe(switchMap((result) => {
+        if (result) {
+          return of(true);
+        } else {
+          return of(false);
+        }
+      }));
+  }
 
-    getFromStoreOrApi(): any {
-        return this.store.select('auth')
-            .pipe(
-                tap((state: fromAuth.IAuthState) => {
-                    if (state.authenticated) {
-                        return of(true);
-                    } else {
-                        this.store.dispatch(new AuthActions.GetUser());
-                    }
-                }),
-                tap((result: fromAuth.IAuthState) => {
-                    if (result && result.authenticated && result._id) {
-                        return result;
-                    } else {
-                        this.router.navigate(['signin']);
-                    }
-                })
-            );
-    }
+  getFromStoreOrApi(): any {
+    return this.store.select('auth')
+      .pipe(
+        tap((state: fromAuth.IAuthState) => {
+          if (state.authenticated) {
+            return of(true);
+          } else if (state.isAuthenticating) {
+            return of(false);
+          } else {
+            this.store.dispatch(new AuthActions.GetUser());
+          }
+        }),
+        tap((result: fromAuth.IAuthState) => {
+          console.log('result', result);
+          if (result && result.authenticated && result._id) {
+            return result;
+          } else if (result.isAuthenticating) {
+            console.log(' is authenticating! ');
+            return result;
+          } else {
+            console.log('aloha!');
+            this.router.navigate(['signin']);
+          }
+        })
+      );
+  }
 }
 

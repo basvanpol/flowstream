@@ -1,3 +1,5 @@
+import { FlowInvitationGuard } from './guards/flow-invitation-guard.service';
+import { FlowDataResolver } from './resolvers/flow-data-resolver.service';
 import { FrontPageService } from './http/frontpage.service';
 import { FilterService } from './filter/filter.service';
 import { ParserService } from './parser/parser.service';
@@ -21,7 +23,8 @@ import { FeedService } from './http/feed.service';
         PostsService,
         ParserService,
         FilterService,
-        FrontPageService
+        FrontPageService,
+        FlowDataResolver
     ]
 })
 export class ServicesModule { }

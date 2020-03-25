@@ -37,8 +37,9 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
 
   onSelectFlow(flowId: number) {
-    this.flowFacade.getFlowPosts(flowId);
-    this.router.navigate(['/flow']);
+
+    // this.router.navigate([`/flow/?flowId=flowId`]);
+    this.router.navigate(['flow'], {queryParams: {flowId: flowId}});
   }
 
   onDeleteFlow(flowId: number) {

@@ -5,6 +5,12 @@
     "logLevel": "debug",
     "changeOrigin": true
   },
+  "/invite/*": {
+    "target": "http://localhost:8090/",
+    "secure": true,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
   "/graphql/*": {
     "target": "http://localhost:8090",
     "secure": true,

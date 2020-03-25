@@ -50,6 +50,9 @@ export class LeftSidebarComponent implements OnInit {
 
   mapFeedSubscriptions(feedSubscriptions: IUserFeedSubscription[]) {
     this.feedGroups = {};
+    if (!feedSubscriptions) {
+      return;
+    }
     feedSubscriptions.forEach((subscription) => {
       if (!!subscription._group) {
         const groupId = subscription._group._id;

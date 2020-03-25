@@ -5,6 +5,10 @@ const Post = mongoose.model('Post');
 
 export default (app) => {
 
+    app.get('/invite/:hash', (req, res) => {
+        res.redirect(`/flow?flowId=5e62aa1c32da1c0011942357`);
+    });
+
     app.post('/api/flows/', (req, res) => {
         
         if (req.body && (req.body.title || req.body.flowTitle)) {

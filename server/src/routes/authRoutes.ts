@@ -41,7 +41,7 @@ export default (app) => {
                 res.redirect(`http://localhost:4200/static/authcallbackredirect.html?userId=${req.user._id}`);
             } else {
                 
-                res.redirect(`/connect/?twitter=ok&userId=${req.user._id}`);
+                res.redirect(`/?twitter=ok&userId=${req.user._id}`);
             }
         }
     );

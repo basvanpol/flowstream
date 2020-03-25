@@ -48,7 +48,7 @@ export class HeaderTopComponent {
   }
 
   goHome() {
-    this.router.navigate(['connect/frontpage']);
+    this.router.navigate(['/frontpage']);
   }
 
 }
