@@ -15,7 +15,7 @@ And run ng serve again.<br>
 
 Then, open a new terminal window in your ide and go into server folder (cd ../server) and run npm install again <br><br>
 
-In order for the backend to run properly locally you need a .env file with environment vars for the following: <br><br>
+In order for the backend to run properly locally you need to create a .env file in the root of your server project with environment vars for the following: <br><br>
 
 googleClientID= <br>
 googleClientSecret= <br>
