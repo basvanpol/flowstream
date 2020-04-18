@@ -13,7 +13,7 @@ export class ImageLoadedComponent implements OnInit {
   @Input() showFull: string;
   @Input() set source(value: string) {
     // this.imageSource = value;
-    this.imageUrl = this.imageSource;
+    this.imageUrl = value;
     // if (!this.promisedImage) {
     // } else {
     //   this.parserService.scrapeMeta(this.scrapeLink).then((body) => {
