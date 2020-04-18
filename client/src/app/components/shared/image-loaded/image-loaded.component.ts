@@ -12,8 +12,8 @@ export class ImageLoadedComponent implements OnInit {
   @Input() promisedImage: string;
   @Input() showFull: string;
   @Input() set source(value: string) {
-    this.imageUrl = this.parseSrc(this.imageSource);
     // this.imageSource = value;
+    this.imageUrl = this.imageSource;
     // if (!this.promisedImage) {
     // } else {
     //   this.parserService.scrapeMeta(this.scrapeLink).then((body) => {
