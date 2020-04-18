@@ -18,8 +18,8 @@ let feedPostTimer = 30000;
 
 const initFeedPostCollector = () => {
     // first get tokens
-    getFeedPosts();
-    setInterval(() => getFeedPosts(), feedPostTimer);
+    // getFeedPosts();
+    // setInterval(() => getFeedPosts(), feedPostTimer);
 }
 
 const getUser = async (id) => {
