@@ -20,7 +20,7 @@
             "image": "basvanpol/fs-api",
             "hostname": "api",
             "essential": false,
-            "memory": 512,
+            "memory": 256,
             "portMappings": [
                 {
                     "hostPort": 8090,
@@ -33,7 +33,7 @@
             "image": "basvanpol/fs-content-server",
             "hostname": "content-server",
             "essential": false,
-            "memory": 512
+            "memory": 256
         },
         {
             "name": "nginx",
