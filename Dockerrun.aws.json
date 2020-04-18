@@ -29,6 +29,13 @@
             ]
         },
         {
+            "name": "content-server",
+            "image": "basvanpol/fs-content-server",
+            "hostname": "content-server",
+            "essential": false,
+            "memory": 512
+        },
+        {
             "name": "nginx",
             "image": "basvanpol/fs-nginx",
             "hostname": "nginx",

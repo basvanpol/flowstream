@@ -1,4 +1,4 @@
-import { PostFunctions } from './../features/posts/postFunctions';
+import { PostFunctions } from '../features/posts/postFunctions';
 import * as mongoose from 'mongoose';
 const Post = mongoose.model('Post');
 const postFunctions = new PostFunctions();

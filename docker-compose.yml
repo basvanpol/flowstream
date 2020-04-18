@@ -1,28 +1,32 @@
-version: '3' # specify docker-compose version
+version: "3" # specify docker-compose version
 
 # Define the services/containers to be run
 services:
   nginx:
     restart: always
-    build: 
+    build:
       context: ./nginx
       dockerfile: Dockerfile
-    ports: 
-      - '80:80'
+    ports:
+      - "80:80"
     depends_on:
       - api
       - client
 
   client: # name of the first service
-    build: 
-        context: ./client # specify the directory of the Dockerfile
-        dockerfile: Dockerfile
-    ports: 
-      - '8080:8080'
+    build:
+      context: ./client # specify the directory of the Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
 
   api: #name of the second service
-    build: 
-        context: ./server # specify the directory of the Dockerfile
-        dockerfile: Dockerfile
-    ports: 
-      - '8090:8090'
+    build:
+      context: ./api # specify the directory of the Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+  content-server: #name of the second service
+    build:
+      context: ./content-server # specify the directory of the Dockerfile
+      dockerfile: Dockerfile

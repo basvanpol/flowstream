@@ -1,4 +1,6 @@
 client/node_modules
-server/node_modules
-server/src/_config
-server/.env
+api/node_modules
+api/src/_config
+api/.env
+content-server/node_modules
+content-server/.env

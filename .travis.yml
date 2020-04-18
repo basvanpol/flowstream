@@ -4,13 +4,15 @@ services:
       
 script:
     - docker build -t basvanpol/fs-client ./client
-    - docker build -t basvanpol/fs-api ./server
+    - docker build -t basvanpol/fs-api ./api
+    - docker build -t basvanpol/fs-content-server ./content-server
     - docker build -t basvanpol/fs-nginx ./nginx
     # login to docker cli
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # push these images to docker hub
     - docker push basvanpol/fs-client:latest
     - docker push basvanpol/fs-api:latest
+    - docker push basvanpol/fs-content-server:latest
     - docker push basvanpol/fs-nginx:latest
 
 deploy:

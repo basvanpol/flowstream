@@ -55,17 +55,10 @@ if (cluster.isMaster) {
     cluster.fork();
     cluster.fork();
     cluster.fork();
-    collector.initFeedPostCollector();
+    // collector.initFeedPostCollector();
 } else {
     
     const app = express();
-
-    // const certOptions = {
-    //     key: fs.readFileSync(path.resolve('certs/server.key')),
-    //     cert: fs.readFileSync(path.resolve('certs/server.crt'))
-    // }
-
-    // const server = https.createServer(certOptions, app)
 
     app.use('/static', express.static(path.join(__dirname, 'static')))
     app.use(bodyParser.json());

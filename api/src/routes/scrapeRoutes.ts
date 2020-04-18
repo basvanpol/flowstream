@@ -3,7 +3,6 @@
 var express = require('express');
 var request = require('request');
 var cheerio = require("cheerio");
-// var metascraper = require("metascraper");
 const Metascraper = require('metascraper')
 var queryRouter = express.Router();
 

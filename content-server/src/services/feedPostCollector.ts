@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
+var cheerio = require("cheerio");
+const Metascraper = require('metascraper')
+var request = require('request');
 require('./../models/Subscription');
 require('./../models/User');
 require('./../models/Post');
 const OAuth = require('oauth');
-// const keys = require('./../config/keys');
 const Subscription = mongoose.model('Subscription');
 const Token = mongoose.model('Token');
 const User = mongoose.model('User');
 const Post = mongoose.model('Post');
+
 
 let feedPostRequestCounter = 0;
 
@@ -38,6 +41,7 @@ const getUser = async (id) => {
 }
 
 const getFeedPosts = async () => {
+    console.log('get feed posts')
     const tokens = await Token.find({}).limit(2);
     let subQueue = [];
     let tooManyRequests = false;
@@ -46,11 +50,11 @@ const getFeedPosts = async () => {
             if (err) {
                 console.log('something went wrong when searching subscription');
             }
-            feedPostTimer = Math.floor((15*60*1000) / Math.floor(900 / subscriptions.length));
+            feedPostTimer = Math.floor((15 * 60 * 1000) / Math.floor(900 / subscriptions.length));
             subQueue = subscriptions;
             let tokenIndex = 0;
             if (subQueue.length > 0) {
-                
+
                 while (subQueue.length > 0) {
                     let token = tokens[tokenIndex];
                     let currentSubscription = subQueue.shift();
@@ -78,9 +82,9 @@ const getFeedPosts = async () => {
                                     token.token, //test user token
                                     token.tokenSecret, //test user secret            
                                     (err, data, result) => {
-                                        // console.log('with since id', feed_id);
+                                        console.log('with since id', feed_id);
                                         if (err) {
-                                            // console.error(err);
+                                            console.error(err);
                                         } else {
                                             parseTwitterPostsData(currentSubscription, feed_id, data);
                                         }
@@ -114,6 +118,7 @@ const getFeedPosts = async () => {
     }
 
     const parseTwitterPostsData = async (subscription, feedId, data) => {
+        console.log('parse twitter post')
         let oData = JSON.parse(data); //reverse since the oldest tweets need to be saved first, otherwise next time new tweets will be saved in wrong order after previously saved tweets
         if (oData.length > 0) {
             oData = [...oData].reverse();
@@ -128,41 +133,19 @@ const getFeedPosts = async () => {
             if (oData[key].id_str !== subscription.sinceId) {
                 // console.log('oData[key]', oData[key]);
 
-                let aContent = [];
-                if (oData[key].text) {
-                    const oText = { "mainType": "TEXT", "type": "TEXT_TWITTER", "source": oData[key].text, "date": null, "location": null, "thumb": null }
-                    aContent.push(oText);
-                }
-                console.log('oData[key]', oData[key]);
-                const entities = oData[key].entities;
-
-                if (entities.urls) {
-                    console.log('urls: ', entities.urls);
-                    const urls = entities.urls;
-                    const firstUrl = entities.urls[0];
-                    if (firstUrl && firstUrl.expanded_url) {
-                        const oLink = { "mainType": "LINK", "type": "LINK_TWITTER", "source": entities.urls[0].expanded_url, "date": null, "location": null, "thumb": null }
-                        aContent.push(oLink);
-                    }
-                }
-
-                if (entities.media) {
-                    const oMedia = { "mainType": "IMAGE", "type": "IMAGE_TWITTER", "source": entities.media[0].media_url, "date": null, "location": null, "thumb": null };
-                    aContent.push(oMedia);
-                }
-
-                const oUser = oData[key].user;
-                let metaData = {
-                    "authorname": "@" + oUser.screen_name,
-                    "authorThumb": oUser.profile_image_url,
-                    "name": oUser.name
-                };
+                let aContent = await parseContent(oData, key)
 
                 const newPost = await new Post();
 
                 newPost.feedId = feedId;
                 newPost.date = new Date(oData[key].created_at);
                 newPost.contents = aContent;
+                const oUser = oData[key].user;
+                let metaData = {
+                    "authorname": "@" + oUser.screen_name,
+                    "authorThumb": oUser.profile_image_url,
+                    "name": oUser.name
+                };
                 newPost.metaData = metaData;
                 // save feed post
                 await newPost.save((err) => {
@@ -193,9 +176,162 @@ const getFeedPosts = async () => {
     }
 }
 
+const parseContent = (oData: any, key: any) => {
+    let promise = new Promise(async (resolve, reject) => {
+        const aContent = [];
+        const entities = oData[key].entities;
+        let scrapedContent
+        if (entities.urls) {
+            console.log('urls: ', entities.urls);
+            const urls = entities.urls;
+            const firstUrl = entities.urls[0] ? entities.urls[0].expanded_url : null;
+            if (firstUrl) {
+                const oLink = { "mainType": "LINK", "type": "LINK_TWITTER", "source": firstUrl, "date": null, "location": null, "thumb": null }
+                aContent.push(oLink);
+            }
+            if(!!firstUrl){
+                scrapedContent = await getScrapedContent(firstUrl, "twitter")
+            }
+        }
 
+        console.log('scrapedContent', scrapedContent);
+        const description = (scrapedContent && scrapedContent.description) ? scrapedContent.description : (oData[key].text) ? oData[key].text : '';
+        if(!!description){
+            const oText = { "mainType": "TEXT", "type": "TEXT_TWITTER", "source": description, "date": null, "location": null, "thumb": null }
+            aContent.push(oText);
+        }
+
+
+        const imageUrl = (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : (entities.media && entities.media[0].media_url) ? entities.media[0].media_url : ''
+
+        if (!!imageUrl) {
+            const oMedia = { "mainType": "IMAGE", "type": "IMAGE_TWITTER", "source": imageUrl, "date": null, "location": null, "thumb": null };
+            aContent.push(oMedia);
+        }
+
+        resolve(aContent);
+
+    });
+
+    return promise;
+
+
+}
+
+const getScrapedContent = async (url, sType) => {
+
+    var imageUrl;
+    var title;
+    var description;
+    var publisher;
+
+    console.log('url', url);
+    return new Promise(async (resolve, reject) => {
+        const metadata = await Metascraper.scrapeUrl(url);
+        if (metadata) {
+            if (sType == "twitter") {
+
+                var expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+                const description = metadata.description;
+                var regex = new RegExp(expression);
+                let aUrl;
+                if (description) {
+                    aUrl = description.match(regex);
+                }
+                if (aUrl && aUrl.length > 0) {
+                    const indirectArticleUrl = aUrl[0];
+
+                    const indirectMetadata = await Metascraper.scrapeUrl(indirectArticleUrl);
+                    if (indirectMetadata) {
+                        imageUrl = indirectMetadata.image;
+
+                    }
+                } else {
+                    if (metadata.image) {
+
+                        imageUrl = metadata.image;
+                    } else {
+                        request(url, function (error, response, body) {
+                            if (!error) {
+                                var $ = cheerio.load(body);
+                                var $image;
+                                $image = $('meta[property="og:image"]');
+
+                                if ($image != undefined) {
+                                    imageUrl = $image.attr('content')
+
+                                } else {
+                                    $image = $('article').find('img');
+                                    if ($image != undefined) {
+                                        imageUrl = getImageUrl($image);
+                                    }
+                                }
+                            } else {
+
+                            }
+
+                        })
+                    }
+                }
+            } else {
+                if (metadata.image) {
+                    imageUrl = metadata.image;
+                } else {
+                    request(url, function (error, response, body) {
+                        if (!error) {
+                            var $ = cheerio.load(body);
+                            var $image;
+                            $image = $('meta[property="og:image"]');
+
+                            if ($image != undefined) {
+                                imageUrl = $image.attr('content')
+                            } else {
+                                $image = $('article').find('img');
+                                if ($image != undefined) {
+                                    imageUrl = getImageUrl($image);
+                                }
+                            }
+                        } else {
+
+                        }
+
+                    })
+                }
+            }
+        }
+        
+        title = (metadata.title) ? metadata.title : '';
+        description = (metadata.description) ? metadata.description : '';
+        publisher = (metadata.publisher) ? metadata.publisher : '';
+
+        const scrapedContent = {
+            title,
+            description,
+            publisher,
+            imageUrl
+        }
+        resolve(scrapedContent);
+    })
+
+
+}
+
+const getImageUrl = function ($image) {
+
+    var imageUrl = $image.attr('src');
+    if (imageUrl == undefined) {
+        imageUrl = $image.attr('srcset');
+        if (imageUrl != undefined) {
+            var aImageUrl = imageUrl.split(',', 1);
+            imageUrl = aImageUrl[0].split(" ")[0];
+        }
+    }
+
+    return imageUrl;
+};
 
 
 module.exports = {
     initFeedPostCollector
-}
+};
+

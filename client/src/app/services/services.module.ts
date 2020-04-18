@@ -1,4 +1,3 @@
-import { FlowInvitationGuard } from './guards/flow-invitation-guard.service';
 import { FlowDataResolver } from './resolvers/flow-data-resolver.service';
 import { FrontPageService } from './http/frontpage.service';
 import { FilterService } from './filter/filter.service';
@@ -13,18 +12,18 @@ import { BaseHttpService } from './http/base.http.service';
 import { FeedService } from './http/feed.service';
 
 @NgModule({
-    providers: [
-        BaseHttpService,
-        TwitterService,
-        FeedService,
-        FlowService,
-        GroupService,
-        AuthService,
-        PostsService,
-        ParserService,
-        FilterService,
-        FrontPageService,
-        FlowDataResolver
-    ]
+  providers: [
+    BaseHttpService,
+    TwitterService,
+    FeedService,
+    FlowService,
+    GroupService,
+    AuthService,
+    PostsService,
+    ParserService,
+    FilterService,
+    FrontPageService,
+    FlowDataResolver
+  ]
 })
 export class ServicesModule { }
