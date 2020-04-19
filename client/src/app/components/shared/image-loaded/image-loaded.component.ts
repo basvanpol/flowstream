@@ -12,21 +12,7 @@ export class ImageLoadedComponent implements OnInit {
   @Input() promisedImage: string;
   @Input() showFull: string;
   @Input() set source(value: string) {
-    // this.imageSource = value;
     this.imageUrl = value;
-    // if (!this.promisedImage) {
-    // } else {
-    //   this.parserService.scrapeMeta(this.scrapeLink).then((body) => {
-    //     const metaData: any = body;
-
-    //     this.imageUrl = this.parseSrc(metaData.imageUrl);
-    //     // this.$scope.$emit("meta:scraped", { source: metaData });
-    //     this.metaScraped.emit({ source: metaData });
-
-    //   }, (err) => {
-
-    //   });
-    // }
   }
 
   imageSource: string;
