@@ -16,13 +16,13 @@ export class PostContentComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onMetaScraped (event) {
+  public onMetaScraped(event) {
     if (this.content.source === "") {
-        this.content.source = (event.source.imageUrl !== "") ? event.source.imageUrl : "";
-        delete this.content.isPromisedImage;
-        delete this.content.scrapeLink;
+      this.content.source = (event.source.imageUrl !== "") ? event.source.imageUrl : "";
+      delete this.content.isPromisedImage;
+      delete this.content.scrapeLink;
 
-        this.imageUpdated.emit(this.content);
+      this.imageUpdated.emit(this.content);
     }
   }
 
