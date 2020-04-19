@@ -7,7 +7,7 @@
             "hostname": "client",
             "essential": false,
             "links": ["api"],
-            "memory": 256,
+            "memory": 128,
             "portMappings": [
                 {
                     "hostPort": 8080,
@@ -33,13 +33,7 @@
             "image": "basvanpol/fs-content-server",
             "hostname": "content-server",
             "essential": false,
-            "memory": 256,
-            "portMappings": [
-                {
-                    "hostPort": 8070,
-                    "containerPort": 8070
-                }
-            ]
+            "memory": 256
         },
         {
             "name": "nginx",

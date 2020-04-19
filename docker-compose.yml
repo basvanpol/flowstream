@@ -12,6 +12,7 @@ services:
     depends_on:
       - api
       - client
+      - content-server
 
   client: # name of the first service
     build:

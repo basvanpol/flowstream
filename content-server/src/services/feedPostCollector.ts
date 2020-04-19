@@ -202,7 +202,7 @@ const parseContent = (oData: any, key: any) => {
         }
 
 
-        const imageUrl = (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : (entities.media && entities.media[0].media_url) ? entities.media[0].media_url : ''
+        const imageUrl = (entities.media && entities.media[0].media_url) ? entities.media[0].media_url : (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl  : ''
 
         if (!!imageUrl) {
             const oMedia = { "mainType": "IMAGE", "type": "IMAGE_TWITTER", "source": imageUrl, "date": null, "location": null, "thumb": null };
