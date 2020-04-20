@@ -11,7 +11,7 @@ const path = require('path');
 const https = require('https');
 require('dotenv').config();
 require('./models/Token');
-const collector = require('./services/feedPostCollector');
+
 const graphqlHttp = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
@@ -24,6 +24,8 @@ import './models/Feed';
 import './models/FeedFeature';
 import './models/User';
 import './models/UserFeedSubscription';
+import './models/Post';
+import './models/Subscription';
 import './models/Group';
 import './services/passport';
 import authRoutes from './routes/authRoutes';
@@ -57,8 +59,11 @@ if (cluster.isMaster) {
     cluster.fork();
     // collector.initFeedPostCollector();
 } else {
-    
+
     const app = express();
+
+
+    // const server = https.createServer(certOptions, app)
 
     app.use('/static', express.static(path.join(__dirname, 'static')))
     app.use(bodyParser.json());

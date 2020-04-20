@@ -41,7 +41,6 @@ const getUser = async (id) => {
 }
 
 const getFeedPosts = async () => {
-    console.log('get feed posts')
     const tokens = await Token.find({}).limit(2);
     let subQueue = [];
     let tooManyRequests = false;
@@ -118,7 +117,6 @@ const getFeedPosts = async () => {
     }
 
     const parseTwitterPostsData = async (subscription, feedId, data) => {
-        console.log('parse twitter post')
         let oData = JSON.parse(data); //reverse since the oldest tweets need to be saved first, otherwise next time new tweets will be saved in wrong order after previously saved tweets
         if (oData.length > 0) {
             oData = [...oData].reverse();
@@ -127,13 +125,17 @@ const getFeedPosts = async () => {
         }
         let i = 0;
         let newestPostIndex = oData.length - 1;
-        console.log('data length ', oData.length);
         for (let key in oData) {
             // console.log(`if ${oData[key].id_str} !== ${subscription.sinceId}`)
             if (oData[key].id_str !== subscription.sinceId) {
-                // console.log('oData[key]', oData[key]);
-
-                let aContent = await parseContent(oData, key)
+                let aContent
+                try {
+                    aContent = await parseContent(oData, key)
+                }
+                catch (error) {
+                    console.error(error);
+                    aContent = [];
+                }
 
                 const newPost = await new Post();
 
@@ -177,32 +179,34 @@ const getFeedPosts = async () => {
 }
 
 const parseContent = (oData: any, key: any) => {
-    let promise = new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const aContent = [];
         const entities = oData[key].entities;
         let scrapedContent
         if (entities.urls) {
-            console.log('urls: ', entities.urls);
             const urls = entities.urls;
             const firstUrl = entities.urls[0] ? entities.urls[0].expanded_url : null;
-            if (firstUrl) {
+            if (!!firstUrl) {
                 const oLink = { "mainType": "LINK", "type": "LINK_TWITTER", "source": firstUrl, "date": null, "location": null, "thumb": null }
                 aContent.push(oLink);
-            }
-            if(!!firstUrl){
-                scrapedContent = await getScrapedContent(firstUrl, "twitter")
+                try {
+                    scrapedContent = await getScrapedContent(firstUrl, "twitter")
+                }
+                catch (error) {
+                    console.error(error);
+                    reject('Parse Error');
+                }
             }
         }
 
-        console.log('scrapedContent', scrapedContent);
         const description = (scrapedContent && scrapedContent.description) ? scrapedContent.description : (oData[key].text) ? oData[key].text : '';
-        if(!!description){
+        if (!!description) {
             const oText = { "mainType": "TEXT", "type": "TEXT_TWITTER", "source": description, "date": null, "location": null, "thumb": null }
             aContent.push(oText);
         }
 
 
-        const imageUrl = (entities.media && entities.media[0].media_url) ? entities.media[0].media_url : (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl  : ''
+        const imageUrl = (entities.media && entities.media[0].media_url) ? entities.media[0].media_url : (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : ''
 
         if (!!imageUrl) {
             const oMedia = { "mainType": "IMAGE", "type": "IMAGE_TWITTER", "source": imageUrl, "date": null, "location": null, "thumb": null };
@@ -212,8 +216,6 @@ const parseContent = (oData: any, key: any) => {
         resolve(aContent);
 
     });
-
-    return promise;
 
 
 }
@@ -227,7 +229,13 @@ const getScrapedContent = async (url, sType) => {
 
     console.log('url', url);
     return new Promise(async (resolve, reject) => {
-        const metadata = await Metascraper.scrapeUrl(url);
+        let metadata;
+        try {
+            metadata = await Metascraper.scrapeUrl(url);
+        } catch (e) {
+            console.log('meta data error');
+            return reject('meta data error');
+        }
         if (metadata) {
             if (sType == "twitter") {
 
@@ -240,15 +248,20 @@ const getScrapedContent = async (url, sType) => {
                 }
                 if (aUrl && aUrl.length > 0) {
                     const indirectArticleUrl = aUrl[0];
+                    let indirectMetadata;
+                    try {
+                        indirectMetadata = await Metascraper.scrapeUrl(indirectArticleUrl);
+                    }
+                    catch (e) {
+                        console.log('meta scraper error', e);
+                        return reject('meta scraper error');
+                    }
 
-                    const indirectMetadata = await Metascraper.scrapeUrl(indirectArticleUrl);
                     if (indirectMetadata) {
                         imageUrl = indirectMetadata.image;
-
                     }
                 } else {
                     if (metadata.image) {
-
                         imageUrl = metadata.image;
                     } else {
                         request(url, function (error, response, body) {
@@ -267,7 +280,7 @@ const getScrapedContent = async (url, sType) => {
                                     }
                                 }
                             } else {
-
+                                return reject('scrape meta cheerio error');
                             }
 
                         })
@@ -292,17 +305,20 @@ const getScrapedContent = async (url, sType) => {
                                 }
                             }
                         } else {
-
+                            return reject('scrape meta cheerio error 2');
                         }
 
                     })
                 }
             }
+            title = (metadata.title) ? metadata.title : '';
+            description = (metadata.description) ? metadata.description : '';
+            publisher = (metadata.publisher) ? metadata.publisher : '';
+        } else {
+            // no meta data or incorrect url
+            console.log('no meta data');
+            return reject('no meta');
         }
-        
-        title = (metadata.title) ? metadata.title : '';
-        description = (metadata.description) ? metadata.description : '';
-        publisher = (metadata.publisher) ? metadata.publisher : '';
 
         const scrapedContent = {
             title,
