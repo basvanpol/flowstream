@@ -1,23 +1,22 @@
 import * as mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
+import './models/Token';
 import * as express from 'express';
 import * as cookieSession from 'cookie-session';
 import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
-// const keys = require('./config/keys');
 import * as cors from 'cors';
+
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 require('dotenv').config();
-require('./models/Token');
 
 const graphqlHttp = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 const cluster = require('cluster');
-
-
+const collector = require('./services/feedPostCollector');
 
 import './models/Flow';
 import './models/Feed';
@@ -27,6 +26,7 @@ import './models/UserFeedSubscription';
 import './models/Post';
 import './models/Subscription';
 import './models/Group';
+
 import './services/passport';
 import authRoutes from './routes/authRoutes';
 import twitterRoutes from './routes/twitterRoutes';
@@ -35,6 +35,7 @@ import flowRoutes from './routes/flowRoutes';
 import groupRoutes from './routes/groupRoutes';
 import postRoutes from './routes/postRoutes';
 import scrapeRoutes from './routes/scrapeRoutes';
+
 
 const corsOptions = {
     origin: true,
@@ -57,7 +58,7 @@ if (cluster.isMaster) {
     cluster.fork();
     cluster.fork();
     cluster.fork();
-    // collector.initFeedPostCollector();
+    collector.initFeedPostCollector();
 } else {
 
     const app = express();
