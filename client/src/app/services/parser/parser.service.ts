@@ -45,11 +45,11 @@ export class ParserService {
         if (content.type === ContentType.TEXT_RSS) {
           parsedContent = this.getRssHTML(content.source, showFull);
         } else if (content.type === ContentType.TEXT_TWITTER) {
-          parsedContent = this.getRichHTML(content.source, showFull);
-        } else if (content.type === ContentType.TEXT_EXT) {
-          parsedContent = this.getTextExt(content.source, showFull);
-        } else {
-          parsedContent = this.getRichHTML(content.source, showFull);
+          parsedContent = this.getDescription(content.source);
+        } else if (content.type === ContentType.TEXT_TITLE) {
+          parsedContent = this.getTitle(content.source);
+        } else  {
+          parsedContent = this.getDefaultText(content.source);
         }
 
         // content.htmlContent = this.$sce.trustAsHtml(parsedContent);
@@ -407,27 +407,7 @@ export class ParserService {
     return rawText;
   }
 
-  getRichHTML(text, bShowFull) {
-    if (typeof bShowFull === 'undefined') {
-      bShowFull = true;
-    }
 
-    let rawText = text;
-    if (!rawText) {
-      return "";
-    }
-
-    if (!bShowFull) {
-      // const summaryText = this.getTextSummary(rawText);
-      const summaryText = this.getLongSummary(rawText);
-      rawText = this.getRichTitle(summaryText);
-    }
-
-    rawText = this.parseLinks(rawText);
-    rawText = this.parseUsernames(rawText);
-    rawText = this.parseHashtags(rawText);
-    return '<div class="post-title"><p>' + rawText + '</p></div>';
-  }
 
   getScraperPostHTML(text) {
 
@@ -504,14 +484,33 @@ export class ParserService {
     return rawText;
   }
 
-  getTextExt(rawText, bShowFull) {
-    if (!bShowFull && !!rawText) {
-      rawText = this.getSummary(rawText);
-      return '<div class="TEXT_EXT"><p>' + rawText + '</p></div>';
+  getDefaultText(rawText) {
+    if (!!rawText) {
+      return '<div class="TEXT"><p>' + rawText + '</p></div>';
     } else {
       return '';
     }
+  }
 
+  getTitle(rawText) {
+    if (!!rawText) {
+      return '<div class="post__title"><p>' + rawText + '</p></div>';
+    } else {
+      return '';
+    }
+  }
+
+  getDescription(text) {
+    let rawText = text;
+    if (!rawText) {
+      return "";
+    }
+    const summaryText = this.getLongSummary(rawText);
+    rawText = this.getRichTitle(summaryText);
+    rawText = this.parseLinks(rawText);
+    rawText = this.parseUsernames(rawText);
+    rawText = this.parseHashtags(rawText);
+    return '<div class="post__description"><p>' + rawText + '</p></div>';
   }
 
   /**

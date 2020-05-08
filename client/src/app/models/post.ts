@@ -26,6 +26,7 @@ export enum ContentType {
     VIDEO_YOUTUBE = "VIDEO_YOUTUBE",
     VIDEO_TWITTER = "VIDEO_TWITTER",
     TEXT = "TEXT",
+    TEXT_TITLE = 'TEXT_TITLE',
     TEXT_TWITTER = "TEXT_TWITTER",
     TEXT_RSS = "TEXT_RSS",
     TEXT_EXT = "TEXT_EXT",

@@ -59,7 +59,7 @@ export default (app) => {
 
     app.get('/api/admingroups', (req, res) => {
         // get groups 
-        Group.find({ '_user' : '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
+        Group.find({ '_user' : '5eb1d665ece528543de4dd0f' }, async (err, groups) => {
             if (err) {
                 res.status(500).send('Something broke!')
             }

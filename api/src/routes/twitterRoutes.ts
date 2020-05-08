@@ -1,7 +1,9 @@
 import * as OAuth from 'oauth';
 // const keys = require('./../config/keys');
+const mongoose = require('mongoose');
+const Token = mongoose.model('Token');
 
-export default (app) => {
+export default async(app) => {
 
     const oauth = new OAuth.OAuth(
         'https://api.twitter.com/oauth/request_token',
@@ -13,17 +15,25 @@ export default (app) => {
         'HMAC-SHA1'
     );
 
-    app.get('/api/twitter/search', (req, res) => {
-        oauth.get(
-            `https://api.twitter.com/1.1/users/search.json?q=${req.query.q}&page=1`,
-            '378751182-osBanchlb3uXld55fvplBW6weEChmQBbOrhmPb2r', //test user token
-            'QxPyt7u4cx25kH0KHnZWCfbk2kxceYALhtyAasw4kNk', //test user secret            
-            (e, data, result) => {
-                if (e) console.error(e);
-                const parsedData = parseData(data);
-                res.status(200).send({ data: parsedData, message: 'ok' });
+    const tokens = await Token.find({}).limit(2);
+    let subQueue = [];
+    let tooManyRequests = false;
+    if (tokens && tokens.length > 0) {
+        let token = tokens[0];
+        if (token) {
+            app.get('/api/twitter/search', (req, res) => {
+                oauth.get(
+                    `https://api.twitter.com/1.1/users/search.json?q=${req.query.q}&page=1`,
+                    token.token, //test user token
+                    token.tokenSecret, //test user secret            
+                    (e, data, result) => {
+                        if (e) console.error(e);
+                        const parsedData = parseData(data);
+                        res.status(200).send({ data: parsedData, message: 'ok' });
+                    });
             });
-    });
+        }
+    }
 
 
     // app.post('/api/twitter/search', (req, res) => {

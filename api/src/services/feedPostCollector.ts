@@ -45,11 +45,12 @@ const getFeedPosts = async () => {
     let subQueue = [];
     let tooManyRequests = false;
     if (tokens && tokens.length > 0) {
+        console.log('token!', tokens);
         Subscription.find({ memberCount: { $gt: 0 } }, async (err, subscriptions) => {
             if (err) {
                 console.log('something went wrong when searching subscription');
             }
-            feedPostTimer = Math.floor((15 * 60 * 1000) / Math.floor(900 / subscriptions.length));
+            // feedPostTimer = Math.floor((15 * 60 * 1000) / Math.floor(900 / subscriptions.length));
             subQueue = subscriptions;
             let tokenIndex = 0;
             if (subQueue.length > 0) {
@@ -92,12 +93,12 @@ const getFeedPosts = async () => {
                             } else {
                                 await oauth.get(
                                     `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${feed_id}&count=10}`,
-                                    '378751182-osBanchlb3uXld55fvplBW6weEChmQBbOrhmPb2r', //test user token
-                                    'QxPyt7u4cx25kH0KHnZWCfbk2kxceYALhtyAasw4kNk', //test user secret            
+                                    token.token, //test user token
+                                    token.tokenSecret, //test user secret              
                                     (err, data, result) => {
                                         // console.log('without since id', feed_id);
                                         if (err) {
-                                            // console.error(err);
+                                            console.error(err);
                                         } else {
                                             parseTwitterPostsData(currentSubscription, feed_id, data);
                                         }
@@ -123,11 +124,18 @@ const getFeedPosts = async () => {
         } else {
             return;
         }
+        
         let i = 0;
         let newestPostIndex = oData.length - 1;
         for (let key in oData) {
-            // console.log(`if ${oData[key].id_str} !== ${subscription.sinceId}`)
-            if (oData[key].id_str !== subscription.sinceId) {
+
+            const postData = oData[key];
+            /**
+             *  check for retweets, ignore them.
+             */
+            
+
+            if (postData.id_str !== subscription.sinceId) {
                 let aContent
                 try {
                     aContent = await parseContent(oData, key)
@@ -138,10 +146,10 @@ const getFeedPosts = async () => {
                 }
 
                 const newPost = await new Post();
-
                 newPost.feedId = feedId;
-                newPost.date = new Date(oData[key].created_at);
+                newPost.date = new Date(postData.created_at);
                 newPost.contents = aContent;
+                newPost.title = oData[key].text;
                 const oUser = oData[key].user;
                 let metaData = {
                     "authorname": "@" + oUser.screen_name,
@@ -156,11 +164,11 @@ const getFeedPosts = async () => {
                     }
                 })
             } else {
-                console.log(' hey maar, toch n dubbele!', oData[key].text);
+                console.log(' hey maar, toch n dubbele!', postData.text);
             }
 
             if (i === newestPostIndex) {
-                const sinceId = oData[key].id_str;
+                const sinceId = postData.id_str;
                 if (subscription.sinceId && subscription.sinceId.toString() === sinceId.toString()) {
                     return;
                     // the data set is the same, don't do anything, since the sinceId is the most current
@@ -182,7 +190,8 @@ const parseContent = (oData: any, key: any) => {
     return new Promise(async (resolve, reject) => {
         const aContent = [];
         const entities = oData[key].entities;
-        let scrapedContent
+        let scrapedContent;
+
         if (entities.urls) {
             const urls = entities.urls;
             const firstUrl = entities.urls[0] ? entities.urls[0].expanded_url : null;
@@ -199,7 +208,16 @@ const parseContent = (oData: any, key: any) => {
             }
         }
 
-        const description = (scrapedContent && scrapedContent.description) ? scrapedContent.description : (oData[key].text) ? oData[key].text : '';
+        console.log('oData[key]', oData[key]);
+        console.log('scrapedContent', scrapedContent);
+
+        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : '';
+        if (!!title) {
+            const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
+            aContent.push(oTitleText);
+        }
+
+        const description = (scrapedContent && scrapedContent.description) ? scrapedContent.description : '';
         if (!!description) {
             const oText = { "mainType": "TEXT", "type": "TEXT_TWITTER", "source": description, "date": null, "location": null, "thumb": null }
             aContent.push(oText);
@@ -237,6 +255,8 @@ const getScrapedContent = async (url, sType) => {
             return reject('meta data error');
         }
         if (metadata) {
+            console.log('sType', sType);
+            let redirectedMetadata;
             if (sType == "twitter") {
 
                 var expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
@@ -248,17 +268,19 @@ const getScrapedContent = async (url, sType) => {
                 }
                 if (aUrl && aUrl.length > 0) {
                     const indirectArticleUrl = aUrl[0];
-                    let indirectMetadata;
+                    
                     try {
-                        indirectMetadata = await Metascraper.scrapeUrl(indirectArticleUrl);
+                        redirectedMetadata = await Metascraper.scrapeUrl(indirectArticleUrl);
                     }
                     catch (e) {
                         console.log('meta scraper error', e);
                         return reject('meta scraper error');
                     }
 
-                    if (indirectMetadata) {
-                        imageUrl = indirectMetadata.image;
+                    console.log('redirectedMetadata', redirectedMetadata);
+
+                    if (redirectedMetadata) {
+                        imageUrl = redirectedMetadata.image;
                     }
                 } else {
                     if (metadata.image) {
@@ -311,8 +333,10 @@ const getScrapedContent = async (url, sType) => {
                     })
                 }
             }
-            title = (metadata.title) ? metadata.title : '';
-            description = (metadata.description) ? metadata.description : '';
+
+
+            title = (redirectedMetadata && redirectedMetadata.title) ? redirectedMetadata.title : ( metadata && metadata.title) ? metadata.title : '';
+            description =  (redirectedMetadata && redirectedMetadata.description) ? redirectedMetadata.description : (metadata && metadata.description) ? metadata.description : '';
             publisher = (metadata.publisher) ? metadata.publisher : '';
         } else {
             // no meta data or incorrect url

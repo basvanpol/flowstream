@@ -21,7 +21,7 @@
   max-width: 1400px;
 
   &:not(:first-child):not(:last-child) {
-    margin: 10px auto 10px;
+    margin: 10px auto 30px;
 
     @media (max-width: $screen-phone) {
       margin: 0 auto;
@@ -38,12 +38,13 @@
 
     .frontpage-title {
       text-align: left;
-      padding: 10px 0 9px;
+      padding: 15px 0px;
       cursor: pointer;
       font-size: 16pt;
       background-color: #f1f1f1;
       height: 100%;
-      font-weight: 400;
+      color: $default-text-color;
+      font-weight: 500;
 
       @media (max-width: $screen-phone) {
         font-size: 13pt;

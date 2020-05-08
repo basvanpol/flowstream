@@ -1,3 +1,6 @@
+@import "variables";
+@import "content-mixins";
+
 h1 {
     font-size: 20px;
 }
@@ -14,4 +17,12 @@ h3{
 
 h4{
     font-size: 12px;
+}
+
+.post__title{
+  @include default-post-title;
+}
+
+.post__description{
+  @include default-post-description;
 }

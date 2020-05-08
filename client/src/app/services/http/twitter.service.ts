@@ -1,5 +1,4 @@
 import { BaseHttpService } from './base.http.service';
-import { BaseTwitterHttpService } from './base.twitter.http.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';

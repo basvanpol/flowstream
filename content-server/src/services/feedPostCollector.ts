@@ -92,8 +92,8 @@ const getFeedPosts = async () => {
                             } else {
                                 await oauth.get(
                                     `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${feed_id}&count=10}`,
-                                    '378751182-osBanchlb3uXld55fvplBW6weEChmQBbOrhmPb2r', //test user token
-                                    'QxPyt7u4cx25kH0KHnZWCfbk2kxceYALhtyAasw4kNk', //test user secret            
+                                    token.token, //test user token
+                                    token.tokenSecret, //test user secret          
                                     (err, data, result) => {
                                         // console.log('without since id', feed_id);
                                         if (err) {
