@@ -124,7 +124,7 @@ const getFeedPosts = async () => {
         } else {
             return;
         }
-        
+
         let i = 0;
         let newestPostIndex = oData.length - 1;
         for (let key in oData) {
@@ -133,7 +133,7 @@ const getFeedPosts = async () => {
             /**
              *  check for retweets, ignore them.
              */
-            
+
 
             if (postData.id_str !== subscription.sinceId) {
                 let aContent
@@ -157,12 +157,14 @@ const getFeedPosts = async () => {
                     "name": oUser.name
                 };
                 newPost.metaData = metaData;
-                // save feed post
-                await newPost.save((err) => {
-                    if (err) {
-                        if (err) { console.log(err) }
-                    }
-                })
+                // save new post, but only if there's content. RT's often don't have any content, so don't save them.
+                if (newPost.contents.length > 0) {
+                    await newPost.save((err) => {
+                        if (err) {
+                            if (err) { console.log(err) }
+                        }
+                    })
+                }
             } else {
                 console.log(' hey maar, toch n dubbele!', postData.text);
             }
@@ -268,7 +270,7 @@ const getScrapedContent = async (url, sType) => {
                 }
                 if (aUrl && aUrl.length > 0) {
                     const indirectArticleUrl = aUrl[0];
-                    
+
                     try {
                         redirectedMetadata = await Metascraper.scrapeUrl(indirectArticleUrl);
                     }
@@ -335,8 +337,8 @@ const getScrapedContent = async (url, sType) => {
             }
 
 
-            title = (redirectedMetadata && redirectedMetadata.title) ? redirectedMetadata.title : ( metadata && metadata.title) ? metadata.title : '';
-            description =  (redirectedMetadata && redirectedMetadata.description) ? redirectedMetadata.description : (metadata && metadata.description) ? metadata.description : '';
+            title = (redirectedMetadata && redirectedMetadata.title) ? redirectedMetadata.title : (metadata && metadata.title) ? metadata.title : '';
+            description = (redirectedMetadata && redirectedMetadata.description) ? redirectedMetadata.description : (metadata && metadata.description) ? metadata.description : '';
             publisher = (metadata.publisher) ? metadata.publisher : '';
         } else {
             // no meta data or incorrect url
