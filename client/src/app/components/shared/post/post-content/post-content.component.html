@@ -12,9 +12,13 @@
     <div class="post-content-text-holder">
         <!-- text -->
         <ng-container *ngIf="content.htmlContent != '' || content.htmlSummaryContent !== ''">
-            <div *ngSwitchCase="'TEXT'" class="postContentHtml" [ngClass]="content.platformClass">
-                <div *ngIf="showFull" [innerHTML]="content.htmlContent"></div>
-                <div *ngIf="!showFull" [innerHTML]="content.htmlSummaryContent"></div>
+            <div *ngSwitchCase="'TEXT'" [ngSwitch]="content.type"  class="postContentHtml" [ngClass]="content.platformClass">
+                <ng-container *ngSwitchCase="'TEXT_TITLE'">
+                  <div [innerHTML]="content.htmlContent"></div>
+                </ng-container>
+                <ng-container *ngSwitchCase="'TEXT_TWITTER'">
+                  <div *ngIf="showFull" [innerHTML]="content.htmlContent"></div>
+                </ng-container>
             </div>
         </ng-container>
         <ng-container *ngIf="!!content.description || !!content.source ">

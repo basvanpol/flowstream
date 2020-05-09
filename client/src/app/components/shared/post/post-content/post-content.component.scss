@@ -10,7 +10,7 @@
 
   &.IMAGE_RSS {
 
-    ~ .post-title {
+    ~ .post__title {
       order: 1;
     }
 
@@ -20,7 +20,7 @@
 
   }
 
-  .post-title {
+  .post__title {
     order: 1;
   }
 
@@ -44,6 +44,7 @@
   padding-bottom: 0px;
   overflow: hidden;
   text-align: center;
+  margin-bottom: 10px;
 
   img {
     background-clip: padding-box;
@@ -66,7 +67,7 @@
 }
 
 /********************************************** title */
-.post-title {
+.post__title {
   position: relative;
   float: left;
   width: 100%;
@@ -174,7 +175,7 @@
   position: relative;
   float: left;
   margin: 0 auto;
-  padding: 15px 20px 0 20px;
+  padding: 0 20px 0 20px;
   overflow: hidden;
   text-align: left;
   width: 100%;
@@ -182,7 +183,7 @@
   font-size: $font-size-medium;
   @include thumb-column(1);
 
-  .post-title {
+  .post__title {
     position: relative;
     float: left;
     width: 100%;
