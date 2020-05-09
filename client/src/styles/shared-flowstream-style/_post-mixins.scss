@@ -51,10 +51,6 @@ $paper-width-third: 33.3334%;
       }
     }
 
-    .post__title {
-      @include default-post-title();
-    }
-
     .post-media {
       width: 100%;
       height: 100%;
@@ -106,7 +102,6 @@ $paper-width-third: 33.3334%;
 
   .post__title {
     @include paper-post-title();
-
     p,
     a,
     p a {
@@ -118,7 +113,7 @@ $paper-width-third: 33.3334%;
       }
 
       @media (max-width: $paper-screen-phone) {
-        font-size: $font-size-small;
+        font-size: $font-size-medium;
       }
     }
   }
@@ -133,11 +128,11 @@ $paper-width-third: 33.3334%;
       font-size: $font-size-medium;
 
       @media(max-width: $paper-screen-tablet) {
-        font-size: $font-size-small;
+        font-size: $font-size-medium;
       }
 
       @media (max-width: $paper-screen-phone) {
-        font-size: $font-size-small;
+        font-size: $font-size-medium;
       }
     }
   }
@@ -181,7 +176,6 @@ $paper-width-third: 33.3334%;
   .post__title {
     @include paper-post-title();
     padding: 0;
-
     p,
     a,
     p a {
@@ -269,10 +263,6 @@ $paper-width-third: 33.3334%;
     .postGalleryImage {
       max-height: 30vw;
     }
-  }
-
-  .post__title {
-    @include paper-post-title();
   }
 
   .post-media {
@@ -552,19 +542,21 @@ $paper-width-third: 33.3334%;
     padding-top: 5px;
 
     .post__title {
+      z-index: 6;
+      @include post-title-size-medium();
       order: 1;
       background: none;
       position: relative;
-      z-index: 6;
-      @include post-title-size-medium();
       padding: 0;
+      margin-top: -5px;
+      margin-left: 5px;
 
-      p,
-      a,
-      p a {
-        font-family: $PAPER-FONT;
-        font-weight: 300;
-      }
+      // p,
+      // a,
+      // p a {
+      //   font-family: $PAPER-FONT;
+      //   font-weight: 300;
+      // }
     }
 
     .postGalleryImage {
@@ -738,7 +730,6 @@ $paper-width-third: 33.3334%;
 
   .post-media {
     .post__title {
-
       p,
       a,
       p a {

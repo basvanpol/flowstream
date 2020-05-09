@@ -11,17 +11,6 @@ export class ParserService {
 
   constructor(private http: HttpClient) { }
 
-  parsePostThumb(post) {
-    if (post.thumb) {
-      const content = {
-        type: ContentType.THUMB,
-        mainType: ContentType.THUMB,
-        postType: post.postType,
-        source: post.thumb
-      };
-      post.contents.push(content);
-    }
-  }
 
   public parseContent(post, showFull) {
     if (typeof showFull === 'undefined') {
@@ -38,7 +27,6 @@ export class ParserService {
     const contents = post.contents;
     contents.forEach(content => {
       content.postType = post.postType;
-
       if (content.mainType === ContentType.TEXT) {
         textFound = true;
         let parsedContent = "";

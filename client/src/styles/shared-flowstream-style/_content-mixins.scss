@@ -67,11 +67,11 @@
     }
 
     @media (max-width: $screen-tablet) {
-      font-size: $font-size-small;
+      font-size: $font-size-medium;
     }
 
     @media (max-width: $screen-phone) {
-      font-size: $font-size-mini;
+      font-size: $font-size-medium;
     }
   }
 }
@@ -83,15 +83,15 @@
     font-size: $font-size-medium;
 
     @media (max-width: $paper-screen-desktop) {
-      font-size: $font-size-small;
+      font-size: $font-size-medium;
     }
 
     @media (max-width: $screen-tablet) {
-      font-size: $font-size-mini;
+      font-size: $font-size-medium;
     }
 
     @media (max-width: $screen-phone) {
-      font-size: $font-size-mini;
+      font-size: $font-size-medium;
     }
   }
 }
@@ -102,18 +102,18 @@
   p a {
     font-size: $font-size-large;
     font-weight: 500;
-    margin: 15px 0 10px;
+    margin: 0px 0 10px;
 
     @media (max-width: $paper-screen-desktop) {
       font-size: $font-size-medium;
     }
 
     @media (max-width: $screen-tablet) {
-      font-size: $font-size-small;
+      font-size: $font-size-medium;
     }
 
     @media (max-width: $screen-phone) {
-      font-size: $font-size-mini;
+      font-size: $font-size-medium;
     }
   }
 }
