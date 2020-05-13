@@ -210,10 +210,7 @@ const parseContent = (oData: any, key: any) => {
             }
         }
 
-        console.log('oData[key]', oData[key]);
-        console.log('scrapedContent', scrapedContent);
-
-        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : '';
+        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key] && oData[key].text) ? oData[key].text : '';
         if (!!title) {
             const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
             aContent.push(oTitleText);
@@ -247,7 +244,6 @@ const getScrapedContent = async (url, sType) => {
     var description;
     var publisher;
 
-    console.log('url', url);
     return new Promise(async (resolve, reject) => {
         let metadata;
         try {

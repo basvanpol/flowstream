@@ -20,6 +20,7 @@ const userSchema = new Schema({
         token: String,
         tokenSecret: String
     },
+    permissions: {},
     isVerified: Boolean,
     forgotPasswordToken: String,
     feedSubscriptions: [{}]

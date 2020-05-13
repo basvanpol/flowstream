@@ -76,6 +76,7 @@ $paper-width-third: 33.3334%;
         max-width: 100%;
         height: auto;
         max-height: none;
+        margin-bottom: 15px;
       }
     }
   }
@@ -343,8 +344,8 @@ $paper-width-third: 33.3334%;
 
     .postGalleryImage {
       width: 100%;
-      max-height: 24vh;
-      height: 18vh;
+      max-height: 22vh;
+      height: 22vh;
 
       @media(max-width: $paper-screen-mini) {
         height: 24vh;
@@ -352,7 +353,7 @@ $paper-width-third: 33.3334%;
 
       img {
         position: absolute;
-        top: -60%;
+        top: -67%;
         bottom: -70%;
         left: 0;
         margin: auto;

@@ -368,6 +368,8 @@ export class FeedFunctions {
     getAllFeaturedFeeds = (req, res) => {
         this.userId = req.user._id;
         return new Promise((resolve, reject) => {
+            // 5e572e9024a3eaa2cfef89bf  prod
+            // 5eb1d665ece528543de4dd0f dev
             FeedFeature.find({ '_user': { $in: [mongoose.Types.ObjectId('5e572e9024a3eaa2cfef89bf'), mongoose.Types.ObjectId(req.user._id)] }, 'active': true }).
                 populate('_feed').
                 exec((err, featuredFeeds) => {
