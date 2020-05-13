@@ -210,7 +210,7 @@ const parseContent = (oData: any, key: any) => {
             }
         }
 
-        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key] && oData[key].text) ? oData[key].text : '';
+        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : '';
         if (!!title) {
             const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
             aContent.push(oTitleText);
