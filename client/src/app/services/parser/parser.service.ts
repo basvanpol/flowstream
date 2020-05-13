@@ -19,9 +19,9 @@ export class ParserService {
 
     let thumbFound = false;
     let textFound = false;
+    let titleFound = false;
     let imageFound = false;
     let videoFound = false;
-    let videoTwitterFound = false;
     let linkFound = false;
     let link;
     const contents = post.contents;
@@ -35,12 +35,12 @@ export class ParserService {
         } else if (content.type === ContentType.TEXT_TWITTER) {
           parsedContent = this.getDescription(content.source);
         } else if (content.type === ContentType.TEXT_TITLE) {
+          titleFound = true;
           parsedContent = this.getTitle(content.source);
         } else  {
           parsedContent = this.getDefaultText(content.source);
         }
 
-        // content.htmlContent = this.$sce.trustAsHtml(parsedContent);
         content.htmlContent = parsedContent;
         content.htmlSummaryContent = parsedContent;
 
@@ -101,71 +101,25 @@ export class ParserService {
       }
     });
 
-    contents.forEach(content => {
-      if (!linkFound) {
-        content.platformClass += " no-link";
-      }
-
-      if (showFull && videoFound) {
-        content.platformClass += " no-video";
-      }
-
-      if (post.thumb && !imageFound && !videoFound) {
-        content.platformClass += " thumb";
-      }
-
-      if (content.type === ContentType.VIDEO_TWITTER) {
-        videoTwitterFound = true;
-        const twitterThumb = contents.find((_content) => {
-          return _content.type === ContentType.IMAGE_TWITTER;
-        });
-        if (twitterThumb) {
-          content.thumb = twitterThumb.source;
-          if (!post.thumb) {
-            post.thumb = twitterThumb.source;
-          }
-        }
-      }
-    });
-
-
-    if (!imageFound && linkFound) {
-
+    if (!titleFound && !!post.title) {
       /**
        * also create extra text field for to parse scraped title
        */
-
-
       const contentDescription = {
         date: null,
         location: 0,
-        mainType: "TEXT_EXT",
-        platformClass: "TEXT_EXT",
-        postType: "TEXT_EXT",
+        mainType: "TEXT_TITLE",
+        platformClass: "TEXT_TITLE",
+        postType: "TEXT_TITLE",
         thumb: null,
-        type: "TEXT_EXT",
+        type: "TEXT_TITLE",
         isPromisedDescription: true,
-        source: ""
+        source: post.title
       };
 
       contents.unshift(contentDescription);
 
-      const content = {
-        date: null,
-        location: 0,
-        mainType: "IMAGE",
-        platformClass: "IMAGE_LINK",
-        postType: "IMAGE",
-        thumb: null,
-        type: "IMAGE",
-        isPromisedImage: true,
-        scrapeLink: link,
-        source: ""
-      };
-      contents.unshift(content);
-
     }
-
 
     return contents;
   }
