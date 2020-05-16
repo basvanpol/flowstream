@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 mongoose.Promise = global.Promise;
-import './models/Token';
+import './dbmodels/Token';
 import * as express from 'express';
 import * as cookieSession from 'cookie-session';
 import * as passport from 'passport';
@@ -18,14 +18,14 @@ const graphqlResolver = require('./graphql/resolvers');
 const cluster = require('cluster');
 const collector = require('./services/feedPostCollector');
 
-import './models/Flow';
-import './models/Feed';
-import './models/FeedFeature';
-import './models/User';
-import './models/UserFeedSubscription';
-import './models/Post';
-import './models/Subscription';
-import './models/Group';
+import './dbmodels/Flow';
+import './dbmodels/Feed';
+import './dbmodels/FeedFeature';
+import './dbmodels/User';
+import './dbmodels/UserFeedSubscription';
+import './dbmodels/Post';
+import './dbmodels/Subscription';
+import './dbmodels/Group';
 
 import './services/passport';
 import authRoutes from './routes/authRoutes';
