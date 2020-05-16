@@ -1,3 +1,4 @@
+import { IGroup } from './../tsmodels/groups';
 import * as mongoose from 'mongoose';
 import { UserRoles } from '../tsmodels/userRoles';
 const Group = mongoose.model('Group');
@@ -41,6 +42,11 @@ export default (app) => {
                 res.status(500).send('Something broke!')
             }
             if (group) {
+                const userId = req.user._id.toString();
+                const canUserDelete = (group._user.toString() === userId || !!req.user.permissions.groups) ;
+                if(!canUserDelete){
+                    res.status(401).send("You don't have permission to delete this group");
+                }
                 Group.deleteOne({ '_id': req.params.groupId }, function (err) {
                     if (err) {
                         res.status(500).send('delete fail!')
@@ -60,33 +66,42 @@ export default (app) => {
     });
 
     app.get('/api/admingroups', async (req, res) => {
-        // get groups hack
         /**
          * first, find all admin users. then, search for all groups that the admin users have created
          */
+        const userId = req.user._id.toString();
 
         const adminUsers = await User.find({ 'permissions.groups': UserRoles.ADMIN }, (err, users) => {
             if (err) {
                 res.status(500).send('Something broke!')
             }
             return users;
-        })
+        });
         let adminUserIds = adminUsers.map(adminUser => adminUser._id);
         let userIds = [];
         if (!!adminUserIds && adminUserIds.length > 0) {
-            userIds = [...adminUserIds, req.user._id]
+            userIds = [...adminUserIds, userId]
         } else {
-            userIds = [req.user._id];
+            userIds = [userId];
         }
 
         const Query = [{ $match: { '_user': { $in: userIds } } }]
 
-        const groups: any[] = await Group.aggregate(Query);
+        let groups: IGroup[] = await Group.aggregate(Query);
 
         if (!!groups) {
-            res.status(200).send({ msg: 'all admin groups', groups: groups });
+            adminUserIds.forEach(element => {
+                return element.toString();
+            });
+            const mappedGroups = groups.map((group: IGroup) => {
+                return {
+                    ...group,
+                    canUserEdit: (group._user.toString() === userId || !!req.user.permissions.groups)  // TODO: check not only if user is owner of group or is admin user, but also if user is a manager and the group is part of a team that user manager of
+                }
+            });
+            res.status(200).send({ msg: 'all admin groups', groups: mappedGroups });
         } else {
-            res.status(200).send({ msg: 'no admin groups', groups: [] });;
+            res.status(200).send({ msg: 'no admin groups', groups: [] });
         }
     });
 

@@ -1,10 +1,10 @@
 <div class="groups-list">
   <div class="list__container">
     <ul class="list__list">
-      <li *ngFor="let item of listItems" (click)="onSelect(item)" class="list__list-item"
-        [ngClass]="{'selected': (selectedId && selectedId !== -1 && item._id === selectedId)}">
-        <span>{{item.title}}</span>
-        <app-dropdown class="dropdown--right" style="float: right; margin-top: 3px;">
+      <li *ngFor="let item of groups" class="list__list-item" style="display: flex; flex-direction: row; justify-content:space-between;"
+        [ngClass]="{'selected': (selectedId && selectedId !== '-1' && item._id === selectedId)}" >
+        <div class="list__list-item-button" (click)="onSelect(item)"><span>{{item.title}}</span></div>
+        <app-dropdown *ngIf="canUserEditSome" class="dropdown--right" style="float: right; margin-top: 3px;">
           <ng-container selector>
               <div style="margin-right: -20px;">
                   <app-icon-font [iconClass]="'icon-more'" class="header__add-post-button-icon"></app-icon-font>
@@ -12,7 +12,7 @@
           </ng-container>
           <ng-container list>
               <ul>
-                  <li><a (click)="deleteTag(item._id)">Delete tag</a></li>
+                  <li><a (click)="deleteCategory(item._id)">Delete category</a></li>
               </ul>
           </ng-container>
       </app-dropdown>

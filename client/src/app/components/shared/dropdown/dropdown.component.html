@@ -1,5 +1,5 @@
 <ng-container>
-  <div (click)="toggleMenu()">
+  <div (click)="toggleMenu($event)">
     <ng-content select=[selector]></ng-content>
   </div>
   <div *ngIf="showMenu" class="dropdown__list">

@@ -11,7 +11,7 @@ export class DropdownComponent {
   public showMenu = false;
 
   @HostListener('document:click', ['$event'])
-  onClick(event?) {
+  onClick(event: Event) {
     if (this.showMenu && !this.eref.nativeElement.contains(event.target)) {
       this.showMenu = false;
     }
@@ -19,7 +19,7 @@ export class DropdownComponent {
 
   constructor(private eref: ElementRef) {}
 
-  toggleMenu() {
+  toggleMenu(event: Event) {
     this.showMenu = !this.showMenu;
   }
 
