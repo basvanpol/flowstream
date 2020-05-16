@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
+import { UserRoles } from '../tsmodels/userRoles';
 const Group = mongoose.model('Group');
+const User = mongoose.model('User');
 const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 
 export default (app) => {
@@ -11,7 +13,7 @@ export default (app) => {
                     res.status(500).send('Something broke!')
                 }
                 if (group) {
-                    res.status(500).send({msg: 'this group already exists'});
+                    res.status(500).send({ msg: 'this group already exists' });
                     // save flow
                 } else {
                     const newGroup = new Group();
@@ -24,7 +26,7 @@ export default (app) => {
                             return res.status(500).send({ msg: err.message });
                         }
                         // new flow saved
-                        res.status(200).send({msg: 'new group saved'});
+                        res.status(200).send({ msg: 'new group saved' });
                     });
                 }
             });
@@ -45,28 +47,47 @@ export default (app) => {
                     }
                 });
                 UserFeedSubscription.deleteMany({ 'group': req.params.groupId })
-                .then(result => console.log(`Deleted ${result.deletedCount} item(s).`))
-                .catch(err => console.error(`Delete failed with error: ${err}`));
-                Group.find({ '_user' : '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
+                    .then(result => console.log(`Deleted ${result.deletedCount} item(s).`))
+                    .catch(err => console.error(`Delete failed with error: ${err}`));
+                Group.find({ '_user': '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
                     if (err) {
                         res.status(500).send('Something broke!')
                     }
-                    res.status(200).send({msg : 'all admin groups' , groups: groups,  } );
+                    res.status(200).send({ msg: 'all admin groups', groups: groups, });
                 });
-            } 
+            }
         });
     });
 
-    app.get('/api/admingroups', (req, res) => {
+    app.get('/api/admingroups', async (req, res) => {
         // get groups hack
-        // 5eb1d665ece528543de4dd0f dev
-        // 5e572e9024a3eaa2cfef89bf prod
-        Group.find({ '_user' : '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
+        /**
+         * first, find all admin users. then, search for all groups that the admin users have created
+         */
+
+        const adminUsers = await User.find({ 'permissions.groups': UserRoles.ADMIN }, (err, users) => {
             if (err) {
                 res.status(500).send('Something broke!')
             }
-            res.status(200).send({msg : 'all admin groups' , groups: groups } );
-        });
+            return users;
+        })
+        let adminUserIds = adminUsers.map(adminUser => adminUser._id);
+        let userIds = [];
+        if (!!adminUserIds && adminUserIds.length > 0) {
+            userIds = [...adminUserIds, req.user._id]
+        } else {
+            userIds = [req.user._id];
+        }
+
+        const Query = [{ $match: { '_user': { $in: userIds } } }]
+
+        const groups: any[] = await Group.aggregate(Query);
+
+        if (!!groups) {
+            res.status(200).send({ msg: 'all admin groups', groups: groups });
+        } else {
+            res.status(200).send({ msg: 'no admin groups', groups: [] });;
+        }
     });
-    
+
 };

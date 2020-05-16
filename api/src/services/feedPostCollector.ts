@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 var cheerio = require("cheerio");
 const Metascraper = require('metascraper')
 var request = require('request');
-require('./../models/Subscription');
-require('./../models/User');
-require('./../models/Post');
+require('./../dbmodels/Subscription');
+require('./../dbmodels/User');
+require('./../dbmodels/Post');
 const OAuth = require('oauth');
 const Subscription = mongoose.model('Subscription');
 const Token = mongoose.model('Token');
@@ -45,7 +45,7 @@ const getFeedPosts = async () => {
     let subQueue = [];
     let tooManyRequests = false;
     if (tokens && tokens.length > 0) {
-        console.log('token!', tokens);
+        // console.log('token!', tokens);
         Subscription.find({ memberCount: { $gt: 0 } }, async (err, subscriptions) => {
             if (err) {
                 console.log('something went wrong when searching subscription');
@@ -210,7 +210,7 @@ const parseContent = (oData: any, key: any) => {
             }
         }
 
-        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : '';
+        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key] );
         if (!!title) {
             const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
             aContent.push(oTitleText);
@@ -253,7 +253,7 @@ const getScrapedContent = async (url, sType) => {
             return reject('meta data error');
         }
         if (metadata) {
-            console.log('sType', sType);
+            // console.log('sType', sType);
             let redirectedMetadata;
             if (sType == "twitter") {
 
@@ -275,7 +275,7 @@ const getScrapedContent = async (url, sType) => {
                         return reject('meta scraper error');
                     }
 
-                    console.log('redirectedMetadata', redirectedMetadata);
+                    // console.log('redirectedMetadata', redirectedMetadata);
 
                     if (redirectedMetadata) {
                         imageUrl = redirectedMetadata.image;

@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { resolve } from 'url';
+import { UserRoles } from '../../tsmodels/userRoles';
 const Feed = mongoose.model('Feed');
 const FeedFeature = mongoose.model('FeedFeature');
 const User = mongoose.model('User');
@@ -28,7 +29,7 @@ export class FeedFunctions {
         const requestFeed = {
             ...req.body.feed
         };
-        
+
         return new Promise((resolve, reject) => {
             Feed.findOne({ 'feedId': requestFeed.feedId }, async (err, feed) => {
                 if (err) {
@@ -49,7 +50,7 @@ export class FeedFunctions {
                     newFeed.feedType = req.body.feedType;
                     newFeed.feedIcon = req.body.feedIcon;
 
-                    
+
 
                     this.feedObjectId = newFeed._id;
                     await newFeed.save((err) => {
@@ -240,7 +241,7 @@ export class FeedFunctions {
     }
 
     createUserSubscription(user, groupId, res) {
-        
+
         return new Promise((resolve, reject) => {
             UserFeedSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userFeedSubscription) => {
                 if (!userFeedSubscription) {
@@ -367,10 +368,25 @@ export class FeedFunctions {
 
     getAllFeaturedFeeds = (req, res) => {
         this.userId = req.user._id;
-        return new Promise((resolve, reject) => {
-            // 5e572e9024a3eaa2cfef89bf  prod
-            // 5eb1d665ece528543de4dd0f dev
-            FeedFeature.find({ '_user': { $in: [mongoose.Types.ObjectId('5e572e9024a3eaa2cfef89bf'), mongoose.Types.ObjectId(req.user._id)] }, 'active': true }).
+        return new Promise(async (resolve, reject) => {
+            /**
+             * first, find all admin users. then, search for all groups that the admin users have created
+             */
+            const adminUsers = await User.find({ 'permissions.groups': UserRoles.ADMIN }, (err, users) => {
+                if (err) {
+                    res.status(500).send('Something broke!')
+                }
+                return users;
+            })
+            let adminUserIds = adminUsers.map(adminUser => adminUser._id);
+            let userIds = [];
+            if (!!adminUserIds && adminUserIds.length > 0) {
+                userIds = [...adminUserIds, req.user._id]
+            } else {
+                userIds = [req.user._id];
+            }
+
+            FeedFeature.find({ '_user': { $in: userIds }, 'active': true }).
                 populate('_feed').
                 exec((err, featuredFeeds) => {
                     if (err) {
