@@ -10,10 +10,15 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class GroupsListComponent {
 
-  @Input() listItems: any[];
-  @Input() selectedId: number;
+  @Input() set listItems(values: GroupVM[]) {
+    this.groups = values;
+    this.canUserEditSome = this.groups.some((group, index, array) => group.canUserEdit === true);
+  }
+  @Input() selectedId: string;
   @Output() selectItem = new EventEmitter();
   @Output() deleteItem = new EventEmitter();
+  public groups: GroupVM[];
+  public canUserEditSome = false;
 
   constructor(public dialog: MatDialog) {}
 
@@ -33,7 +38,7 @@ export class GroupsListComponent {
     });
   }
 
-  deleteTag(groupId){
+  deleteCategory(groupId){
     this.deleteItem.emit({
       groupId
     })

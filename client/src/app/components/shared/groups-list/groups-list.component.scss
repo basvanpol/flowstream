@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 .groups-list {
   width: 200px;
@@ -8,48 +8,49 @@
 }
 
 .list__container {
-    min-height: 300px;
-    padding: 0 30px;
-    position: absolute;
-    top: 0;
-    bottom: 60px;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+  min-height: 300px;
+  padding: 0 30px;
+  position: absolute;
+  top: 0;
+  bottom: 60px;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   .list__list {
     padding: 0px;
     margin-top: 27px;
-    .list__list-item {
-      list-style-type: none;
-      margin: 0px;
-      padding: 0px;
-      line-height: 36px;
-      justify-content: left;
-      cursor: pointer;
-      color: $EDITOR_TEXT_GREY;
-      font-weight: $font-weight-normal;
-      font-family: $font-family-roboto;
-
-      &:hover {
-        color: $EDITOR_TEXT_DARKGREY;
-      }
-
-      &.selected {
-        color: $EDITOR_TEXT_DARKGREY;
-      }
-    }
   }
 }
 
-.list__footer{
-    position: absolute;
-    bottom: 0;
-    height: 60px;
-    width: 100%;
+.list__list-item {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  line-height: 36px;
+  justify-content: left;
+  cursor: pointer;
+  color: $EDITOR_TEXT_GREY;
+  font-weight: $font-weight-normal;
+  font-family: $font-family-roboto;
+  &.selected {
+    color: $EDITOR_TEXT_DARKGREY;
+  }
 }
 
-.add-group-plus-button{
-    margin: 10px auto;
-    min-width: 150px;
+.list__list-item-button {
+  &:hover {
+    color: $EDITOR_TEXT_DARKGREY;
+  }
 }
 
+.list__footer {
+  position: absolute;
+  bottom: 0;
+  height: 60px;
+  width: 100%;
+}
+
+.add-group-plus-button {
+  margin: 10px auto;
+  min-width: 150px;
+}

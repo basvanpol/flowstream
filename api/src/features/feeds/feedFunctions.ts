@@ -366,7 +366,7 @@ export class FeedFunctions {
 
     }
 
-    getAllFeaturedFeeds = (req, res) => {
+    getAllFeeds = (req, res) => {
         this.userId = req.user._id;
         return new Promise(async (resolve, reject) => {
             /**
