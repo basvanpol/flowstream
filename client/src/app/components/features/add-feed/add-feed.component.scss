@@ -6,6 +6,7 @@
 .add-feed__content-container {
   background: #fafafa;
   width: 100%;
+  overflow-y: auto;
 }
 
 .add-feed-header__container {
@@ -40,7 +41,6 @@
 .add-feed-component__holder {
   position: fixed;
   z-index: 999;
-  overflow-y: scroll;
   top: 0;
   bottom: 0;
   left: 0;

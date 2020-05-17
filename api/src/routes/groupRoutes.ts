@@ -8,13 +8,32 @@ const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 export default (app) => {
 
     app.post('/api/groups/save', (req, res) => {
+
         if (req.body._id !== undefined) {
             Group.findOne({ '_id': req.body._id }, async (err, group) => {
                 if (err) {
                     res.status(500).send('Something broke!')
                 }
                 if (group) {
-                    res.status(500).send({ msg: 'this group already exists' });
+                    const userId = req.user._id.toString();
+                    const canUserSave = (group._user.toString() === userId || (!!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN));
+                    if (!canUserSave) {
+                        res.status(401).send("You don't have permission to delete this group");
+                    }
+                    console.log('group to update', group)
+                    await group.update({
+                        '$set': {
+                            'title': req.body.title,
+                            'icon': {
+                                ...req.body.icon
+                            }
+                        }
+                    }, (err, result) => {
+                        if (err) {
+                            res.status(500).send(err);
+                        }
+                        res.status(200).send({ msg: 'group edited', group: group });
+                    });
                     // save flow
                 } else {
                     const newGroup = new Group();
@@ -27,7 +46,7 @@ export default (app) => {
                             return res.status(500).send({ msg: err.message });
                         }
                         // new flow saved
-                        res.status(200).send({ msg: 'new group saved' });
+                        res.status(200).send({ msg: 'new group saved', group: newGroup });
                     });
                 }
             });
@@ -43,8 +62,8 @@ export default (app) => {
             }
             if (group) {
                 const userId = req.user._id.toString();
-                const canUserDelete = (group._user.toString() === userId || !!req.user.permissions.groups) ;
-                if(!canUserDelete){
+                const canUserDelete = (group._user.toString() === userId || (!!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN));
+                if (!canUserDelete) {
                     res.status(401).send("You don't have permission to delete this group");
                 }
                 Group.deleteOne({ '_id': req.params.groupId }, function (err) {
@@ -96,7 +115,7 @@ export default (app) => {
             const mappedGroups = groups.map((group: IGroup) => {
                 return {
                     ...group,
-                    canUserEdit: (group._user.toString() === userId || !!req.user.permissions.groups)  // TODO: check not only if user is owner of group or is admin user, but also if user is a manager and the group is part of a team that user manager of
+                    canUserEdit: (group._user.toString() === userId || (!!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN))  // TODO: check not only if user is owner of group or is admin user, but also if user is a manager and the group is part of a team that user manager of
                 }
             });
             res.status(200).send({ msg: 'all admin groups', groups: mappedGroups });

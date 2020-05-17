@@ -1,3 +1,4 @@
+import { SelectItemDirective } from './../../directives/select-item/select-item.directive';
 import { SubscriptionButtonComponent } from './../features/add-feed/subscription-button/subscription-button.component';
 import { DynamicComponentModalHostDirective } from './modals/dynamic-component-modal/dynamic-component-modal-host.directive';
 import { DynamicComponentModalComponent } from './modals/dynamic-component-modal/dynamic-component-modal.component';
@@ -58,7 +59,8 @@ import { DropdownComponent } from './dropdown/dropdown.component';
         DynamicComponentModalComponent,
         DynamicComponentModalHostDirective,
         DropdownComponent,
-        SubscriptionButtonComponent
+        SubscriptionButtonComponent,
+        SelectItemDirective
     ],
     exports: [
         IconModule,
@@ -86,7 +88,8 @@ import { DropdownComponent } from './dropdown/dropdown.component';
         DynamicComponentModalComponent,
         DynamicComponentModalHostDirective,
         DropdownComponent,
-        SubscriptionButtonComponent
+        SubscriptionButtonComponent,
+        SelectItemDirective
     ],
     entryComponents: [
         ModalPostComponent,

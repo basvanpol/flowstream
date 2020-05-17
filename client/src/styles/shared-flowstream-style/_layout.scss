@@ -1,0 +1,16 @@
+.default-element-padding{
+  padding: $default-element-padding;
+
+  &--right{
+    padding-right: $default-element-padding;
+  }
+  &--left{
+    padding-left: $default-element-padding;
+  }
+  &--top{
+    padding-top: $default-element-padding;
+  }
+  &--bottom{
+    padding-bottom: $default-element-padding;
+  }
+}

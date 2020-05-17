@@ -38,7 +38,10 @@ export class SaveGroup implements Action {
 }
 export class SaveGroupSuccess implements Action {
   readonly type = GroupActionTypes.SaveGroupSuccess;
-  constructor(public payload: string) { }
+  constructor(public payload: {
+    msg: string
+    group: GroupVM
+  }) { }
 }
 export class DeleteGroup implements Action {
   readonly type = GroupActionTypes.DeleteGroup;
@@ -63,6 +66,6 @@ export class SelectGroup implements Action {
   constructor(public payload: GroupVM) { }
 }
 
-export type GroupActions = LoadGroups | LoadGroupsSuccess | SaveGroup | SaveGroupSuccess | 
+export type GroupActions = LoadGroups | LoadGroupsSuccess | SaveGroup | SaveGroupSuccess |
 DeleteGroup | DeleteGroupSuccess | SaveGroupReset
   | GroupDataError | LoadAdminGroups | LoadAdminGroupsSuccess | SelectGroup;

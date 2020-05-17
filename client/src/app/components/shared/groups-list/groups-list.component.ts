@@ -12,7 +12,9 @@ export class GroupsListComponent {
 
   @Input() set listItems(values: GroupVM[]) {
     this.groups = values;
-    this.canUserEditSome = this.groups.some((group, index, array) => group.canUserEdit === true);
+    if (!!this.groups && this.groups.length > 0) {
+      this.canUserEditSome = this.groups.some((group, index, array) => group.canUserEdit === true);
+    }
   }
   @Input() selectedId: string;
   @Output() selectItem = new EventEmitter();
@@ -20,16 +22,29 @@ export class GroupsListComponent {
   public groups: GroupVM[];
   public canUserEditSome = false;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) { }
 
-  openAddGroupDialog() {
+  openGroupDialog(selectedGroup: GroupVM = null, isNewItem: boolean = true) {
     const dialogRef = this.dialog.open(AddGroupComponent, {
       width: '400px',
-      maxHeight: '400px',
+      height: '400px',
       data: {
-        isNewItem: true
+        isNewItem,
+        selectedGroup
       }
     });
+  }
+
+  public createNewCategory() {
+    this.openGroupDialog();
+  }
+
+  public editCategory(groupId) {
+    console.log('this group', this.groups.find((group) => group._id === groupId));
+    const selectedGroup = this.groups.find((group) => group._id === groupId);
+    if (!!selectedGroup) {
+      this.openGroupDialog(selectedGroup, false);
+    }
   }
 
   onSelect(item: any) {
@@ -38,7 +53,7 @@ export class GroupsListComponent {
     });
   }
 
-  deleteCategory(groupId){
+  deleteCategory(groupId) {
     this.deleteItem.emit({
       groupId
     })

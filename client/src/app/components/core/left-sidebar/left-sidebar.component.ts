@@ -63,6 +63,7 @@ export class LeftSidebarComponent implements OnInit {
     this.mappedSubscriptions = Object.keys(this.feedGroups).map((group) => {
       return this.feedGroups[group];
     });
+    console.log('mappedSubscriptions', this.mappedSubscriptions);
   }
 
   onOpenFeedGroup($event: Event, feedSubscriptionGroup: []) {

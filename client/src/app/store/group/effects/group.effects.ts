@@ -20,9 +20,8 @@ export class GroupEffects {
       return this.groupService.saveGroup(<GroupVM>action.payload)
         .pipe(
           map((res: any) => {
-
+            console.log('save group success', res)
             if (res) {
-
               return new GroupActions.SaveGroupSuccess(res);
             }
           })

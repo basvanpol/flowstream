@@ -1,12 +1,41 @@
-.group-form__form-container{
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+@import "variables";
+
+.group-form__form-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.cancel-button{
-    float: left;
-    position: relative;
-    min-width: 120px;
-    margin: 0 0 0 10px;
+.cancel-button {
+  float: left;
+  position: relative;
+  min-width: 120px;
+  margin: 0 0 0 10px;
+}
+
+.add-group__icon-grid {
+  column-gap: 10px;
+  row-gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  grid-auto-rows: 64px;
+}
+
+.add-group__icon-grid-item {
+  background: white;
+  border: 1px solid $EDITOR_VERY_LIGHTGREY;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid $EDITOR_DARK_GREY;
+  }
+
+  &.selected {
+    border: 1px solid $EDITOR_GREEN;
+  }
 }

@@ -26,6 +26,7 @@
 
 .modal__content{
     padding: $default-element-padding 0px;
+    overflow-y: auto;
 }
 .modal__footer{
     height: 75px;
@@ -55,4 +56,9 @@
 
 .mat-tab-body-wrapper{
     height: 100%;
+}
+
+
+.mat-tab-body-active{
+  position: absolute !important;
 }

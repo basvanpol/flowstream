@@ -15,7 +15,6 @@ export class AuthEffects {
   getUser = this.actions$
     .ofType(AuthActions.AuthActionTypes.GET_USER)
     .pipe(switchMap((action: AuthActions.GetUser) => {
-      console.log('get current user');
       return this.http.get('/api/current_user', {
         observe: 'body',
         responseType: 'json'
@@ -23,11 +22,17 @@ export class AuthEffects {
     }),
       take(1),
       switchMap((result) => {
-        console.log('result user!', result);
-        return [
-          new AuthActions.SetUser(result !== null ? result : null),
-          new AuthActions.SignInRedirect()
-        ];
+        if (!result) {
+          this.router.navigate(['/signin']);
+          return [
+            new AuthActions.SetUser(result !== null ? result : null),
+          ];
+        } else {
+          return [
+            new AuthActions.SetUser(result !== null ? result : null),
+            new AuthActions.SignInRedirect()
+          ];
+        }
       })
     );
 
@@ -47,9 +52,7 @@ export class AuthEffects {
           isForwardedUrl = true;
         }
       }
-
       if (!!this.router.routerState.snapshot.url && isForwardedUrl) {
-        console.log('is forwarded url')
         this.router.navigateByUrl(this.router.routerState.snapshot.url);
       } else {
         this.router.navigate(['/frontpage']);

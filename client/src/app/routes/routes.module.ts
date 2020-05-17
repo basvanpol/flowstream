@@ -1,3 +1,4 @@
+import { AuthenticatingComponent } from './../components/features/auth/authenticating/authenticating.component';
 import { FlowDataResolver } from './../services/resolvers/flow-data-resolver.service';
 import { FrontPageComponent } from './../components/features/front-page/front-page.component';
 import { FeedPageComponent } from '../components/features/feed-page/feed-page.component';
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
       ]
   },
   { path: 'signin', component: SigninComponent },
+  { path: 'loading', component: AuthenticatingComponent },
   { path: '**', redirectTo: 'signin' }
 ];
 
@@ -30,7 +32,8 @@ const appRoutes: Routes = [
   ],
   declarations: [
     SigninComponent,
-    MainUserComponent
+    MainUserComponent,
+    AuthenticatingComponent
   ],
   providers: [AuthGuard],
   exports: [
