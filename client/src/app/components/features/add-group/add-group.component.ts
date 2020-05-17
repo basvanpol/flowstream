@@ -84,7 +84,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
 
     if (!this.isNewGroup) {
       groupModel = {
-        ...this.groupState.selectedAdminGroup,
+        ...this.data.selectedGroup,
         title: form.value.title,
         icon: {
           type: IconTypes.SVG_CLASS,

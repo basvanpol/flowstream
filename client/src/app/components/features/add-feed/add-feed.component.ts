@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import * as TwitterActions from '../../../store/twitter/actions/twitter.actions';
 import { TwitterState } from '../../../store/twitter/reducers/twitter.reducer';
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
 
@@ -22,7 +22,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
   templateUrl: './add-feed.component.html',
   styleUrls: ['./add-feed.component.scss']
 })
-export class AddFeedComponent extends DefaultFormComponent implements OnInit {
+export class AddFeedComponent extends DefaultFormComponent implements OnInit, OnDestroy {
 
   searchQuery: string;
   twitterSubscription: Subscription;
@@ -92,6 +92,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
       }
 
       this.adminGroups = this.groupState.adminGroups;
+      console.log('this.adminGroups', this.adminGroups);
       if (this.featuredFeeds && this.selectedAdminGroup) {
         this.filterGroupFeeds();
         this.setSubscribed();
@@ -320,6 +321,13 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
     //   groups: []
     // };
     // this.store.dispatch(new FeedActions.RemoveFromFeatureList(featureRequestObject));
+  }
+
+  ngOnDestroy() {
+    this.feedStateSubscription.unsubscribe();
+    this.groupsSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
+    this.twitterSubscription.unsubscribe();
   }
 
 }

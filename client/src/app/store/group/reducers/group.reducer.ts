@@ -26,7 +26,9 @@ export const initialState: GroupState = {
 };
 
 export function reducer(state = initialState, action: GroupActions.GroupActions): GroupState {
+  console.log('action.types', action.type);
   switch (action.type) {
+
     case GroupActions.GroupActionTypes.DeleteGroupSuccess:
     case GroupActions.GroupActionTypes.LoadAdminGroupsSuccess:
       return {
@@ -34,24 +36,24 @@ export function reducer(state = initialState, action: GroupActions.GroupActions)
         adminGroups: action.payload.groups
       };
     case GroupActions.GroupActionTypes.SaveGroupSuccess:
-      const newAdminGroups = [...state.adminGroups];
-      const savedGroup = action.payload.group;
-      console.log('savedGroup', savedGroup);
-      console.log('state.adminGroups', state.adminGroups);
-      if (!!savedGroup) {
-        const groupIndex = state.adminGroups.findIndex((group) => group._id.toString() === savedGroup._id.toString());
-        console.log('groupIndex', groupIndex);
-        if (groupIndex !== -1) {
-          newAdminGroups[groupIndex] = savedGroup;
-          console.log('hoezee')
-        } else {
-          newAdminGroups.push(savedGroup);
-        }
-      }
-      console.log('newAdminGroups', newAdminGroups);
+      // const newAdminGroups = [...state.adminGroups];
+      // const savedGroup = action.payload.group;
+      // console.log('savedGroup', savedGroup);
+      // console.log('state.adminGroups', state.adminGroups);
+      // if (!!savedGroup) {
+      //   const groupIndex = state.adminGroups.findIndex((group) => group._id.toString() === savedGroup._id.toString());
+      //   console.log('groupIndex', groupIndex);
+      //   if (groupIndex !== -1) {
+      //     newAdminGroups[groupIndex] = savedGroup;
+      //     console.log('hoezee')
+      //   } else {
+      //     newAdminGroups.push(savedGroup);
+      //   }
+      // }
+      // console.log('newAdminGroups', newAdminGroups);
       return {
         ...state,
-        adminGroups: newAdminGroups,
+        // adminGroups: newAdminGroups,
         saveGroupSuccess: true
       };
     case GroupActions.GroupActionTypes.SaveGroupReset:
