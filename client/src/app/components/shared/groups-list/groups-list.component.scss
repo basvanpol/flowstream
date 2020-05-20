@@ -29,6 +29,10 @@
   padding: 0px;
   line-height: 36px;
   justify-content: left;
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  align-items: center;
   cursor: pointer;
   color: $EDITOR_TEXT_GREY;
   &.selected {

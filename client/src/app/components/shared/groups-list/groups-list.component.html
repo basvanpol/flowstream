@@ -2,7 +2,6 @@
   <div class="list__container">
     <ul class="list__list">
       <li *ngFor="let item of groups" class="list__list-item"
-        style="display: flex; flex-direction: row; justify-content:space-between;"
         [ngClass]="{'selected': (selectedId && selectedId !== '-1' && item._id === selectedId)}">
         <div class="list__list-item-button" (click)="onSelect(item)">
           <div><app-icon-font [iconClass]="item.icon.value"></app-icon-font></div>
