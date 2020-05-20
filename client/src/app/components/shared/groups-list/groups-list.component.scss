@@ -1,7 +1,7 @@
 @import "variables";
 
 .groups-list {
-  width: 200px;
+  width: 250px;
   height: 100%;
   position: relative;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
@@ -35,6 +35,13 @@
   &.selected {
     color: $EDITOR_TEXT_DARKGREY;
   }
+}
+
+.list__list-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: -22px;
 }
 
 .list__list-item-button {

@@ -4,7 +4,10 @@
       <li *ngFor="let item of groups" class="list__list-item"
         style="display: flex; flex-direction: row; justify-content:space-between;"
         [ngClass]="{'selected': (selectedId && selectedId !== '-1' && item._id === selectedId)}">
-        <div class="list__list-item-button" (click)="onSelect(item)"><span>{{item.title}}</span></div>
+        <div class="list__list-item-button" (click)="onSelect(item)">
+          <div><app-icon-font [iconClass]="item.icon.value"></app-icon-font></div>
+          <span>{{item.title}}</span>
+        </div>
         <app-dropdown *ngIf="canUserEditSome" class="dropdown--right" style="float: right; margin-top: 3px;">
           <ng-container selector>
             <div style="margin-right: -20px;">
