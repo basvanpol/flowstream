@@ -4,7 +4,7 @@ import { GroupVM } from '../../../models/group';
 import { areArraysUnequal } from '../../../utils/comparative.methods';
 import * as GroupActions from '../../../store/group/actions/group.actions';
 import { FeedState } from '../../../store/feed/reducers/feed.reducer';
-import { GroupState } from '../../../store/group/reducers/group.reducer';
+import { IGroupState } from '../../../store/group/reducers/group.reducer';
 import { DefaultFormComponent } from '../../shared/default-form/default-form.component';
 import { FeedSubscription } from '../../../models/feed';
 import { IAuthState } from '../../../store/auth/reducers/auth.reducer';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import * as TwitterActions from '../../../store/twitter/actions/twitter.actions';
 import { TwitterState } from '../../../store/twitter/reducers/twitter.reducer';
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
 
@@ -22,7 +22,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
   templateUrl: './add-feed.component.html',
   styleUrls: ['./add-feed.component.scss']
 })
-export class AddFeedComponent extends DefaultFormComponent implements OnInit {
+export class AddFeedComponent extends DefaultFormComponent implements OnInit, OnDestroy {
 
   searchQuery: string;
   twitterSubscription: Subscription;
@@ -33,7 +33,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   groupsSubscription: Subscription;
   feedStateSubscription: Subscription;
   feedState: FeedState;
-  groupState: GroupState;
+  groupState: IGroupState;
   adminGroups: any[];
   saveGroupSuccess: boolean;
   selectedAdminGroup: GroupVM;
@@ -44,6 +44,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   groupedSubscriptions: {
     [id: number]: number
   };
+  public isLoading = false;
 
   constructor(
     private store: Store<TwitterState | IAuthState>,
@@ -67,14 +68,15 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
       });
 
 
-    this.groupsSubscription = this.store.select('group').subscribe((state: GroupState) => {
+    this.groupsSubscription = this.store.select('group').subscribe((state: IGroupState) => {
       this.groupState = state;
       this.selectedAdminGroup = this.groupState.selectedAdminGroup;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
+      this.isLoading = this.groupState.loading;
 
       if (this.saveGroupSuccess) {
         this.store.dispatch(new GroupActions.SaveGroupReset());
-        this.store.dispatch(new GroupActions.LoadAdminGroups());
+        // this.store.dispatch(new GroupActions.LoadAdminGroups());
       }
 
       // check if this.adminGroups and groupState.adminGroups arrays are different, if so, select the last one or the top one
@@ -86,12 +88,12 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
             this.selectListState('first');
           }
         }
-      } else if (!this.adminGroups) {
+      } else if (!this.adminGroups && !this.isLoading) {
         this.selectListState('first');
-        this.store.dispatch(new GroupActions.LoadAdminGroups());
       }
 
       this.adminGroups = this.groupState.adminGroups;
+
       if (this.featuredFeeds && this.selectedAdminGroup) {
         this.filterGroupFeeds();
         this.setSubscribed();
@@ -114,6 +116,10 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
     this.formGroup = new FormGroup({
       'searchInput': new FormControl(null)
     });
+
+    if (!this.adminGroups) {
+      this.store.dispatch(new GroupActions.LoadAdminGroups());
+    }
   }
 
   mapFeedSubscriptions(feedSubscriptions: IUserFeedSubscription[]) {
@@ -182,6 +188,21 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
 
   }
 
+  selectDisabledGroupIds(feed: FeedFeedVM): string[] {
+    let feedGroups: string[] = [];
+    if (this.featuredFeeds && this.featuredFeeds.length > 0) {
+      feedGroups = this.featuredFeeds.filter((featuredFeed) => {
+        return featuredFeed._feed.feedId === feed.feedId && !featuredFeed.canUserEdit;
+      }).map((featuredFeed) => {
+        return featuredFeed._group;
+      });
+      if (!feedGroups || feedGroups.length === 0) {
+        feedGroups = [];
+      }
+    }
+    return feedGroups;
+  }
+
 
   selectListState(sPosition: string) {
     const newAdminGroups = this.groupState.adminGroups;
@@ -219,7 +240,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   }
 
   onDeleteGroup(event: any) {
-    this.store.dispatch(new GroupActions.DeleteGroup(event.groupId));
+    this.store.dispatch(new GroupActions.DeleteGroup(event.item));
   }
 
   onSearchSubmit(form: NgForm) {
@@ -296,6 +317,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
       data: {
         selectionList: this.adminGroups,
         selectedIdsOnLoaded: this.filterFeedGroups(feed),
+        disabledIdsOnLoaded: this.selectDisabledGroupIds(feed),
         callback: (selectedItems) => {
           selectedItems.forEach((group) => {
             featureRequestObject.groups.push(group._id);
@@ -320,6 +342,13 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
     //   groups: []
     // };
     // this.store.dispatch(new FeedActions.RemoveFromFeatureList(featureRequestObject));
+  }
+
+  ngOnDestroy() {
+    this.feedStateSubscription.unsubscribe();
+    this.groupsSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
+    this.twitterSubscription.unsubscribe();
   }
 
 }

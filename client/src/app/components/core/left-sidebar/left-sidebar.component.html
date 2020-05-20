@@ -23,15 +23,15 @@
                                     </div>
                                     <div class="filter-menu-container">
                                         <mat-accordion [multi]="true">
-                                            <mat-expansion-panel [@.disabled]="true" *ngFor="let group of mappedSubscriptions, let i = index" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                                            <mat-expansion-panel [@.disabled]="true" *ngFor="let feedGroup of mappedFeedGroups, let i = index" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                                                 <mat-expansion-panel-header>
                                                     <mat-panel-title >
-                                                        <app-icon-font [iconClass]="group[0]._group.icon.value"></app-icon-font>
-                                                        <a (click)="onOpenFeedGroup($event, group)" class="feed-menu__title-link">{{group[0]._group.title}}</a>
+                                                        <app-icon-font [iconClass]="feedGroup.group.icon.value"></app-icon-font>
+                                                        <a (click)="onOpenFeedGroup($event, feedGroup)" class="feed-menu__title-link">{{feedGroup.group.title}}</a>
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
                                                 <ul class="feeds-menu__list">
-                                                    <li *ngFor="let subscription of group" class="feeds-menu__list-item">
+                                                    <li *ngFor="let subscription of feedGroup.subscriptions" class="feeds-menu__list-item">
                                                         <div class="feeds-menu__feed-container">
                                                             <app-feed-resource-thumb class="feeds-menu__feed-thumb" [thumb]="subscription._feed.feedIcon"></app-feed-resource-thumb>
                                                             <a (click)="onOpenFeed(subscription._feed)">
@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="sidebar-footer">
                                     <div (click)="openAddFeedDialog()" class="btn-red menu-left">
-                                        <span>Add feed</span>
+                                        <span>Manage Feeds</span>
                                     </div>
                                     <div class="add-feed-plus-button" (click)="openAddFeedDialog()">
                                         <app-icon-font [iconClass]="'icon-add'"></app-icon-font>

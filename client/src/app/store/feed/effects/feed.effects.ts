@@ -85,7 +85,6 @@ export class FeedEffects {
         .pipe(
             ofType(FeedActions.ADD_TO_FEATURE_LIST),
             switchMap((action: FeedActions.AddToFeatureList) => {
-
                 return this.feedService.addToFeatureList(<FeedSubscription>action.payload)
                     .pipe(
                         switchMap((res) => {

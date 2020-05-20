@@ -7,7 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
-import { MatCheckboxModule } from '@angular/material';
+import { MatCheckboxModule, MatOptionModule, MatSelectModule } from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
 
 
@@ -22,7 +22,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
         MatFormFieldModule,
         MatTabsModule,
         MatCheckboxModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatSelectModule,
+        MatOptionModule
+
     ],
     exports: [
         CommonModule,
@@ -34,7 +37,9 @@ import {MatExpansionModule} from '@angular/material/expansion';
         MatFormFieldModule,
         MatTabsModule,
         MatCheckboxModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatSelectModule,
+        MatOptionModule
     ]
 })
 export class MaterialModule {}

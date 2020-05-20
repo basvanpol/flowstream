@@ -1,7 +1,6 @@
-import { createEntityAdapter } from '@ngrx/entity';
-import { IAppState } from './../../flow/selectors/flow.selectors';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { IFrontPageState } from '../reducers/frontpage.reducers';
+import { IAppState } from '../../app/app.state';
 
 export const getFrontPageState = createFeatureSelector<IAppState, IFrontPageState>('frontpage');
 

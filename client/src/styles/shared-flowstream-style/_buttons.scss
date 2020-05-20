@@ -164,40 +164,56 @@
   }
 }
 
-.btn-black {
-  position: relative;
-  height: 37px;
-  cursor: pointer;
-  background-color: $EDITOR_BUTTON_BLACK;
+.blue-button {
+  background-color: $EDITOR_BUTTON_BLUE;
   background-image: none;
-  border: none;
-  border-radius: $EDITOR_BUTTON_RADIUS;
+  position: relative;
+  cursor: pointer;
+  @include post-radius(50px);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-sizing: content-box;
-  -webkit-font-smoothing: antialiased;
+  color: #6c6c6c;
   display: table !important;
+  height: 41px !important;
   text-align: center;
-  color: $EDITOR_WHITE;
+  box-sizing: content-box;
+  float: left;
+  min-width: 120px;
 
   &:hover {
-    background-color: $EDITOR_BUTTON_RED_HOVER;
+    background-color: $EDITOR_BUTTON_BLUE_HOVER;
+    color: #fff;
   }
 
   &:active {
-    background-image: -o-linear-gradient(89deg, #e9351f 80%, #d52712 100%);
-    background-image: -moz-linear-gradient(89deg, #e9351f 80%, #d52712 100%);
-    background-image: -ms-linear-gradient(89deg, #e9351f 80%, #d52712 100%);
-    background-image: linear-gradient(-1deg, #e9351f 80%, #d52712 100%);
-    background-color: transparent;
+    background-color: $EDITOR_BUTTON_BLUE;
+    color: #fff;
+    background-image: -o-linear-gradient(89deg, $EDITOR_BUTTON_BLUE_HOVER 80%, $EDITOR_BUTTON_BLUE 100%);
+    background-image: -moz-linear-gradient(89deg, $EDITOR_BUTTON_BLUE_HOVER 80%, $EDITOR_BUTTON_BLUE 100%);
+    background-image: -ms-linear-gradient(89deg, $EDITOR_BUTTON_BLUE_HOVER 80%, $EDITOR_BUTTON_BLUE 100%);
+    background-image: linear-gradient(-1deg, $EDITOR_BUTTON_BLUE_HOVER 80%, $EDITOR_BUTTON_BLUE 100%);
+  }
+
+  &.disabled,
+  &.disable:hover,
+  &.disable:active {
+    cursor: default;
+    background-color: $EDITOR_BUTTON_GREY;
+    border: none;
+
+    span {
+      color: $EDITOR_DEFAULT_BUTTON_TEXT_COLOR;
+    }
   }
 
   span {
+    @include button-label-text($EDITOR_TEXT_WHITE, 13pt);
     display: table-cell;
-    padding: 5px 8px 5px 8px;
     vertical-align: middle;
     font-family: $font-family-primary;
     font-size: 10pt;
     font-weight: 600;
+    text-align: center;
+    margin: 11px 40px 11px 40px;
   }
 }
 
@@ -254,7 +270,6 @@
   @include text-select-none();
 
   &:hover {
-
   }
 
   .icon {

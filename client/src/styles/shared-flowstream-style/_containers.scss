@@ -1,13 +1,30 @@
-.popup__container{
+.popup__container {
+  &--medium {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
 
-    &--medium{
-        display: flex;
-        flex-direction: column;
-        max-height: 500px;
-
-        article{
-            display: flex;
-            flex-direction: column;
-        }
+    article {
+      display: flex;
+      flex-direction: column;
     }
+  }
+}
+
+.content__element-container {
+  width: 100%;
+  padding: 0 $default-element-padding $default-element-padding $default-element-padding;
+
+  &--hor {
+    @extend .content__element-container;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  &--vert {
+    @extend .content__element-container;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

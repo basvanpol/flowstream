@@ -179,6 +179,8 @@ export default (app) => {
                 currentUser.feedSubscriptions = userSubscriptions;
                 res.status(200).send(currentUser);
             });
+        } else {
+            res.status(200).send(null);
         }
     });
 

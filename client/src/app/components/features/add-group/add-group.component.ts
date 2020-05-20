@@ -1,7 +1,7 @@
 import { IconTypes, defaultSvgClass } from './../../../models/icon';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GroupVM } from '../../../models/group';
-import { GroupState } from '../../../store/group/reducers/group.reducer';
+import { IGroupState } from '../../../store/group/reducers/group.reducer';
 import { Subscription } from 'rxjs';
 import * as GroupActions from '../../../store/group/actions/group.actions';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -17,44 +17,79 @@ import { Store } from '@ngrx/store';
 export class AddGroupComponent extends DefaultFormComponent implements OnInit, OnDestroy {
 
   groupSubscription: Subscription;
-  groupState: GroupState;
+  groupState: IGroupState;
   saveGroupSuccess: boolean;
   isNewGroup: boolean;
+  public selectedIconClass: string;
+  public selectedPage = "form";
+  public selectedIconId: number | string;
+  public icons: string[] = [
+    "icon-java",
+    "icon-lollypop",
+    "icon-mobile",
+    "icon-game",
+    "icon-shirt",
+    "icon-camera2",
+    "icon-ball",
+    "icon-outdoors",
+    "icon-house",
+    "icon-plant",
+    "icon-pencil",
+    "icon-art",
+    "icon-entertainment",
+    "icon-news",
+    "icon-frontpage",
+    "icon-science",
+    "icon-body",
+    "icon-mobility",
+    "icon-closet",
+    "icon-film",
+    "icon-bookmark",
+    "icon-tech"
+  ];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private store: Store<GroupState>,
+    @Inject(MAT_DIALOG_DATA) public data: {
+      isNewItem: boolean,
+      selectedGroup: GroupVM
+    },
+    private store: Store<IGroupState>,
     private matDialogRef: MatDialogRef<AddGroupComponent>) {
     super();
   }
 
   ngOnInit() {
-    this.groupSubscription = this.store.select('group').subscribe((state: GroupState) => {
+    this.formGroup = new FormGroup({
+      'title': new FormControl(null, [Validators.required])
+    });
+    console.log('this.data', this.data);
+    this.isNewGroup = this.data.isNewItem;
+    if (!this.isNewGroup) {
+      this.setFormValues();
+      this.selectedIconId = this.data.selectedGroup.icon.value;
+    }
+
+    this.groupSubscription = this.store.select('group').subscribe((state: IGroupState) => {
       this.groupState = state;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
       if (this.saveGroupSuccess) {
         this.matDialogRef.close();
       }
-
-      this.isNewGroup = this.data.isNewItem;
-      if (!this.isNewGroup) {
-        this.setFormValues();
-      }
-    });
-
-    this.formGroup = new FormGroup({
-      'title': new FormControl(null, [Validators.required]),
-      'icon': new FormControl(null),
     });
   }
 
-  onSubmit(form: NgForm) {
+  public onSubmit(form: NgForm) {
+    console.log('form', form);
     let groupModel: GroupVM;
 
     if (!this.isNewGroup) {
       groupModel = {
-        ...this.groupState.selectedAdminGroup,
-        title: form.value.title
+        ...this.data.selectedGroup,
+        title: form.value.title,
+        icon: {
+          type: IconTypes.SVG_CLASS,
+          value: (this.selectedIconId) ? this.selectedIconId : defaultSvgClass
+        }
       };
     } else {
       groupModel = {
@@ -63,11 +98,12 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
         title: form.value.title,
         icon: {
           type: IconTypes.SVG_CLASS,
-          value: (form.value.icon) ? form.value.icon : defaultSvgClass
+          value: (this.selectedIconId) ? this.selectedIconId : defaultSvgClass
         }
       };
     }
 
+    console.log('groupModel', groupModel);
     this.store.dispatch(new GroupActions.SaveGroup(groupModel));
   }
 
@@ -80,12 +116,20 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
 
   closeModal() {
     this.matDialogRef.close();
-  };
+  }
 
   setFormValues() {
     this.formGroup.patchValue({
-      'title': this.groupState.selectedAdminGroup.title
+      'title': this.data.selectedGroup.title
     });
+  }
+
+  public goTo(page: string) {
+    this.selectedPage = page;
+  }
+
+  public onSelectItem(itemId: number | string) {
+    this.selectedIconId = itemId;
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 export interface IIcon {
     type: IconTypes;
-    value: string;
+    value: number | string;
 }
 
 export enum IconTypes {

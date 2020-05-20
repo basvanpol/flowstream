@@ -22,7 +22,7 @@
   <mat-tab-group style="flex: 1;" [selectedIndex]="selectedTabIndex" [animationDuration]="'0ms'" disableRipple>
     <mat-tab label="Categories" style="height: 100%;" disableRipple>
       <div style="display: flex; flex-direction: row; height:100%;">
-        <app-groups-list [listItems]="adminGroups" [selectedId]="selectedAdminGroup._id.toString()"
+        <app-groups-list [listItems]="adminGroups" [selectedId]="(selectedAdminGroup && selectedAdminGroup._id) ? selectedAdminGroup._id.toString() : null"
           (selectItem)="onSelectGroup($event)" (deleteItem)="onDeleteGroup($event)"></app-groups-list>
         <div class="add-feed__content-container">
           <h2>{{selectedGroupName}}</h2>
@@ -34,7 +34,7 @@
               <p>{{(feed._feed) ? feed._feed.feedName : ''}}</p>
               <div class="add-feed__manage-buttons-holder">
                 <subscription-button (click)="handleSubscription(feed)" [feed]="feed"></subscription-button>
-                <div class="add-feed__categories-button" (click)="addTofeatureList(feed._feed)"><span>Choose
+                <div *ngIf="feed.canUserEdit" class="add-feed__categories-button" (click)="addTofeatureList(feed._feed)"><span>Choose
                     categories</span></div>
               </div>
             </div>

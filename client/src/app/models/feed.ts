@@ -31,6 +31,7 @@ export interface FeedVM {
     _id: string;
     _user: string;
     subscribed?: boolean;
+    canUserEdit?: boolean;
 }
 
 export interface FeedFeedVM {

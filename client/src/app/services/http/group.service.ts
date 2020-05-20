@@ -23,8 +23,8 @@ export class GroupService extends BaseHttpService {
         });
     }
 
-    public deleteGroup(groupId: number): Observable<any> {
-        console.log('delete group');
+    public deleteGroup(groupId: string): Observable<any> {
+        console.log('delete group', groupId);
         const url = `${environment.webApiUrl}/api/groups/${groupId}`;
         return this.http.delete(url, {
             observe: 'body',

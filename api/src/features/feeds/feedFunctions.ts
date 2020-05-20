@@ -17,6 +17,8 @@ export class FeedFunctions {
     userId: string;
     numFeedSubscriptionMutation = 0;
     updatedUser: {} = null;
+    isUserFeedAdmin = false;
+    adminUserIds: number[] = [];
 
     constructor() { }
 
@@ -26,6 +28,16 @@ export class FeedFunctions {
         this.processedGroups = 0;
         this.errorSend = false;
         this.userId = req.body.userId.toString();
+        this.isUserFeedAdmin = (req.user && req.user.permissions && req.user.permissions.feeds && req.user.permissions.feeds === UserRoles.ADMIN);
+        const adminUsers = await User.find({ 'permissions.feeds': UserRoles.ADMIN }, (err, users) => {
+            if (err) {
+                res.status(500).send('Something broke!')
+            }
+            return users;
+        });
+        this.adminUserIds = adminUsers.map(adminUser => adminUser._id);
+
+
         const requestFeed = {
             ...req.body.feed
         };
@@ -50,8 +62,6 @@ export class FeedFunctions {
                     newFeed.feedType = req.body.feedType;
                     newFeed.feedIcon = req.body.feedIcon;
 
-
-
                     this.feedObjectId = newFeed._id;
                     await newFeed.save((err) => {
                         if (err) {
@@ -72,8 +82,18 @@ export class FeedFunctions {
 
 
     removeFeature = (req, res, finalCB) => {
-        return new Promise((resolve, reject) => {
-            FeedFeature.find({ '_feed': this.feedObjectId }, async (err, feedFeatures) => {
+        return new Promise(async (resolve, reject) => {
+            const userId = req.user._id;
+
+            let userIds = [];
+            if (!!this.isUserFeedAdmin) {
+                userIds = [...this.adminUserIds, userId]
+            } else {
+                userIds = [userId];
+            }
+            // if user is not a feed admin, retrieve just his own featured feeds
+
+            FeedFeature.find({ '_user': { $in: userIds }, '_feed': this.feedObjectId }, async (err, feedFeatures) => {
                 if (err) {
                     if (!this.errorSend) {
                         reject(err.message);
@@ -83,26 +103,29 @@ export class FeedFunctions {
                 }
                 if (feedFeatures && feedFeatures.length > 0) {
                     const toBeRemovedFeaturedFeeds = feedFeatures.filter((feateredFeed) => {
-                        return !this.groups.includes(feateredFeed._feed.toString());
+                        return !this.groups.includes(feateredFeed._group.toString());
                     });
                     const numToBeRemoved = toBeRemovedFeaturedFeeds.length;
-                    let numRemoved = 0;
-                    toBeRemovedFeaturedFeeds.forEach(async (tbrFeaturedFeed) => {
-                        await FeedFeature.remove({ '_id': tbrFeaturedFeed._id }, (err, result) => {
-                            if (err) {
-                                if (!this.errorSend) {
-                                    reject(err.message);
-                                    this.errorSend = true;
-                                    res.send(err);
+                    if (numToBeRemoved > 0) {
+                        let numRemoved = 0;
+                        toBeRemovedFeaturedFeeds.forEach(async (tbrFeaturedFeed) => {
+                            await FeedFeature.remove({ '_id': tbrFeaturedFeed._id }, (err, result) => {
+                                if (err) {
+                                    if (!this.errorSend) {
+                                        reject(err.message);
+                                        this.errorSend = true;
+                                        res.send(err);
+                                    }
                                 }
-                            }
-                            numRemoved++;
-                            if (numRemoved === numToBeRemoved) {
-                                resolve('featured feed removed');
-                            }
+                                numRemoved++;
+                                if (numRemoved === numToBeRemoved) {
+                                    resolve('featured feed removed');
+                                }
+                            });
                         });
-                    });
-
+                    } else {
+                        resolve('nothing to remove');
+                    }
                 } else {
                     resolve('no featured feeds');
                 }
@@ -113,8 +136,18 @@ export class FeedFunctions {
     savefeature = (req, res, finalCB) => {
         return new Promise((resolve, reject) => {
             if (this.groups.length > 0) {
+                const userId = req.user._id;
                 this.groups.forEach((groupId) => {
-                    FeedFeature.findOne({ '_feed': this.feedObjectId, '_group': groupId }, async (err, feedFeature) => {
+                    let userIds;
+                    if (!this.isUserFeedAdmin) {
+                        userIds = [...this.adminUserIds, userId]
+                    } else {
+                        userIds = [...this.adminUserIds]
+                    }
+                    /*
+                    * if user is feed admin, search all featuredfeeds created by feedadmin, otherwise search all featuredfeeds created by feedadmins, AND user
+                    */
+                    FeedFeature.findOne({ '_user': { $in: userIds }, '_feed': this.feedObjectId, '_group': groupId }, async (err, feedFeature) => {
                         if (err) {
                             if (!this.errorSend) {
                                 reject(err.message);
@@ -123,18 +156,17 @@ export class FeedFunctions {
                             }
                         }
                         if (feedFeature) {
-                            await feedFeature.update({
-                                '$set': { 'active': true }
-                            }, (err, result) => {
-                                if (err) {
-                                    if (!this.errorSend) {
-                                        reject(err.message);
-                                        this.errorSend = true;
-                                        res.send(err);
-                                    }
-
+                            console.log('found feedFeature!', feedFeature);
+                            try {
+                                await feedFeature.updateOne({ _id: feedFeature._id }, { $set: { 'active': true } });
+                            } catch (e) {
+                                if (!this.errorSend) {
+                                    reject(err.message);
+                                    this.errorSend = true;
+                                    res.send(err);
                                 }
-                            });
+                            }
+
                             this.processedGroups++;
                             if (this.processedGroups === this.numGroups) {
                                 resolve(' saved feature');
@@ -368,22 +400,28 @@ export class FeedFunctions {
 
     getAllFeeds = (req, res) => {
         this.userId = req.user._id;
+        this.isUserFeedAdmin = (req.user && req.user.permissions && req.user.permissions.feeds && req.user.permissions.feeds === UserRoles.ADMIN);
         return new Promise(async (resolve, reject) => {
             /**
-             * first, find all admin users. then, search for all groups that the admin users have created
+             * first, find all users that have admin permissions for feeds.
              */
-            const adminUsers = await User.find({ 'permissions.groups': UserRoles.ADMIN }, (err, users) => {
-                if (err) {
-                    res.status(500).send('Something broke!')
-                }
-                return users;
-            })
-            let adminUserIds = adminUsers.map(adminUser => adminUser._id);
+            if (!this.adminUserIds || this.adminUserIds.length === 0) {
+                const adminUsers = await User.find({ 'permissions.feeds': UserRoles.ADMIN }, (err, users) => {
+                    if (err) {
+                        res.status(500).send('Something broke!')
+                    }
+                    return users;
+                });
+                if (!!adminUsers && adminUsers.length > 0) {
+                    this.adminUserIds = adminUsers.map(adminUser => adminUser._id);
+                };
+            }
+
             let userIds = [];
-            if (!!adminUserIds && adminUserIds.length > 0) {
-                userIds = [...adminUserIds, req.user._id]
+            if (this.isUserFeedAdmin) {
+                userIds = [...this.adminUserIds];
             } else {
-                userIds = [req.user._id];
+                userIds = [...this.adminUserIds, req.user._id];
             }
 
             FeedFeature.find({ '_user': { $in: userIds }, 'active': true }).
@@ -397,7 +435,15 @@ export class FeedFunctions {
                         }
                     }
                     if (featuredFeeds) {
-
+                        const mappedFeatureFeeds = featuredFeeds.map(featuredFeed => {
+                            console.log('featuredFeed', featuredFeed);
+                            return {
+                                ...featuredFeed._doc,
+                                canUserEdit: ((this.isUserFeedAdmin && this.adminUserIds.includes(featuredFeed._user)) || featuredFeed._user.toString() === this.userId.toString())
+                            }
+                        })
+                        // console.log('featuredFeeds', featuredFeeds);
+                        console.log('mappedFeatureFeeds', mappedFeatureFeeds);
                         User.findOne({ '_id': this.userId })
                             .exec((err, user) => {
                                 if (err) {
@@ -418,7 +464,7 @@ export class FeedFunctions {
                                             res.status(200).send({
                                                 'message': 'all good in the hood', data: {
                                                     user: this.updatedUser,
-                                                    featuredFeeds: featuredFeeds
+                                                    featuredFeeds: [...mappedFeatureFeeds]
                                                 }
                                             });
                                         });
