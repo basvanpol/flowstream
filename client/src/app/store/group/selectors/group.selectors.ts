@@ -1,5 +1,3 @@
-
-import { IGroup } from './../../../../../../api/src/tsmodels/groups';
 import { Store, createFeatureSelector, createSelector } from '@ngrx/store';
 import { IGroupState } from "../reducers/group.reducer"
 import { IAppState } from '../../app/app.state';
