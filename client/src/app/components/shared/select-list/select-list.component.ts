@@ -20,8 +20,8 @@ export class SelectListComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
     if (this.listData && this.selectedIdsOnLoaded) {
+      console.log('list Data', this.listData);
       this.selectedItems = this.listData.filter((listItem) => {
         return this.selectedIdsOnLoaded.includes(listItem._id);
       });

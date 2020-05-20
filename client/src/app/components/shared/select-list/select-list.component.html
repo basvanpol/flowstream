@@ -1,7 +1,7 @@
 <div class="select-list__container">
   <ul>
       <li *ngFor="let item of listData">
-          <mat-checkbox (change)="onChange($event)" value="{{item._id}}" id="{{item.title}}" [checked]="selectedIdsOnLoaded.includes(item._id)" [disabled]="disabledIdsOnLoaded.includes(item._id)"></mat-checkbox>
+          <mat-checkbox (change)="onChange($event)" value="{{item._id}}" id="{{item.title}}" [checked]="selectedIdsOnLoaded && selectedIdsOnLoaded.includes(item._id)" [disabled]="disabledIdsOnLoaded && disabledIdsOnLoaded.includes(item._id)"></mat-checkbox>
           <div><p>{{ item.title }}</p></div>
       </li>
   </ul>
