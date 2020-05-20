@@ -11,16 +11,13 @@ import { MatDialog } from '@angular/material/dialog';
 export class GroupsListComponent {
 
   @Input() set listItems(values: GroupVM[]) {
+    console.log('new groups', values);
     this.groups = values;
-    if (!!this.groups && this.groups.length > 0) {
-      this.canUserEditSome = this.groups.some((group, index, array) => group.canUserEdit === true);
-    }
   }
   @Input() selectedId: string;
   @Output() selectItem = new EventEmitter();
   @Output() deleteItem = new EventEmitter();
   public groups: GroupVM[];
-  public canUserEditSome = false;
 
   constructor(public dialog: MatDialog) { }
 

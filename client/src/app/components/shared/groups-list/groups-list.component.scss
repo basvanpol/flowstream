@@ -18,11 +18,12 @@
   overflow-x: hidden;
   .list__list {
     padding: 0px;
-    margin-top: 27px;
+    margin-top: 15px;
   }
 }
 
 .list__list-item {
+  height: 52px !important;
   list-style-type: none;
   margin: 0px;
   padding: 0px;
@@ -30,8 +31,6 @@
   justify-content: left;
   cursor: pointer;
   color: $EDITOR_TEXT_GREY;
-  font-weight: $font-weight-normal;
-  font-family: $font-family-roboto;
   &.selected {
     color: $EDITOR_TEXT_DARKGREY;
   }
@@ -42,13 +41,14 @@
   align-items: center;
   justify-content: flex-start;
   margin-left: -22px;
-}
-
-.list__list-item-button {
-  &:hover {
-    color: $EDITOR_TEXT_DARKGREY;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  &:hover{
+    text-decoration:underline;
   }
 }
+
 
 .list__footer {
   position: absolute;

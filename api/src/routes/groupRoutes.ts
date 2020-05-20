@@ -16,7 +16,7 @@ export default (app) => {
                 }
                 if (group) {
                     const userId = req.user._id.toString();
-                    const canUserSave = (group._user.toString() === userId || (!!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN));
+                    const canUserSave = (group._user.toString() === userId || (!!req.user.permissions && !!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN));
                     if (!canUserSave) {
                         res.status(401).send("You don't have permission to delete this group");
                     }
@@ -42,12 +42,16 @@ export default (app) => {
                     newGroup._user = req.user._id;
                     newGroup.title = req.body.title;
                     newGroup.icon = req.body.icon;
+                    // The one who created a group, can also edit it ;
                     await newGroup.save((err) => {
                         if (err) {
                             return res.status(500).send({ msg: err.message });
                         }
-                        // new flow saved
-                        res.status(200).send({ msg: 'new group saved', group: newGroup });
+                        const updatedNewGroup = {
+                            ...newGroup._doc,
+                            canUserEdit: true
+                        }
+                        res.status(200).send({ msg: 'new group saved', group: updatedNewGroup });
                     });
                 }
             });

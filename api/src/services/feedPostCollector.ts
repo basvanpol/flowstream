@@ -210,12 +210,6 @@ const parseContent = (oData: any, key: any) => {
             }
         }
 
-        const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key] );
-        if (!!title) {
-            const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
-            aContent.push(oTitleText);
-        }
-
         const description = (scrapedContent && scrapedContent.description) ? scrapedContent.description : '';
         if (!!description) {
             const oText = { "mainType": "TEXT", "type": "TEXT_TWITTER", "source": description, "date": null, "location": null, "thumb": null }
@@ -228,6 +222,15 @@ const parseContent = (oData: any, key: any) => {
         if (!!imageUrl) {
             const oMedia = { "mainType": "IMAGE", "type": "IMAGE_TWITTER", "source": imageUrl, "date": null, "location": null, "thumb": null };
             aContent.push(oMedia);
+        }
+
+        if(aContent.length > 0){
+            // only show title when there's already content, we want to return an empty array when no other content is found, to ignore RT's without images
+            const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key]);
+            if (!!title) {
+                const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
+                aContent.push(oTitleText);
+            }
         }
 
         resolve(aContent);

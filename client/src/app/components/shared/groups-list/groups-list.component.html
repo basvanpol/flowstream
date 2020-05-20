@@ -6,9 +6,9 @@
         [ngClass]="{'selected': (selectedId && selectedId !== '-1' && item._id === selectedId)}">
         <div class="list__list-item-button" (click)="onSelect(item)">
           <div><app-icon-font [iconClass]="item.icon.value"></app-icon-font></div>
-          <span>{{item.title}}</span>
+          <a>{{item.title}}</a>
         </div>
-        <app-dropdown *ngIf="canUserEditSome" class="dropdown--right" style="float: right; margin-top: 3px;">
+        <app-dropdown *ngIf="item.canUserEdit" class="dropdown--right" style="float: right; margin-top: 3px;">
           <ng-container selector>
             <div style="margin-right: -20px;">
               <app-icon-font [iconClass]="'icon-more'" class="header__add-post-button-icon"></app-icon-font>
