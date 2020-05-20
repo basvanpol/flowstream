@@ -29,7 +29,6 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
   authSubscription: Subscription;
   searchFeedsData: any[] = [];
   authState: any;
-  selectedGroupName: string;
   groupsSubscription: Subscription;
   feedStateSubscription: Subscription;
   feedState: FeedState;

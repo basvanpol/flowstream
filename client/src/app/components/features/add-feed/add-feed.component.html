@@ -25,7 +25,6 @@
         <app-groups-list [listItems]="adminGroups" [selectedId]="(selectedAdminGroup && selectedAdminGroup._id) ? selectedAdminGroup._id.toString() : null"
           (selectItem)="onSelectGroup($event)" (deleteItem)="onDeleteGroup($event)"></app-groups-list>
         <div class="add-feed__content-container">
-          <h2>{{selectedGroupName}}</h2>
           <div class="add-feed__group-feeds-container">
             <div *ngFor="let feed of groupFeeds" class="add-feed__item-card" [ngClass]="{selected: feed.subscribed}">
               <div class="add-feed__icon-container">
