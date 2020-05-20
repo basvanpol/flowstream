@@ -10,6 +10,7 @@ export class SelectListComponent implements OnInit {
 
   @Input() listData: any;
   @Input() selectedIdsOnLoaded: any[];
+  @Input() disabledIdsOnLoaded: any[];
   @Output() selectedItemsEmitter: EventEmitter<any[]> = new EventEmitter();
   selectedItems: {
     _id: string,
@@ -19,7 +20,6 @@ export class SelectListComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
 
     if (this.listData && this.selectedIdsOnLoaded) {
       this.selectedItems = this.listData.filter((listItem) => {

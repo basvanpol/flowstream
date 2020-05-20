@@ -188,6 +188,21 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
 
   }
 
+  selectDisabledGroupIds(feed: FeedFeedVM): string[] {
+    let feedGroups: string[] = [];
+    if (this.featuredFeeds && this.featuredFeeds.length > 0) {
+      feedGroups = this.featuredFeeds.filter((featuredFeed) => {
+        return featuredFeed._feed.feedId === feed.feedId && !featuredFeed.canUserEdit;
+      }).map((featuredFeed) => {
+        return featuredFeed._group;
+      });
+      if (!feedGroups || feedGroups.length === 0) {
+        feedGroups = [];
+      }
+    }
+    return feedGroups;
+  }
+
 
   selectListState(sPosition: string) {
     const newAdminGroups = this.groupState.adminGroups;
@@ -302,6 +317,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
       data: {
         selectionList: this.adminGroups,
         selectedIdsOnLoaded: this.filterFeedGroups(feed),
+        disabledIdsOnLoaded: this.selectDisabledGroupIds(feed),
         callback: (selectedItems) => {
           selectedItems.forEach((group) => {
             featureRequestObject.groups.push(group._id);

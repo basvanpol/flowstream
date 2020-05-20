@@ -110,7 +110,6 @@ export default (app) => {
         const Query = [{ $match: { '_user': { $in: userIds } } }]
 
         let groups: IGroup[] = await Group.aggregate(Query);
-        console.log('groups', groups);
         if (!!groups) {
             adminUserIds.forEach(element => {
                 return element.toString();

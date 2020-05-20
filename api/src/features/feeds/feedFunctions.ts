@@ -18,7 +18,7 @@ export class FeedFunctions {
     numFeedSubscriptionMutation = 0;
     updatedUser: {} = null;
     isUserFeedAdmin = false;
-    adminUserIds: number[];
+    adminUserIds: number[] = [];
 
     constructor() { }
 
@@ -36,8 +36,8 @@ export class FeedFunctions {
             return users;
         });
         this.adminUserIds = adminUsers.map(adminUser => adminUser._id);
-        
-        
+
+
         const requestFeed = {
             ...req.body.feed
         };
@@ -159,14 +159,14 @@ export class FeedFunctions {
                             console.log('found feedFeature!', feedFeature);
                             try {
                                 await feedFeature.updateOne({ _id: feedFeature._id }, { $set: { 'active': true } });
-                             } catch (e) {
+                            } catch (e) {
                                 if (!this.errorSend) {
                                     reject(err.message);
                                     this.errorSend = true;
                                     res.send(err);
                                 }
-                             }
-                        
+                            }
+
                             this.processedGroups++;
                             if (this.processedGroups === this.numGroups) {
                                 resolve(' saved feature');
@@ -400,22 +400,28 @@ export class FeedFunctions {
 
     getAllFeeds = (req, res) => {
         this.userId = req.user._id;
+        this.isUserFeedAdmin = (req.user && req.user.permissions && req.user.permissions.feeds && req.user.permissions.feeds === UserRoles.ADMIN);
         return new Promise(async (resolve, reject) => {
             /**
              * first, find all users that have admin permissions for feeds.
              */
-            const adminUsers = await User.find({ 'permissions.feeds': UserRoles.ADMIN }, (err, users) => {
-                if (err) {
-                    res.status(500).send('Something broke!')
-                }
-                return users;
-            })
-            let adminUserIds = adminUsers.map(adminUser => adminUser._id);
+            if (!this.adminUserIds || this.adminUserIds.length === 0) {
+                const adminUsers = await User.find({ 'permissions.feeds': UserRoles.ADMIN }, (err, users) => {
+                    if (err) {
+                        res.status(500).send('Something broke!')
+                    }
+                    return users;
+                });
+                if (!!adminUsers && adminUsers.length > 0) {
+                    this.adminUserIds = adminUsers.map(adminUser => adminUser._id);
+                };
+            }
+
             let userIds = [];
-            if (!!adminUserIds && adminUserIds.length > 0) {
-                userIds = [...adminUserIds, req.user._id]
+            if (this.isUserFeedAdmin) {
+                userIds = [...this.adminUserIds];
             } else {
-                userIds = [req.user._id];
+                userIds = [...this.adminUserIds, req.user._id];
             }
 
             FeedFeature.find({ '_user': { $in: userIds }, 'active': true }).
@@ -430,11 +436,14 @@ export class FeedFunctions {
                     }
                     if (featuredFeeds) {
                         const mappedFeatureFeeds = featuredFeeds.map(featuredFeed => {
+                            console.log('featuredFeed', featuredFeed);
                             return {
-                                ...featuredFeed,
-                                canUserEdit: ((this.isUserFeedAdmin && this.adminUserIds.includes(featuredFeed._user) ) || featuredFeed._user === this.userId)
+                                ...featuredFeed._doc,
+                                canUserEdit: ((this.isUserFeedAdmin && this.adminUserIds.includes(featuredFeed._user)) || featuredFeed._user.toString() === this.userId.toString())
                             }
                         })
+                        // console.log('featuredFeeds', featuredFeeds);
+                        console.log('mappedFeatureFeeds', mappedFeatureFeeds);
                         User.findOne({ '_id': this.userId })
                             .exec((err, user) => {
                                 if (err) {

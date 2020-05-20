@@ -34,7 +34,7 @@
               <p>{{(feed._feed) ? feed._feed.feedName : ''}}</p>
               <div class="add-feed__manage-buttons-holder">
                 <subscription-button (click)="handleSubscription(feed)" [feed]="feed"></subscription-button>
-                <div class="add-feed__categories-button" (click)="addTofeatureList(feed._feed)"><span>Choose
+                <div *ngIf="feed.canUserEdit" class="add-feed__categories-button" (click)="addTofeatureList(feed._feed)"><span>Choose
                     categories</span></div>
               </div>
             </div>

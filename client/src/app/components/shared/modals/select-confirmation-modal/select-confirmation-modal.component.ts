@@ -18,6 +18,7 @@ export class SelectConfirmationModalComponent implements OnInit {
     title: string
   }[];
   selectedIdsOnLoaded: number[];
+  disabledIdsOnLoaded: number[];
   actionType: string;
   requestObject: any | FeedSubscription;
 
@@ -31,6 +32,7 @@ export class SelectConfirmationModalComponent implements OnInit {
       ...data.requestObject
     };
     this.selectedIdsOnLoaded = data.selectedIdsOnLoaded;
+    this.disabledIdsOnLoaded = data.disabledIdsOnLoaded;
   }
 
   ngOnInit() {

@@ -6,7 +6,7 @@
       </div>
     </header>
     <section class="wrapper clearfix popup__form-content">
-      <app-select-list [listData]="listData" [selectedIdsOnLoaded]="selectedIdsOnLoaded" (selectedItemsEmitter)="onSelectedList($event)"></app-select-list>
+      <app-select-list [listData]="listData" [selectedIdsOnLoaded]="selectedIdsOnLoaded" [disabledIdsOnLoaded]="disabledIdsOnLoaded" (selectedItemsEmitter)="onSelectedList($event)"></app-select-list>
     </section>
     <footer>
       <div class="popup__form-footer">
