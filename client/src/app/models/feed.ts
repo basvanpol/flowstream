@@ -40,3 +40,4 @@ export interface FeedFeedVM {
     feedType: string;
     feedIcon: string;
 }
+
