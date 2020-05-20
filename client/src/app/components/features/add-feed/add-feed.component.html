@@ -21,7 +21,7 @@
   </div>
   <mat-tab-group style="flex: 1;" [selectedIndex]="selectedTabIndex" [animationDuration]="'0ms'" disableRipple>
     <mat-tab label="Categories" style="height: 100%;" disableRipple>
-      <div style="display: flex; flex-direction: row; height:100%;">
+      <div style="display: flex; flex-direction: row; height:100%;">`
         <app-groups-list [listItems]="adminGroups" [selectedId]="(selectedAdminGroup && selectedAdminGroup._id) ? selectedAdminGroup._id.toString() : null"
           (selectItem)="onSelectGroup($event)" (deleteItem)="onDeleteGroup($event)"></app-groups-list>
         <div class="add-feed__content-container">
