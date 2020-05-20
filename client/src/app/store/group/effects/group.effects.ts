@@ -20,9 +20,9 @@ export class GroupEffects {
       return this.groupService.saveGroup(<GroupVM>action.payload)
         .pipe(
           map((res: any) => {
-            console.log('save group success', res)
+            console.log('save group success', res);
             if (res) {
-              return new GroupActions.SaveGroupSuccess(res);
+              return new GroupActions.SaveGroupSuccess(res.group);
             }
           })
           , catchError((err) => {
@@ -38,13 +38,11 @@ export class GroupEffects {
   deleteGroup$ = this.actions$.pipe(
     ofType(GroupActions.GroupActionTypes.DeleteGroup),
     switchMap((action: GroupActions.DeleteGroup) => {
-      return this.groupService.deleteGroup(<number>action.payload)
+      return this.groupService.deleteGroup(<string>action.payload._id)
         .pipe(
           map((res: any) => {
-
             if (res) {
-
-              return new GroupActions.DeleteGroupSuccess(res);
+              return new GroupActions.DeleteGroupSuccess(action.payload);
             }
           })
           , catchError((err) => {
@@ -63,13 +61,15 @@ export class GroupEffects {
       return this.groupService.loadAdminGroups()
         .pipe(
           map((res: any) => {
-
             if (res) {
               return new GroupActions.LoadAdminGroupsSuccess(res);
+            } else {
+              return new GroupActions.LoadAdminGroupsError(this.errorMessage);
             }
           })
           , catchError((err) => {
             return of(
+              new GroupActions.LoadAdminGroupsError(this.errorMessage),
               new GroupActions.GroupDataError(this.errorMessage)
             );
           })

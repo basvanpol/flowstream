@@ -1,7 +1,7 @@
 import { IconTypes, defaultSvgClass } from './../../../models/icon';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GroupVM } from '../../../models/group';
-import { GroupState } from '../../../store/group/reducers/group.reducer';
+import { IGroupState } from '../../../store/group/reducers/group.reducer';
 import { Subscription } from 'rxjs';
 import * as GroupActions from '../../../store/group/actions/group.actions';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -17,7 +17,7 @@ import { Store } from '@ngrx/store';
 export class AddGroupComponent extends DefaultFormComponent implements OnInit, OnDestroy {
 
   groupSubscription: Subscription;
-  groupState: GroupState;
+  groupState: IGroupState;
   saveGroupSuccess: boolean;
   isNewGroup: boolean;
   public selectedIconClass: string;
@@ -53,7 +53,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
       isNewItem: boolean,
       selectedGroup: GroupVM
     },
-    private store: Store<GroupState>,
+    private store: Store<IGroupState>,
     private matDialogRef: MatDialogRef<AddGroupComponent>) {
     super();
   }
@@ -69,7 +69,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
       this.selectedIconId = this.data.selectedGroup.icon.value;
     }
 
-    this.groupSubscription = this.store.select('group').subscribe((state: GroupState) => {
+    this.groupSubscription = this.store.select('group').subscribe((state: IGroupState) => {
       this.groupState = state;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
       if (this.saveGroupSuccess) {

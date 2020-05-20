@@ -39,11 +39,9 @@ export class GroupsListComponent {
     this.openGroupDialog();
   }
 
-  public editCategory(groupId) {
-    console.log('this group', this.groups.find((group) => group._id === groupId));
-    const selectedGroup = this.groups.find((group) => group._id === groupId);
-    if (!!selectedGroup) {
-      this.openGroupDialog(selectedGroup, false);
+  public editCategory(group: GroupVM) {
+    if (!!group) {
+      this.openGroupDialog(group, false);
     }
   }
 
@@ -53,10 +51,10 @@ export class GroupsListComponent {
     });
   }
 
-  deleteCategory(groupId) {
+  deleteCategory(item: GroupVM) {
     this.deleteItem.emit({
-      groupId
-    })
+      item
+    });
   }
 
 }

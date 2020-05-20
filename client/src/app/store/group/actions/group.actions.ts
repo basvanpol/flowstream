@@ -10,6 +10,7 @@ export enum GroupActionTypes {
   GroupDataError = 'GroupDataError',
   LoadAdminGroups = 'LoadAdminGroups',
   LoadAdminGroupsSuccess = 'LoadAdminGroupsSuccess',
+  LoadAdminGroupsError = 'LoadAdminGroupsError',
   SelectGroup = 'SelectGroup',
   DeleteGroup = 'DeleteGroup',
   DeleteGroupSuccess = 'DeleteGroupSuccess'
@@ -32,27 +33,25 @@ export class LoadAdminGroupsSuccess implements Action {
     groups: any[];
   }) { }
 }
+export class LoadAdminGroupsError implements Action {
+  readonly type = GroupActionTypes.LoadAdminGroupsError;
+  constructor(public payload: any) { }
+}
 export class SaveGroup implements Action {
   readonly type = GroupActionTypes.SaveGroup;
   constructor(public payload: GroupVM) { }
 }
 export class SaveGroupSuccess implements Action {
   readonly type = GroupActionTypes.SaveGroupSuccess;
-  constructor(public payload: {
-    msg: string
-    group: GroupVM
-  }) { }
+  constructor(public payload: GroupVM) { }
 }
 export class DeleteGroup implements Action {
   readonly type = GroupActionTypes.DeleteGroup;
-  constructor(public payload: number) { }
+  constructor(public payload: GroupVM) { }
 }
 export class DeleteGroupSuccess implements Action {
   readonly type = GroupActionTypes.DeleteGroupSuccess;
-  constructor(public payload: {
-    msg: string;
-    groups: any[];
-  }) { }
+  constructor(public payload: GroupVM) { }
 }
 export class SaveGroupReset implements Action {
   readonly type = GroupActionTypes.SaveGroupReset;
@@ -68,4 +67,4 @@ export class SelectGroup implements Action {
 
 export type GroupActions = LoadGroups | LoadGroupsSuccess | SaveGroup | SaveGroupSuccess |
 DeleteGroup | DeleteGroupSuccess | SaveGroupReset
-  | GroupDataError | LoadAdminGroups | LoadAdminGroupsSuccess | SelectGroup;
+  | GroupDataError | LoadAdminGroups | LoadAdminGroupsSuccess | LoadAdminGroupsError | SelectGroup;

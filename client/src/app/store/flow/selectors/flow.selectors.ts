@@ -4,12 +4,8 @@ import { FlowVM } from './../../../models/flow';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { createEntityAdapter } from '@ngrx/entity';
 import { IFrontPageState } from '../../frontpage/reducers/frontpage.reducers';
-
-export interface IAppState {
-    flows: IFlowState;
-    auth: IAuthState;
-    frontpage: IFrontPageState;
-}
+import { IGroupState } from '../../group/reducers/group.reducer';
+import { IAppState } from '../../app/app.state';
 
 export const getFlowsState = createFeatureSelector<IAppState, IFlowState>('flows');
 

@@ -4,7 +4,7 @@ import { GroupVM } from '../../../models/group';
 import { areArraysUnequal } from '../../../utils/comparative.methods';
 import * as GroupActions from '../../../store/group/actions/group.actions';
 import { FeedState } from '../../../store/feed/reducers/feed.reducer';
-import { GroupState } from '../../../store/group/reducers/group.reducer';
+import { IGroupState } from '../../../store/group/reducers/group.reducer';
 import { DefaultFormComponent } from '../../shared/default-form/default-form.component';
 import { FeedSubscription } from '../../../models/feed';
 import { IAuthState } from '../../../store/auth/reducers/auth.reducer';
@@ -33,7 +33,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
   groupsSubscription: Subscription;
   feedStateSubscription: Subscription;
   feedState: FeedState;
-  groupState: GroupState;
+  groupState: IGroupState;
   adminGroups: any[];
   saveGroupSuccess: boolean;
   selectedAdminGroup: GroupVM;
@@ -44,6 +44,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
   groupedSubscriptions: {
     [id: number]: number
   };
+  public isLoading = false;
 
   constructor(
     private store: Store<TwitterState | IAuthState>,
@@ -67,14 +68,15 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
       });
 
 
-    this.groupsSubscription = this.store.select('group').subscribe((state: GroupState) => {
+    this.groupsSubscription = this.store.select('group').subscribe((state: IGroupState) => {
       this.groupState = state;
       this.selectedAdminGroup = this.groupState.selectedAdminGroup;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
+      this.isLoading = this.groupState.loading;
 
       if (this.saveGroupSuccess) {
         this.store.dispatch(new GroupActions.SaveGroupReset());
-        this.store.dispatch(new GroupActions.LoadAdminGroups());
+        // this.store.dispatch(new GroupActions.LoadAdminGroups());
       }
 
       // check if this.adminGroups and groupState.adminGroups arrays are different, if so, select the last one or the top one
@@ -86,13 +88,12 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
             this.selectListState('first');
           }
         }
-      } else if (!this.adminGroups) {
+      } else if (!this.adminGroups && !this.isLoading) {
         this.selectListState('first');
-        this.store.dispatch(new GroupActions.LoadAdminGroups());
       }
 
       this.adminGroups = this.groupState.adminGroups;
-      console.log('this.adminGroups', this.adminGroups);
+
       if (this.featuredFeeds && this.selectedAdminGroup) {
         this.filterGroupFeeds();
         this.setSubscribed();
@@ -115,6 +116,10 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
     this.formGroup = new FormGroup({
       'searchInput': new FormControl(null)
     });
+
+    if (!this.adminGroups) {
+      this.store.dispatch(new GroupActions.LoadAdminGroups());
+    }
   }
 
   mapFeedSubscriptions(feedSubscriptions: IUserFeedSubscription[]) {
@@ -220,7 +225,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
   }
 
   onDeleteGroup(event: any) {
-    this.store.dispatch(new GroupActions.DeleteGroup(event.groupId));
+    this.store.dispatch(new GroupActions.DeleteGroup(event.item));
   }
 
   onSearchSubmit(form: NgForm) {

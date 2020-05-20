@@ -8,9 +8,9 @@ const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 export default (app) => {
 
     app.post('/api/groups/save', (req, res) => {
-
-        if (req.body._id !== undefined) {
-            Group.findOne({ '_id': req.body._id }, async (err, group) => {
+        const sGroup = req.body;
+        if (sGroup._id !== undefined) {
+            Group.findOne({ '_id': sGroup._id }, async (err, group) => {
                 if (err) {
                     res.status(500).send('Something broke!')
                 }
@@ -32,7 +32,8 @@ export default (app) => {
                         if (err) {
                             res.status(500).send(err);
                         }
-                        res.status(200).send({ msg: 'group edited', group: group });
+                        console.log('result', result);
+                        res.status(200).send({ msg: 'group edited', group: sGroup });
                     });
                     // save flow
                 } else {
@@ -56,39 +57,40 @@ export default (app) => {
 
 
     app.delete('/api/groups/:groupId', (req, res) => {
-        Group.findOne({ '_id': req.params.groupId }, async (err, group) => {
+        console.log('delete', req.params.groupId);
+        const groupId = req.params.groupId;
+        if (!groupId) res.status(400).send("no group id found in your request");
+
+        Group.findOne({ '_id': groupId }, async (err, group) => {
             if (err) {
                 res.status(500).send('Something broke!')
             }
             if (group) {
                 const userId = req.user._id.toString();
-                const canUserDelete = (group._user.toString() === userId || (!!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN));
+                const canUserDelete = (group._user.toString() === userId || (!!req.user.permissions && !!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN));
                 if (!canUserDelete) {
                     res.status(401).send("You don't have permission to delete this group");
+                } else {
+                    Group.deleteOne({ '_id': groupId }, function (err) {
+                        if (err) {
+                            res.status(500).send('delete fail!')
+                        }
+                    });
+                    UserFeedSubscription.deleteMany({ 'group': groupId })
+                        .then(result => console.log(`Deleted ${result.deletedCount} item(s).`))
+                        .catch(err => console.error(`Delete failed with error: ${err}`));
+                    res.status(200).send({ msg: 'group deleted', groupId });
                 }
-                Group.deleteOne({ '_id': req.params.groupId }, function (err) {
-                    if (err) {
-                        res.status(500).send('delete fail!')
-                    }
-                });
-                UserFeedSubscription.deleteMany({ 'group': req.params.groupId })
-                    .then(result => console.log(`Deleted ${result.deletedCount} item(s).`))
-                    .catch(err => console.error(`Delete failed with error: ${err}`));
-                Group.find({ '_user': '5e572e9024a3eaa2cfef89bf' }, async (err, groups) => {
-                    if (err) {
-                        res.status(500).send('Something broke!')
-                    }
-                    res.status(200).send({ msg: 'all admin groups', groups: groups, });
-                });
+
             }
         });
     });
 
     app.get('/api/admingroups', async (req, res) => {
         /**
-         * first, find all admin users. then, search for all groups that the admin users have created
+         * first, find all admin users. then, search for all groups that the admin users have created, plus the ones the user created
          */
-        const userId = req.user._id.toString();
+        const userId = req.user._id;
 
         const adminUsers = await User.find({ 'permissions.groups': UserRoles.ADMIN }, (err, users) => {
             if (err) {
@@ -100,6 +102,7 @@ export default (app) => {
         let userIds = [];
         if (!!adminUserIds && adminUserIds.length > 0) {
             userIds = [...adminUserIds, userId]
+            console.log("id's to search for ", userIds)
         } else {
             userIds = [userId];
         }
@@ -107,7 +110,7 @@ export default (app) => {
         const Query = [{ $match: { '_user': { $in: userIds } } }]
 
         let groups: IGroup[] = await Group.aggregate(Query);
-
+        console.log('groups', groups);
         if (!!groups) {
             adminUserIds.forEach(element => {
                 return element.toString();
@@ -115,7 +118,7 @@ export default (app) => {
             const mappedGroups = groups.map((group: IGroup) => {
                 return {
                     ...group,
-                    canUserEdit: (group._user.toString() === userId || (!!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN))  // TODO: check not only if user is owner of group or is admin user, but also if user is a manager and the group is part of a team that user manager of
+                    canUserEdit: (group._user.toString() === userId.toString() || (!!req.user.permissions && !!req.user.permissions.groups && req.user.permissions.groups === UserRoles.ADMIN))  // TODO: check not only if user is owner of group or is admin user, but also if user is a manager and the group is part of a team that user manager of
                 }
             });
             res.status(200).send({ msg: 'all admin groups', groups: mappedGroups });
