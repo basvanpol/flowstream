@@ -225,11 +225,12 @@ const parseContent = (oData: any, key: any) => {
         }
 
         if(aContent.length > 0){
+            
             // only show title when there's already content, we want to return an empty array when no other content is found, to ignore RT's without images
-            const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key]);
+            const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : oData[key].text;
             if (!!title) {
                 const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
-                aContent.push(oTitleText);
+                aContent.unshift(oTitleText);
             }
         }
 
