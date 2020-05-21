@@ -1,6 +1,8 @@
 import * as passport from 'passport';
 import { Strategy as TwitterStrategy } from 'passport-twitter';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+// import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+// var GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
+import { OAuth2Strategy as GoogleStrategy} from 'passport-google-oauth';
 import { Strategy as LocalStrategy } from 'passport-local';
 import * as mongoose from 'mongoose';
 // const keys = require('../config/keys');
@@ -101,7 +103,7 @@ passport.use(
     new GoogleStrategy({
         clientID: process.env.googleClientID,
         clientSecret: process.env.googleClientSecret,
-        callbackURL: '/api/auth/google/callback',
+        callbackURL: process.env.googleCallbackUrl,
         proxy: true
         //proxy: true needed for deploying on heroku on prod, since it acts as a proxy, and google auth callback will fail. other option is to                       //add a full callback url path instead of relative
     }, async (accessToken, refreshToken, profile, done) => {

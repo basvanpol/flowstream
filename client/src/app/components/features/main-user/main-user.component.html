@@ -1,5 +1,5 @@
 <app-left-sidebar [headerTop]="headerTop"></app-left-sidebar>
-<app-right-sidebar ></app-right-sidebar>
-<app-header [headerTop]="headerTop"></app-header>
+<app-right-sidebar [isOpen]="isRightSidebarOpen" (closeSidebar)="closeRightSidebar()"></app-right-sidebar>
+<app-header [headerTop]="headerTop" (openRightSidebar)="onOpenRightSideBar()"></app-header>
 <router-outlet></router-outlet>
 <app-dynamic-component-modal></app-dynamic-component-modal>

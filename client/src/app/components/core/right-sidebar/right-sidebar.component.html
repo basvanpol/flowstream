@@ -1,9 +1,9 @@
-<div ng-show="false" class="sidebar__ruby-holder">
+<!-- <div class="sidebar__ruby-holder">
     <div (click)="isOpen = true" class="sidebar__ruby-button">
         <app-icon-font [iconClass]="'icon-ruby'"></app-icon-font>
     </div>
-</div>
-<div class="right-menu-container" [ngClass]="{'selected': isOpen}" (mouseleave)="isOpen = false">
+</div> -->
+<div class="right-menu-container" [ngClass]="{'selected': isSidebarOpen}" (mouseleave)="onCloseSidebar()">
     <div class="right-container-scroll">
         <div class="filter-menu-container">
             <ul>

@@ -1,6 +1,6 @@
 import { IAuthState } from '../../../store/auth/reducers/auth.reducer';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -11,18 +11,52 @@ import { ActivatedRoute } from '@angular/router';
 export class MainUserComponent implements OnInit {
 
   headerTop = 0;
+  scrollTop = 0;
+  scrollDownPos = 0;
+  isRightSidebarOpen = false;
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     const offset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    if (offset > 0 && offset < 60) {
-      this.headerTop = -offset;
-    } else if (offset === 0) {
-      this.headerTop = 0;
+    const direction = (offset > this.scrollTop) ? "down" : "up";
+    if (direction === "down") {
+      if (offset > 0 && offset <= 60) {
+        this.headerTop = -offset;
+      } else if (offset === 0) {
+        this.headerTop = 0;
+      } else {
+        this.headerTop = -60;
+      }
+      this.scrollDownPos = offset;
+
     } else {
-      this.headerTop = -60;
+      const scrollUpDif = this.scrollDownPos - offset;
+      if (offset >= 0) {
+        if (scrollUpDif > 0 && scrollUpDif <= 60) {
+          this.headerTop = scrollUpDif - 60;
+        } else {
+          this.headerTop = 0;
+        }
+      } else {
+        if (offset >= 0 && offset <= 60) {
+          if (offset === 0) {
+            this.headerTop = 0;
+          } else {
+            this.headerTop = -offset;
+          }
+        }
+      }
     }
+    this.scrollTop = offset;
+    // if (offset > 0 && offset < 60) {
+    //   this.headerTop = -offset;
+    // } else if (offset === 0) {
+    //   this.headerTop = 0;
+    // } else {
+    //   this.headerTop = -60;
+    // }
   }
+
 
   constructor(private route: ActivatedRoute, private store: Store<IAuthState>) { }
 
@@ -35,6 +69,15 @@ export class MainUserComponent implements OnInit {
       };
     });
 
+  }
+
+  public onOpenRightSideBar() {
+    console.log('open right sidebar');
+    this.isRightSidebarOpen = true;
+  }
+
+  public closeRightSidebar() {
+    this.isRightSidebarOpen = false;
   }
 
 }

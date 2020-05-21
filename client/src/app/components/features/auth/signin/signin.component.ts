@@ -12,6 +12,7 @@ import {Store} from '@ngrx/store';
 export class SigninComponent implements OnInit {
 
     twitterSignInUrl = `api/auth/twitter`;
+    googleSignInUrl = `api/auth/google`;
     hide = true;
     signinForm: FormGroup;
     path = '';

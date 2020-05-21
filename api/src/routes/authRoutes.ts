@@ -1,4 +1,4 @@
-import { nodemailer} from 'nodemailer';
+import { nodemailer } from 'nodemailer';
 import * as passport from 'passport';
 import * as mongoose from 'mongoose';
 import *  as crypto from 'crypto';
@@ -16,43 +16,53 @@ export default (app) => {
 
     app.get('/api/auth/twitter', (req, res, next) => {
         this.isExtension = false;
-        
+
         passport.authenticate('twitter', (err, user, info) => {
-            
+
             // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
-        },{ display: 'popup' })(req, res, next);
-      });
+        }, { display: 'popup' })(req, res, next);
+    });
 
     app.get('/api/auth/twitterextension', (req, res, next) => {
         this.isExtension = true;
         passport.authenticate('twitter', (err, user, info) => {
-            
+
             // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
-        },{ display: 'popup' })(req, res, next);
-      });
+        }, { display: 'popup' })(req, res, next);
+    });
 
     app.get(
         '/api/auth/twitter/callback',
         passport.authenticate('twitter'),
         (req, res) => {
-            if(this.isExtension){
-                
+            if (this.isExtension) {
+
                 // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
                 res.redirect(`http://localhost:4200/static/authcallbackredirect.html?userId=${req.user._id}`);
             } else {
-                
+                console.log('ja twitter!');
                 res.redirect(`/?twitter=ok&userId=${req.user._id}`);
             }
         }
     );
 
-    app.get('/api/auth/google', passport.authenticate('google'));
+    app.get('/api/auth/google', (req, res, next) => {
+        this.isExtension = false;
+        passport.authenticate('google', { scope: ['profile', 'email'] }, (err, user, info) => {
+        }, { display: 'popup' })(req, res, next);
+    });
+
 
     app.get(
         '/api/auth/google/callback',
         passport.authenticate('google'),
         (req, res) => {
-            res.redirect('/home')
+            if (this.isExtension) {
+                // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
+                res.redirect(`http://localhost:4200/static/authcallbackredirect.html?userId=${req.user._id}`);
+            } else {
+                res.redirect(`/?google=ok&userId=${req.user._id}`);
+            }
         }
     );
 
@@ -133,10 +143,10 @@ export default (app) => {
                         }
 
                         if (user.isVerified === false) {
-                            return res.send({isNotVerified: true, message: 'this account needs to be verified first.'});
+                            return res.send({ isNotVerified: true, message: 'this account needs to be verified first.' });
                         }
 
-                        return res.status(200).json({user});
+                        return res.status(200).json({ user });
                     });
                 }
 
@@ -144,8 +154,8 @@ export default (app) => {
         }
     );
 
-    app.get('/api/auth/local/authorisation/:token',  (req, res) => {
-        
+    app.get('/api/auth/local/authorisation/:token', (req, res) => {
+
         Token.findOne({ token: req.params.token, tokenType: 'verification' }, (err, token) => {
             if (!token) return res.status(400).send({ type: 'not-verified', message: 'We were unable to find a valid token.' });
 
@@ -163,22 +173,22 @@ export default (app) => {
     });
 
     app.get('/api/logout', (req, res) => {
-        
+
         req.logout();
-        res.status(200).send({'isLoggedOut': true});
+        res.status(200).send({ 'isLoggedOut': true });
     });
 
     app.get('/api/current_user', (req, res) => {
-        let currentUser = (req.user !== undefined )? req.user : null;
+        let currentUser = (req.user !== undefined) ? req.user : null;
         // res.status(200).send(currentUser);
-        if(!!currentUser) {
+        if (!!currentUser) {
             UserFeedSubscription.find({ '_user': req.user.id })
-            .populate('_feed')
-            .populate('_group')
-            .exec(async (err, userSubscriptions) => {
-                currentUser.feedSubscriptions = userSubscriptions;
-                res.status(200).send(currentUser);
-            });
+                .populate('_feed')
+                .populate('_group')
+                .exec(async (err, userSubscriptions) => {
+                    currentUser.feedSubscriptions = userSubscriptions;
+                    res.status(200).send(currentUser);
+                });
         } else {
             res.status(200).send(null);
         }
@@ -251,13 +261,13 @@ export default (app) => {
 
             // If we found a token, find a matching user
             User.findOne({ _id: token._userId }, function (err, user) {
-                if(err){
+                if (err) {
                     res.send({
                         tokenFail: true,
                         message: err.message
                     });
                 }
-                if(user){
+                if (user) {
                     // Verify and save the user's new password
                     user.local.password = user.generatePasswordHash(req.body.newPassword);
                     user.save(function (err) {
@@ -268,7 +278,7 @@ export default (app) => {
                             message: 'New password saved.'
                         });
                     });
-                }else{
+                } else {
                     res.send({
                         tokenFail: true,
                         message: 'Unable to verify token'

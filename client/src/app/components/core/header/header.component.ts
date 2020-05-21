@@ -1,5 +1,5 @@
 import { AuthService } from '../../../services/http/auth.service';
-import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { Component, OnInit, HostListener, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +10,7 @@ export class HeaderComponent implements OnInit {
 
 
   @Input() headerTop: number;
+  @Output() openRightSidebar = new EventEmitter();
 
   showEditor = true;
 
@@ -18,6 +19,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-
+  onOpenSidebar() {
+    console.log('on open');
+    this.openRightSidebar.emit(true);
+  }
 
 }
