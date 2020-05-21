@@ -50,7 +50,7 @@ const getFeedPosts = async () => {
             if (err) {
                 console.log('something went wrong when searching subscription');
             }
-            // feedPostTimer = Math.floor((15 * 60 * 1000) / Math.floor(900 / subscriptions.length));
+            feedPostTimer = Math.floor((15 * 60 * 1000) / Math.floor(900 / subscriptions.length));
             subQueue = subscriptions;
             let tokenIndex = 0;
             if (subQueue.length > 0) {
