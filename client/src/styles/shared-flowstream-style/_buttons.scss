@@ -249,7 +249,47 @@
     display: table-cell;
     vertical-align: middle;
     font-family: $font-family-primary;
-    font-size: 10pt;
+    font-size: $font-size-medium;
+    font-weight: normal;
+    text-align: center;
+    margin: 11px 40px 11px 40px;
+  }
+}
+
+
+.google-button {
+  background-color: $GOOGLE_BLUE;
+  background-image: none;
+  position: relative;
+  cursor: pointer;
+  @include post-radius(50px);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  color: #6c6c6c;
+  display: table !important;
+  height: 41px !important;
+  text-align: center;
+  box-sizing: content-box;
+  float: left;
+  min-width: 120px;
+  padding: 0 15px;
+
+  &:hover {
+    background-color: $GOOGLE_BLUE_HOVER;
+    color: #fff;
+  }
+
+  &:active,
+  &:focus {
+    background-color: $GOOGLE_BLUE;
+    color: #fff;
+  }
+
+  span {
+    @include button-label-text($EDITOR_TEXT_WHITE, 13pt);
+    display: table-cell;
+    vertical-align: middle;
+    font-family: $font-family-primary;
+    font-size: $font-size-medium;
     font-weight: normal;
     text-align: center;
     margin: 11px 40px 11px 40px;

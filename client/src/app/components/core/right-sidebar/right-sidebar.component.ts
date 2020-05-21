@@ -2,7 +2,7 @@ import { FlowVM } from './../../../models/flow';
 import { Subscription } from 'rxjs';
 import { FlowFacade } from './../../../store/flow/facade/flow.facade';
 import { AddFlowComponent } from '../../features/add-flow/add-flow.component';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { Router } from '@angular/router';
@@ -14,7 +14,11 @@ import { Router } from '@angular/router';
 })
 export class RightSidebarComponent implements OnInit, OnDestroy {
 
-  isOpen = false;
+  @Input() set isOpen (value) {
+    this.isSidebarOpen = value;
+  }
+  @Output() closeSidebar = new EventEmitter();
+  isSidebarOpen = false;
   flows$: Subscription;
   flows: FlowVM[];
 
@@ -30,7 +34,6 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.flows$ = this.flowFacade.flows$.pipe(untilDestroyed(this)).subscribe((flows: FlowVM[]) => {
-
       this.flows = flows;
     });
   }
@@ -44,6 +47,10 @@ export class RightSidebarComponent implements OnInit, OnDestroy {
 
   onDeleteFlow(flowId: number) {
     this.flowFacade.deleteFlow(flowId);
+  }
+
+  onCloseSidebar() {
+    this.closeSidebar.emit();
   }
 
   ngOnDestroy() { }

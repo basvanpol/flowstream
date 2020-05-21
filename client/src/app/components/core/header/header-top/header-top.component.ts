@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AddPostComponent } from './../../../features/add-post/add-post.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from './../../../../services/http/auth.service';
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { IGeneralSelectionState } from '../../../../store/general/reducers/general-selection.reducer';
 
 @Component({
@@ -18,6 +18,7 @@ export class HeaderTopComponent {
   showHeader = true;
   dialogRef: MatDialogRef<any>;
   @Input() headerTop: number;
+  @Output() openRightSidebar = new EventEmitter();
 
   constructor(
     private authService: AuthService,
@@ -49,6 +50,10 @@ export class HeaderTopComponent {
 
   goHome() {
     this.router.navigate(['/frontpage']);
+  }
+
+  public onOpenRightSidebar() {
+    this.openRightSidebar.emit(true);
   }
 
 }
