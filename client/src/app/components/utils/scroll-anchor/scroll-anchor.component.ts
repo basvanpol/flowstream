@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, ViewChild, ElementRef, EventEmitter, 
 
 @Component({
   selector: 'fixed-element',
-  template: `<div #fixedanchor style="display: inline-block;"></div><ng-content></ng-content>`
+  template: `<ng-content></ng-content><div #fixedanchor>Aloha</div>`
 })
 export class FixedElementComponent implements AfterViewInit, OnDestroy {
 
