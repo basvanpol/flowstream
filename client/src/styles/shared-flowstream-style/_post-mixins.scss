@@ -23,10 +23,13 @@ $paper-width-three-quarter: 75%;
 $paper-width-two-third: 66.66667%;
 $paper-width-third: 33.3334%;
 
+$max-post-height: 440px;
+
 /* Default post layout */
 @mixin paper-post-default($width, $height) {
   width: $width;
   height: $height;
+  max-height: $max-post-height;
   margin: 0;
   padding: 0 18px 18px 18px;
   border-top: 1px solid #f1f1f1 !important;
@@ -93,9 +96,10 @@ $paper-width-third: 33.3334%;
 }
 
 /* Main landscape image with text on top */
-@mixin paper-post-full-image($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header) {
+@mixin paper-post-full-image($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header, $max-thumb-height: 60vh) {
   width: $thumb-width;
   height: $thumb-height;
+  max-height: $max-post-height;
 
   .post-header {
     @include paper-post-header($thumb-width, $display-solo-post-header, $display-media-post-header);
@@ -139,7 +143,7 @@ $paper-width-third: 33.3334%;
   }
 
   .postGalleryImage {
-    @include paper-post-gallery-image($paper-width-full, 52vh, 60vh);
+    @include paper-post-gallery-image($paper-width-full, 52vh, $max-thumb-height);
     top: 0;
     padding: 0;
   }
@@ -166,9 +170,10 @@ $paper-width-third: 33.3334%;
 }
 
 /* Full image, text on top, half size */
-@mixin paper-post-half-image($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header) {
+@mixin paper-post-half-image($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header, $max-thumb-height: 60vh) {
   width: $thumb-width;
   height: $thumb-height;
+  max-height: $max-post-height;
 
   .post-header {
     @include paper-post-header($paper-width-two-third, $display-solo-post-header, $display-media-post-header);
@@ -205,7 +210,7 @@ $paper-width-third: 33.3334%;
   }
 
   .postGalleryImage {
-    @include paper-post-gallery-image($paper-width-full, 52vh, 60vh);
+    @include paper-post-gallery-image($paper-width-full, 52vh, $max-thumb-height);
     top: 0;
     padding: 0;
 
@@ -230,7 +235,7 @@ $paper-width-third: 33.3334%;
 }
 
 /* Image and large text, next to full image */
-@mixin paper-post-title-text($thumb-height, $thumb-height-portrait, $display-solo-post-header, $display-media-post-header) {
+@mixin paper-post-title-text($thumb-height, $thumb-height-portrait, $display-solo-post-header, $display-media-post-header, $max-thumb-height: 24vh) {
   width: $paper-width-third;
   height: $thumb-height;
 
@@ -246,7 +251,7 @@ $paper-width-third: 33.3334%;
 
   .post-media {
     .postGalleryImage {
-      max-height: 24vh;
+      max-height: $max-thumb-height;
     }
   }
 
@@ -307,7 +312,7 @@ $paper-width-third: 33.3334%;
 @mixin paper-post-grid-text($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header, $max-thumb-height: 100%) {
   width: $thumb-width;
   height: $thumb-height;
-  max-height: $max-thumb-height;
+  max-height: $max-post-height;
   border-left: 1px solid #f1f1f1;
   border-bottom: 1px solid #f1f1f1;
   margin: 0;
@@ -344,7 +349,7 @@ $paper-width-third: 33.3334%;
 
     .postGalleryImage {
       width: 100%;
-      max-height: 22vh;
+      max-height: $max-thumb-height;
       height: 22vh;
 
       @media(max-width: $paper-screen-mini) {
@@ -438,7 +443,7 @@ $paper-width-third: 33.3334%;
 }
 
 /* Image right */
-@mixin paper-post-right-image($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header) {
+@mixin paper-post-right-image($thumb-height, $thumb-width, $display-solo-post-header, $display-media-post-header, $max-thumb-height: 60vh) {
   width: $thumb-width;
   height: $thumb-height;
 
@@ -471,12 +476,12 @@ $paper-width-third: 33.3334%;
   }
 
   .postGalleryImage {
-    @include paper-post-gallery-image($paper-width-two-third, 50vh, 60vh);
+    @include paper-post-gallery-image($paper-width-two-third, 50vh, $max-thumb-height, contain);
     margin: 0;
     padding: 0 0 16px 16px;
 
     @media(max-width: $paper-screen-desktop) {
-      @include paper-post-gallery-image($paper-width-two-third, 44vh, 50vh);
+      @include paper-post-gallery-image($paper-width-two-third, 44vh, $max-thumb-height, contain);
       margin: 0;
       padding: 0 0 16px 16px;
     }
@@ -629,6 +634,7 @@ $paper-width-third: 33.3334%;
 @mixin paper-post-large-image($thumb-height, $thumb-width) {
   width: $thumb-width;
   height: $thumb-height;
+  max-height: $max-post-height;
 
   .post-media {
     .postContentHtml {
@@ -728,6 +734,7 @@ $paper-width-third: 33.3334%;
 @mixin paper-post-grid-image($thumb-height, $thumb-width) {
   width: $thumb-width;
   height: $thumb-height;
+  max-height: $max-post-height;
 
   .post-media {
     .post__title {

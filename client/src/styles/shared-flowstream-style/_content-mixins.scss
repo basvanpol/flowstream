@@ -286,7 +286,7 @@
 }
 
 /* gallery image */
-@mixin paper-post-gallery-image($width, $height, $max-height) {
+@mixin paper-post-gallery-image($width, $height, $max-height, $object-fit: cover) {
   order: 5;
   float: right;
   display: block;
@@ -306,7 +306,7 @@
   img {
     top: 0;
     bottom: 50px;
-    object-fit: cover;
+    object-fit: $object-fit;
     width: 100%;
     height: 100%;
   }
