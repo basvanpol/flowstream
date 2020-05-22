@@ -13,6 +13,7 @@ export class MainUserComponent implements OnInit {
   headerTop = 0;
   scrollTop = 0;
   scrollDownPos = 0;
+  scrollUpPos = 0;
   isRightSidebarOpen = false;
 
   @HostListener('window:scroll', ['$event'])
@@ -20,32 +21,25 @@ export class MainUserComponent implements OnInit {
     const offset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     const direction = (offset > this.scrollTop) ? "down" : "up";
     if (direction === "down") {
-      if (offset > 0 && offset <= 60) {
-        this.headerTop = -offset;
+      const scrollDownDif =  offset - this.scrollUpPos;
+      if (scrollDownDif > 0 && scrollDownDif <= 60) {
+        this.headerTop = -scrollDownDif;
       } else if (offset === 0) {
         this.headerTop = 0;
       } else {
         this.headerTop = -60;
       }
       this.scrollDownPos = offset;
-
     } else {
-      const scrollUpDif = this.scrollDownPos - offset;
+      const scrollUpDif =  this.scrollDownPos - offset;
       if (offset >= 0) {
         if (scrollUpDif > 0 && scrollUpDif <= 60) {
-          this.headerTop = scrollUpDif - 60;
+          this.headerTop = -60 + scrollUpDif;
         } else {
           this.headerTop = 0;
         }
-      } else {
-        if (offset >= 0 && offset <= 60) {
-          if (offset === 0) {
-            this.headerTop = 0;
-          } else {
-            this.headerTop = -offset;
-          }
-        }
       }
+      this.scrollUpPos = offset;
     }
     this.scrollTop = offset;
     // if (offset > 0 && offset < 60) {

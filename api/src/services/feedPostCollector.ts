@@ -190,8 +190,9 @@ const getFeedPosts = async () => {
 
 const parseContent = (oData: any, key: any) => {
     return new Promise(async (resolve, reject) => {
-        const aContent = [];
+        let aContent = [];
         const entities = oData[key].entities;
+        let imageFound = false;
         let scrapedContent;
 
         if (entities.urls) {
@@ -220,11 +221,12 @@ const parseContent = (oData: any, key: any) => {
         const imageUrl = (entities.media && entities.media[0].media_url) ? entities.media[0].media_url : (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : ''
 
         if (!!imageUrl) {
+            imageFound = true;
             const oMedia = { "mainType": "IMAGE", "type": "IMAGE_TWITTER", "source": imageUrl, "date": null, "location": null, "thumb": null };
             aContent.push(oMedia);
         }
 
-        if(aContent.length > 0){
+        if(aContent.length > 0 && !!imageFound){
             
             // only show title when there's already content, we want to return an empty array when no other content is found, to ignore RT's without images
             const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key] && oData[key].text) ? oData[key].text : '';
@@ -232,6 +234,8 @@ const parseContent = (oData: any, key: any) => {
                 const oTitleText = { "mainType": "TEXT", "type": "TEXT_TITLE", "source": title, "date": null, "location": null, "thumb": null }
                 aContent.unshift(oTitleText);
             }
+        } else {
+            aContent = [];
         }
 
         resolve(aContent);
