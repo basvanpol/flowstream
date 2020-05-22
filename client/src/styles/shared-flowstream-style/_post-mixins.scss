@@ -476,12 +476,12 @@ $max-post-height: 440px;
   }
 
   .postGalleryImage {
-    @include paper-post-gallery-image($paper-width-two-third, 50vh, $max-thumb-height, contain);
+    @include paper-post-gallery-image($paper-width-two-third, 50vh, $max-thumb-height, cover);
     margin: 0;
     padding: 0 0 16px 16px;
 
     @media(max-width: $paper-screen-desktop) {
-      @include paper-post-gallery-image($paper-width-two-third, 44vh, $max-thumb-height, contain);
+      @include paper-post-gallery-image($paper-width-two-third, 44vh, $max-thumb-height, cover);
       margin: 0;
       padding: 0 0 16px 16px;
     }
