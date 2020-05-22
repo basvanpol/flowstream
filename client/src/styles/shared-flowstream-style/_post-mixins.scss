@@ -750,7 +750,6 @@ $max-post-height: 440px;
       width: 100%;
       max-height: 24vh;
       height: 18vh;
-      max-height: 420px;
 
       img {
         top: -60%;
@@ -762,17 +761,13 @@ $max-post-height: 440px;
         max-height: none !important;
       }
 
-      @media(max-width: $paper-screen-desktop) {
-        .postGalleryImage {
-          max-height: 27vh;
-        }
+      @media(min-width: $paper-screen-desktop) {
+        max-height: 160px;
       }
 
       @media(max-width: $paper-screen-phone) {
-        .postGalleryImage {
           max-height: 24vh;
           height: 24vh;
-        }
       }
     }
   }
