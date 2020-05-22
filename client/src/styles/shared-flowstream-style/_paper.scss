@@ -166,18 +166,18 @@
                 border-top: 1px solid #f1f1f1;
 
                 .post-tmpl {
-                    @include paper-post-grid-text($paper-thumb-height-small, $paper-width-quarter, block, none, 400px);
+                    @include paper-post-grid-text($paper-thumb-height-small, $paper-width-quarter, block, none, 200px);
 
                     @media(max-width: $paper-screen-desktop) {
-                        @include paper-post-grid-text($paper-thumb-height-small, $paper-width-third, block, none, 400px);
+                        @include paper-post-grid-text($paper-thumb-height-small, $paper-width-third, block, none, 200px);
                     }
 
                     @media(max-width: $paper-screen-tablet) {
-                        @include paper-post-grid-text($paper-thumb-height-small, $paper-width-half, block, none, 400px);
+                        @include paper-post-grid-text($paper-thumb-height-small, $paper-width-half, block, none, 200px);
                     }
 
                     @media(max-width: $paper-screen-phone) {
-                        @include paper-post-grid-text($paper-thumb-height-medium, $paper-width-full, block, none, 400px);
+                        @include paper-post-grid-text($paper-thumb-height-medium, $paper-width-full, block, none, 200px);
                     }
                 }
             }
