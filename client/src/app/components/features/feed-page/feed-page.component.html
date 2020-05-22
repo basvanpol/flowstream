@@ -1,2 +1,5 @@
-<app-posts-view-container [currentPosts]="currentFeedPosts"></app-posts-view-container>
-<fixed-element (fixElement)="onLoadMore($event)"></fixed-element>
+<div style="display: flex; flex-direction: column;">
+  <app-posts-view-container [currentPosts]="currentFeedPosts"></app-posts-view-container>
+  <fixed-element (fixElement)="onLoadMore($event)"><div class="fixed-element"></div></fixed-element>
+</div>
+
