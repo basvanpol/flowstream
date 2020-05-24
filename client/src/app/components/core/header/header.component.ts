@@ -10,6 +10,7 @@ export class HeaderComponent implements OnInit {
 
 
   @Input() headerTop: number;
+  @Input() scrollTop: number;
   @Output() openRightSidebar = new EventEmitter();
 
   showEditor = true;

@@ -24,7 +24,7 @@ export class GroupsListComponent {
   openGroupDialog(selectedGroup: GroupVM = null, isNewItem: boolean = true) {
     const dialogRef = this.dialog.open(AddGroupComponent, {
       width: '400px',
-      height: '400px',
+      height: '450px',
       data: {
         isNewItem,
         selectedGroup

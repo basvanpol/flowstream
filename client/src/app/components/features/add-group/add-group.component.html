@@ -4,36 +4,36 @@
   </div>
   <div class="modal__content flex-grow-1">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit(f)" #f="ngForm">
-      <section *ngIf="selectedPage === 'form'">
-        <div class="content__element-container">
-          <mat-form-field class="mat-form-input d-flex " appearance="outline">
+      <div class="form-wrapper">
+        <section *ngIf="selectedPage === 'form'">
+          <div class="content__element-container">
             <input matInput placeholder="Choose a title" [formControlName]="'title'">
-          </mat-form-field>
-        </div>
-        <div class="content__element-container--hor">
-          <span class="default-element-padding--right">Icon: </span>
-          <ng-container *ngIf="!!selectedIconId ">
-            <app-icon-font [iconClass]="selectedIconId" class="default-element-padding--right"></app-icon-font>
-          </ng-container>
-          <div class="blue-button" (click)="goTo('icons')">
-            <span>Select Icon</span>
           </div>
-        </div>
+          <div class="content__element-container--hor">
+            <span class="default-element-padding--right">Icon: </span>
+            <ng-container *ngIf="!!selectedIconId ">
+              <app-icon-font [iconClass]="selectedIconId" class="default-element-padding--right"></app-icon-font>
+            </ng-container>
+            <div class="blue-button" (click)="goTo('icons')">
+              <span>Select Icon</span>
+            </div>
+          </div>
+        </section>
+        <section *ngIf="selectedPage === 'icons'">
+          <div class="content__element-container--hor">
+            <div class="blue-button" (click)="goTo('form')">
+              <span>Back</span>
+            </div>
+          </div>
+          <div class="content__element-container add-group__icon-grid">
+            <div *ngFor="let item of icons" selectItem [itemId]="item" [selectedId]="selectedIconId"
+              (click)="onSelectItem(item)" class="add-group__icon-grid-item">
+              <app-icon-font [iconClass]="item"></app-icon-font>
+            </div>
+          </div>
+        </section>
+      </div>
 
-      </section>
-      <section *ngIf="selectedPage === 'icons'">
-        <div class="content__element-container--hor">
-          <div class="blue-button" (click)="goTo('form')">
-            <span>Back</span>
-          </div>
-        </div>
-        <div class="content__element-container add-group__icon-grid">
-          <div *ngFor="let item of icons" selectItem [itemId]="item" [selectedId]="selectedIconId"
-            (click)="onSelectItem(item)" class="add-group__icon-grid-item">
-            <app-icon-font [iconClass]="item"></app-icon-font>
-          </div>
-        </div>
-      </section>
     </form>
   </div>
   <div class="modal__footer">

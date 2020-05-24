@@ -15,7 +15,7 @@
 
 .content__element-container {
   width: 100%;
-  padding: 0 $default-element-padding $default-element-padding $default-element-padding;
+  padding: 0 0 $default-element-padding-large 0;
 
   &--hor {
     @extend .content__element-container;

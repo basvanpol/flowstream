@@ -10,9 +10,9 @@
                         <div ng-switch="$ctrl.selectedMenu" class="left-container-scroll">
                             <div ng-switch-when="feeds" class="feeds-menu-container">
                                 <div class="feeds-menu">
-                                    <div class="burger-holder" [ngStyle]="{'top': headerTop+'px'}">
+                                    <!-- <div class="burger-holder" [ngStyle]="{'top': headerTop+'px'}" [ngClass]="{'disappear': headerTop == 0 && scrollTop == 0}">
                                         <app-icon-font iconClass="icon-burger" class="icon-burger"></app-icon-font>
-                                    </div>
+                                    </div> -->
                                     <div class="frontpage-button" (click)="goHome()">
                                         <div>
                                             <app-icon-font iconClass="icon-frontpage"></app-icon-font>

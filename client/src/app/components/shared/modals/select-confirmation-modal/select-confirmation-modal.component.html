@@ -1,24 +1,19 @@
 <div class="popup__container--medium">
-  <article>
-    <header>
-      <div class="popup__form-header">
-        <h3>{{ popupTitle }}</h3>
+  <div class="modal__header">
+    <span class="modal__title">{{ popupTitle }}</span>
+  </div>
+  <div class="modal__content flex-grow-1">
+    <app-select-list [listData]="listData" [selectedIdsOnLoaded]="selectedIdsOnLoaded"
+      [disabledIdsOnLoaded]="disabledIdsOnLoaded" (selectedItemsEmitter)="onSelectedList($event)"></app-select-list>
+  </div>
+  <div class="modal__footer">
+    <div class="modal__footer-button-container">
+      <div class="ok-button" (click)="onConfirm()">
+        <span>Save</span>
       </div>
-    </header>
-    <section class="wrapper clearfix popup__form-content">
-      <app-select-list [listData]="listData" [selectedIdsOnLoaded]="selectedIdsOnLoaded" [disabledIdsOnLoaded]="disabledIdsOnLoaded" (selectedItemsEmitter)="onSelectedList($event)"></app-select-list>
-    </section>
-    <footer>
-      <div class="popup__form-footer">
-        <div class="popup__form-footer-button-container">
-          <div class="ok-button" (click)="onConfirm()">
-            <span>Save</span>
-          </div>
-          <div class="cancel-button" (click)="closeModal()">
-            <span>Cancel</span>
-          </div>
-        </div>
+      <div class="cancel-button" (click)="closeModal()">
+        <span>Cancel</span>
       </div>
-    </footer>
-  </article>
+    </div>
+  </div>
 </div>

@@ -65,6 +65,7 @@
   color: $EDITOR_DEFAULT_BUTTON_TEXT_COLOR;
   text-align: center;
   box-sizing: content-box;
+  min-width: 120px;
 
   &:hover {
     color: $EDITOR_DEFAULT_BUTTON_TEXT_HOVER_COLOR;

@@ -3,17 +3,17 @@
         list-style-type: none;
         margin:0;
         padding:0;
-        
+
         li{
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: flex-start;
             height: 42px;
-            padding-left: 3rem;
+            // padding-left: 3rem;
 
             div{
-                padding-left: 1rem;
+                padding-left: 15px;
 
                 p{
                     margin: 0;

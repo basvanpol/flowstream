@@ -18,6 +18,7 @@ export class HeaderTopComponent {
   showHeader = true;
   dialogRef: MatDialogRef<any>;
   @Input() headerTop: number;
+  @Input() scrollTop: number;
   @Output() openRightSidebar = new EventEmitter();
 
   constructor(

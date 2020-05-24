@@ -1,7 +1,8 @@
 .mat-tab-label {
   min-width: 100px !important;
-  height: 52px !important;
+  height: 80px !important;
   padding: 2px $default-element-padding-large 2px $default-element-padding-large !important;
+  align-items: flex-end;
 }
 
 .mat-tab-label-active {
@@ -11,10 +12,23 @@
   }
 }
 
+.mat-tab-label-content{
+  font-size: $h2;
+}
+
+.mat-tab-list{
+  flex-grow: 0;
+}
+
 .mat-tab-labels {
-  height: 54px;
+  height: 80px;
 }
 
 .mat-ink-bar {
   display: none;
+}
+
+.mat-tab-header{
+  height: 80px;
+  border-bottom: none;
 }

@@ -7,7 +7,7 @@ h1 {
 
 
 h2 {
-    font-size: 16px;
+    font-size: $h2;
 }
 
 
@@ -25,4 +25,8 @@ h4{
 
 .post__description{
   @include default-post-description;
+}
+
+.h2{
+  font-size: $h2;
 }
