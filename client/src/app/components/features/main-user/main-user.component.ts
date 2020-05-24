@@ -25,19 +25,19 @@ export class MainUserComponent implements OnInit {
 
     if (direction === "down") {
       const scrollDownDif = offset - this.scrollUpPos;
-      if (scrollDownDif > 0 && scrollDownDif <= 60) {
+      if (scrollDownDif > 0 && scrollDownDif <= 70) {
         this.headerTop = this.scrollUpHeaderPosition - scrollDownDif;
       } else if (offset === 0) {
         this.headerTop = 0;
       } else {
-        this.headerTop = -60;
+        this.headerTop = -70;
       }
       this.scrollDownPos = offset;
       this.scrollDownHeaderPosition = this.headerTop;
     } else {
       const scrollUpDif = this.scrollDownPos - offset;
       if (offset >= 0) {
-        if (scrollUpDif > 0 && scrollUpDif <= 60) {
+        if (scrollUpDif > 0 && scrollUpDif <= 70) {
           this.headerTop = (this.headerTop < 0 ) ? this.scrollDownHeaderPosition + scrollUpDif : 0;
         } else {
           this.headerTop = 0;

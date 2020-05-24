@@ -1,3 +1,5 @@
+@import 'variables';
+
 .select-list__container{
     ul{
         list-style-type: none;
@@ -17,6 +19,7 @@
 
                 p{
                     margin: 0;
+                    @include list-item-text($EDITOR_TEXT_DARKGREY, $font-size-large);
                 }
             }
         }
