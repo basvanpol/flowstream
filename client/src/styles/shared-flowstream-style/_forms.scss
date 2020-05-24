@@ -11,27 +11,42 @@
   }
 }
 
-.form-wrapper {
-  padding: 15px 20px;
-}
+// .form-wrapper {
+//   padding: 30px;
+// }
 
 .form-wrapper input:not([type="checkbox"]) {
-  position: relative;
-  float: left;
   height: 42px;
-  padding: 10px;
+  padding: 20px;
+  width:100%;
+  // border-radius: 35px;
   vertical-align: middle;
-  border: 1px solid rgba(91, 90, 90, 0.3);
-  background: #fff;
-  border-radius: 2px;
+  border: none;
+  background: #f1f1f1;
+  /* border-radius: 2px; */
   -webkit-appearance: textarea;
   box-sizing: border-box;
-  box-shadow: inset 0 1px 2px 0 hsla(0, 0%, 66%, 0.01);
+  box-shadow: inset 0 1px 2px 0 rgba(168, 168, 168, 0.01);
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
 
+  &.round{
+    border-radius: 30px;
+
+    &:focus {
+      border: 1px solid rgba(91, 90, 90, 0.3);
+    }
+  }
+
   &:focus {
     outline: none;
+    border-bottom: 1px solid rgba(91, 90, 90, 0.3);
+    background: #fff;
+    -webkit-appearance: textarea;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 2px 0 hsla(0, 0%, 66%, 0.01);
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
   }
 }
 
@@ -65,7 +80,7 @@
 }
 
 .search-twitter-feeds__form {
-  .mat-form-field-appearance-outline .mat-form-field-outline{
+  .mat-form-field-appearance-outline .mat-form-field-outline {
     top: 8px !important;
     bottom: 4px !important;
   }

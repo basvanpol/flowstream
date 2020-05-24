@@ -28,6 +28,7 @@ interface IMappedFeedGroup {
 export class LeftSidebarComponent implements OnInit, OnDestroy {
 
   @Input() headerTop: number;
+  @Input() scrollTop: number;
   isOpen = false;
   userSubscription: Subscription;
   authState: IAuthState;

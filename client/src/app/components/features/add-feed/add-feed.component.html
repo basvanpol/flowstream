@@ -1,28 +1,27 @@
 <div class="add-feed-component__holder">
   <div class="add-feed-header__container">
-    <p>Add Feed</p>
-    <div class="add-feed__close" (click)="closeDialog()">
-      <app-icon-font [iconClass]="'icon-close'"></app-icon-font>
-    </div>
-  </div>
-  <div class="add-feed-sub-header__container">
     <div class="search-feed__container">
       <div class="add-feed__search-header-bar">
         <form [formGroup]="formGroup" class="search-twitter-feeds__form" #f="ngForm">
-          <mat-form-field appearance="outline">
-            <input matInput placeholder="Search feeds" [formControlName]="'searchInput'">
-          </mat-form-field>
+          <div class="form-wrapper">
+            <input matInput placeholder="Search feeds" [formControlName]="'searchInput'" class="round">
+          </div>
           <div (click)="onSearchSubmit(f)" style="cursor: pointer;">
             <app-icon-font [iconClass]="'icon-search'"></app-icon-font>
           </div>
         </form>
       </div>
     </div>
+    <div class="add-feed__close" (click)="closeDialog()">
+      <app-icon-font [iconClass]="'icon-close'"></app-icon-font>
+    </div>
   </div>
-  <mat-tab-group style="flex: 1;" [selectedIndex]="selectedTabIndex" [animationDuration]="'0ms'" disableRipple>
-    <mat-tab label="Categories" style="height: 100%;" disableRipple>
-      <div style="display: flex; flex-direction: row; height:100%;">`
-        <app-groups-list [listItems]="adminGroups" [selectedId]="(selectedAdminGroup && selectedAdminGroup._id) ? selectedAdminGroup._id.toString() : null"
+  <mat-tab-group style="flex: 1; margin-top:-80px;" [selectedIndex]="selectedTabIndex" [animationDuration]="'0ms'"
+    disableRipple>
+    <mat-tab label="Feeds" style="height: 100%;" disableRipple>
+      <div style="display: flex; flex-direction: row; height:100%;">
+        <app-groups-list [listItems]="adminGroups"
+          [selectedId]="(selectedAdminGroup && selectedAdminGroup._id) ? selectedAdminGroup._id.toString() : null"
           (selectItem)="onSelectGroup($event)" (deleteItem)="onDeleteGroup($event)"></app-groups-list>
         <div class="add-feed__content-container">
           <div class="add-feed__group-feeds-container">
@@ -33,7 +32,8 @@
               <p>{{(feed._feed) ? feed._feed.feedName : ''}}</p>
               <div class="add-feed__manage-buttons-holder">
                 <subscription-button (click)="handleSubscription(feed)" [feed]="feed"></subscription-button>
-                <div *ngIf="feed.canUserEdit" class="add-feed__categories-button" (click)="addTofeatureList(feed._feed)"><span>Choose
+                <div *ngIf="feed.canUserEdit" class="add-feed__categories-button"
+                  (click)="addTofeatureList(feed._feed)"><span>Choose
                     categories</span></div>
               </div>
             </div>
@@ -43,7 +43,6 @@
     </mat-tab>
     <mat-tab label="Search Results" *ngIf="showSearchResults" disableRipple>
       <div class="add-feed__content-container">
-        <h2>{{selectedGroupName}}</h2>
         <div class="add-feed__result-container">
           <div class="add-feed__search-result-container">
             <div *ngFor="let feed of searchFeedsData" class="add-feed__item-card">

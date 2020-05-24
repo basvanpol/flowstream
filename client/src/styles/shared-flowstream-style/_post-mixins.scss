@@ -32,8 +32,8 @@ $max-post-height: 440px;
   max-height: $max-post-height;
   margin: 0;
   padding: 0 18px 18px 18px;
-  border-top: 1px solid #f1f1f1 !important;
-  border-left: 1px solid #f1f1f1;
+  // border-top: 1px solid #f1f1f1 !important;
+  // border-left: 1px solid #f1f1f1;
   @include post-drop-shadow(0, 0, 0, 0, rgba(0, 0, 0, 0));
   @include post-radius (0px);
 
@@ -313,8 +313,8 @@ $max-post-height: 440px;
   width: $thumb-width;
   height: $thumb-height;
   max-height: $max-post-height;
-  border-left: 1px solid #f1f1f1;
-  border-bottom: 1px solid #f1f1f1;
+  // border-left: 1px solid #f1f1f1;
+  // border-bottom: 1px solid #f1f1f1;
   margin: 0;
 
   @media(min-width: $paper-screen-tablet) {
@@ -332,7 +332,7 @@ $max-post-height: 440px;
   }
 
   &:nth-child(-n+4) {
-    border-top: 1px solid #f1f1f1;
+    // border-top: 1px solid #f1f1f1;
   }
 
   .post-media {
@@ -502,6 +502,7 @@ $max-post-height: 440px;
 @mixin paper-post-info-image($thumb-height, $thumb-width) {
   width: $thumb-width;
   height: $thumb-height;
+  background: none;
 
   .post-header {
     height: 50px;
@@ -546,6 +547,7 @@ $max-post-height: 440px;
     padding-left: 0;
     padding-bottom: 9px;
     padding-top: 5px;
+    background: none;
 
     .post__title {
       z-index: 6;
