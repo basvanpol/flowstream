@@ -282,12 +282,11 @@ $default-element-margin-large: 30px;
 @mixin header-title-text($color: #333333, $size: 11pt) {
   margin: 0;
   padding: 0px;
-
   color: $color;
   font-size: $size;
   font-family: $font-family-primary;
   line-height: 1.0;
-  font-weight: 400;
+  font-weight: 500;
   text-align: left;
   text-indent: 0px;
   text-decoration: none;
@@ -295,6 +294,19 @@ $default-element-margin-large: 30px;
 }
 
 @mixin button-label-text($color: #333333, $size: 11pt) {
+  @include text-select-none();
+  margin: 0;
+  padding: 0px;
+  color: $color;
+  font-size: $size;
+  font-family: $font-family-primary;
+  line-height: 1.5;
+  font-weight: 400;
+  text-align: left;
+  text-indent: 0px;
+}
+
+@mixin list-item-text($color: #333333, $size: $font-size-large) {
   @include text-select-none();
   margin: 0;
   padding: 0px;

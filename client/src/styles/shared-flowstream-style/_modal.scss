@@ -21,11 +21,12 @@
 }
 
 .modal__title {
-  @include header-title-text($default-text-color, 16px);
+  @include header-title-text($EDITOR_TEXT_DARKGREY, 14pt);
+  //  @include thumb-title-text($EDITOR_TEXT_DARKGREY, 15pt);
 }
 
 .modal__content {
-  padding: $default-element-padding-large;
+  padding: 0 $default-element-padding-large $default-element-padding-large $default-element-padding-large;
   overflow-y: auto;
 }
 .modal__footer {

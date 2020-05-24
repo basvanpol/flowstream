@@ -54,7 +54,7 @@
     align-items: center;
 
     p {
-        @include thumb-title-text($EDITOR_TEXT_DARKGREY, 15pt);
+        @include thumb-title-text($EDITOR_TEXT_DARKGREY, 14pt);
         -moz-user-select: none;
         border: medium none;
         color: rgba(0, 0, 0, 0.7);

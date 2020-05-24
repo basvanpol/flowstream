@@ -1,4 +1,4 @@
-<header *ngIf="showHeader" id="navbar_top" class="header header__navbar header__navbar--top" [ngClass]="{'transparent': headerTop == 0 && scrollTop == 0}"
+<header *ngIf="showHeader" id="navbar_top" class="header header__navbar header__navbar--top" [ngClass]="{'transparent': headerTop <= 0 && scrollTop <= 60}"
   [ngStyle]="{'top': headerTop+'px'}">
   <div class="header__logo-container">
     <div (click)="goHome()" class="header__logo--large">
