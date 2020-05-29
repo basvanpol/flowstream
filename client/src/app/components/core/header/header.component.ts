@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onOpenSidebar() {
-    console.log('on open');
+    // console.log('on open');
     this.openRightSidebar.emit(true);
   }
 

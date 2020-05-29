@@ -154,7 +154,6 @@ export class ParserService {
 
     if (title !== '') {
       const parsedContent = this.getScraperPostHTML(title);
-      console.log('parsedContent', parsedContent);
       const htmlContent = parsedContent;
 
       const titleContentObject = {

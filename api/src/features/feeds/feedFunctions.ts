@@ -156,7 +156,7 @@ export class FeedFunctions {
                             }
                         }
                         if (feedFeature) {
-                            console.log('found feedFeature!', feedFeature);
+                            // console.log('found feedFeature!', feedFeature);
                             try {
                                 await feedFeature.updateOne({ _id: feedFeature._id }, { $set: { 'active': true } });
                             } catch (e) {
@@ -436,14 +436,14 @@ export class FeedFunctions {
                     }
                     if (featuredFeeds) {
                         const mappedFeatureFeeds = featuredFeeds.map(featuredFeed => {
-                            console.log('featuredFeed', featuredFeed);
+                            // console.log('featuredFeed', featuredFeed);
                             return {
                                 ...featuredFeed._doc,
                                 canUserEdit: ((this.isUserFeedAdmin && this.adminUserIds.includes(featuredFeed._user)) || featuredFeed._user.toString() === this.userId.toString())
                             }
                         })
                         // console.log('featuredFeeds', featuredFeeds);
-                        console.log('mappedFeatureFeeds', mappedFeatureFeeds);
+                        // console.log('mappedFeatureFeeds', mappedFeatureFeeds);
                         User.findOne({ '_id': this.userId })
                             .exec((err, user) => {
                                 if (err) {

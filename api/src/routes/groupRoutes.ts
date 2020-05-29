@@ -20,7 +20,7 @@ export default (app) => {
                     if (!canUserSave) {
                         res.status(401).send("You don't have permission to delete this group");
                     }
-                    console.log('group to update', group)
+                    // console.log('group to update', group)
                     await group.update({
                         '$set': {
                             'title': req.body.title,
@@ -32,7 +32,7 @@ export default (app) => {
                         if (err) {
                             res.status(500).send(err);
                         }
-                        console.log('result', result);
+                        // console.log('result', result);
                         res.status(200).send({ msg: 'group edited', group: sGroup });
                     });
                     // save flow
@@ -61,7 +61,7 @@ export default (app) => {
 
 
     app.delete('/api/groups/:groupId', (req, res) => {
-        console.log('delete', req.params.groupId);
+        // console.log('delete', req.params.groupId);
         const groupId = req.params.groupId;
         if (!groupId) res.status(400).send("no group id found in your request");
 
@@ -106,7 +106,7 @@ export default (app) => {
         let userIds = [];
         if (!!adminUserIds && adminUserIds.length > 0) {
             userIds = [...adminUserIds, userId]
-            console.log("id's to search for ", userIds)
+            // console.log("id's to search for ", userIds)
         } else {
             userIds = [userId];
         }

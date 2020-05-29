@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class GroupsListComponent {
 
   @Input() set listItems(values: GroupVM[]) {
-    console.log('new groups', values);
+    // console.log('new groups', values);
     this.groups = values;
   }
   @Input() selectedId: string;

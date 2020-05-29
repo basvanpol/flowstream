@@ -54,7 +54,6 @@ export class PostsService extends BaseHttpService {
         });
     }
     public deletePost(post: IPost): Observable<any> {
-        console.log(' delete post', post);
         const url = `${environment.webApiUrl}/api/deletedpost/`;
         return this.http.post(url, post, {
             observe: 'body',
