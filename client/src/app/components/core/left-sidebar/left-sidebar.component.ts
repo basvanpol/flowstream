@@ -94,7 +94,7 @@ export class LeftSidebarComponent implements OnInit, OnDestroy {
   }
 
   updateFeedGroupsWithSavedGroup(mutatedGroup: IMutatedGroup) {
-    console.log('left sidebar: ', mutatedGroup);
+    // console.log('left sidebar: ', mutatedGroup);
     if (this.feedGroups[mutatedGroup.group._id]) {
       this.feedGroups[mutatedGroup.group._id].group = mutatedGroup.group;
     }
@@ -105,8 +105,8 @@ export class LeftSidebarComponent implements OnInit, OnDestroy {
     if (this.feedGroups[mutatedGroup.group._id]) {
       delete this.feedGroups[mutatedGroup.group._id];
     }
-    console.log('mutatedGroup', mutatedGroup);
-    console.log('delete groups', this.feedGroups);
+    // console.log('mutatedGroup', mutatedGroup);
+    // console.log('delete groups', this.feedGroups);
     this.mapFeedGroups();
   }
 

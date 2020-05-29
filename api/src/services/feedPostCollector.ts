@@ -16,6 +16,8 @@ let feedPostRequestCounter = 0;
 
 let feedPostTimer = 30000;
 
+let latestTenFeedPosts = {};
+
 const initFeedPostCollector = () => {
     // first get tokens
     getFeedPosts();
@@ -127,54 +129,85 @@ const getFeedPosts = async () => {
 
         let i = 0;
         let newestPostIndex = oData.length - 1;
+
+        // compare current text with previous post text to undouble on a basic level.
+        // TODO: there should be a cleanup process that does a 'fulltext' search and undoubles in that way
+
+        let previousPostText;
+        let currentPostText;
+
+        if (!latestTenFeedPosts[feedId]) {
+            latestTenFeedPosts[feedId] = [];
+        }
+
         for (let key in oData) {
 
+            // console.log('postData', oData[key]);
             const postData = oData[key];
-            /**
-             *  check for retweets, ignore them.
-             */
 
+            currentPostText = postData.text.substring(0, 10);
 
-            if (postData.id_str !== subscription.sinceId) {
-                let aContent
-                try {
-                    aContent = await parseContent(oData, key)
-                }
-                catch (error) {
-                    console.error(error);
-                    aContent = [];
+            let latestTenFeedPostsArray = latestTenFeedPosts[feedId];
+
+            if (!latestTenFeedPostsArray.includes(currentPostText)) {
+                // console.log('latestFeedPosts[feedId]', latestTenFeedPosts[feedId]);
+                /**
+                 *  save latest ten feed posts' text to undouble trigger posts (publishers tend to send out the latest posts multiple times in a short period)
+                 */
+                latestTenFeedPosts[feedId].unshift(currentPostText);
+                if (latestTenFeedPosts[feedId].length > 10) {
+                    latestTenFeedPosts[feedId].length = 10;
                 }
 
-                const newPost = await new Post();
-                newPost.feedId = feedId;
-                newPost.date = new Date(postData.created_at);
-                newPost.contents = aContent;
-                newPost.title = oData[key].text;
-                const oUser = oData[key].user;
-                let metaData = {
-                    "authorname": "@" + oUser.screen_name,
-                    "authorThumb": oUser.profile_image_url,
-                    "name": oUser.name
-                };
-                newPost.metaData = metaData;
-                // save new post, but only if there's content. RT's often don't have any content, so don't save them.
-                if (newPost.contents.length > 0) {
-                    await newPost.save((err) => {
-                        if (err) {
-                            if (err) { console.log(err) }
-                        }
-                    })
+                /**
+                *  check for retweets, ignore them.
+                */
+
+                if (postData.id_str !== subscription.sinceId) {
+                    let aContent
+                    try {
+                        aContent = await parseContent(oData, key)
+                    }
+                    catch (error) {
+                        console.error(error);
+                        aContent = [];
+                    }
+
+                    const newPost = await new Post();
+                    newPost.feedId = feedId;
+                    newPost.date = new Date(postData.created_at);
+                    newPost.contents = aContent;
+                    newPost.title = oData[key].text;
+                    const oUser = oData[key].user;
+                    let metaData = {
+                        "authorname": "@" + oUser.screen_name,
+                        "authorThumb": oUser.profile_image_url,
+                        "name": oUser.name
+                    };
+                    newPost.metaData = metaData;
+                    // save new post, but only if there's content. RT's often don't have any content, so don't save them.
+                    if (newPost.contents.length > 0) {
+                        // console.log('save it', newPost);
+                        await newPost.save((err) => {
+                            if (err) {
+                                if (err) { console.log(err) }
+                            }
+                        })
+                    } else {
+                        // console.log('dont save it', newPost);
+                    }
+                } else {
+                    // console.log(' hey maar, toch n dubbele!', postData.text);
                 }
-            } else {
-                console.log(' hey maar, toch n dubbele!', postData.text);
             }
 
             if (i === newestPostIndex) {
+
                 const sinceId = postData.id_str;
-                if (subscription.sinceId && subscription.sinceId.toString() === sinceId.toString()) {
-                    return;
-                    // the data set is the same, don't do anything, since the sinceId is the most current
-                } else {
+                /// console.log('sinceId', sinceId);
+                /// console.log('postData', postData);
+                /// console.log('new date', new Date(postData.created_at).getTime())
+                if (!subscription.sinceId || (subscription.sinceId && subscription.sinceId.toString() !== sinceId.toString())) {
                     subscription.sinceId = sinceId;
                     await subscription.save((err) => {
                         if (err) { console.log(err) }
@@ -203,6 +236,7 @@ const parseContent = (oData: any, key: any) => {
                 aContent.push(oLink);
                 try {
                     scrapedContent = await getScrapedContent(firstUrl, "twitter")
+                    /// console.log('scrapedContent', scrapedContent);
                 }
                 catch (error) {
                     console.error(error);
@@ -226,8 +260,8 @@ const parseContent = (oData: any, key: any) => {
             aContent.push(oMedia);
         }
 
-        if(aContent.length > 0 && !!imageFound){
-            
+        if (aContent.length > 0 && !!imageFound) {
+
             // only show title when there's already content, we want to return an empty array when no other content is found, to ignore RT's without images
             const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : (oData[key] && oData[key].text) ? oData[key].text : '';
             if (!!title) {
@@ -238,6 +272,7 @@ const parseContent = (oData: any, key: any) => {
             aContent = [];
         }
 
+        /// console.log('resolve');
         resolve(aContent);
 
     });
@@ -257,11 +292,11 @@ const getScrapedContent = async (url, sType) => {
         try {
             metadata = await Metascraper.scrapeUrl(url);
         } catch (e) {
-            console.log('meta data error');
+            /// console.log('meta data error');
             return reject('meta data error');
         }
         if (metadata) {
-            // console.log('sType', sType);
+            // console.log('meta', metadata);
             let redirectedMetadata;
             if (sType == "twitter") {
 
@@ -276,10 +311,16 @@ const getScrapedContent = async (url, sType) => {
                     const indirectArticleUrl = aUrl[0];
 
                     try {
-                        redirectedMetadata = await Metascraper.scrapeUrl(indirectArticleUrl);
+                        /// console.log('redirected media', indirectArticleUrl);
+                        Metascraper.scrapeUrl(indirectArticleUrl).then(value => {
+                            // console.log('yeah!', value);
+                            redirectedMetadata = value;
+                        }, reason => {
+                            // console.log('oh no!');
+                        });
                     }
                     catch (e) {
-                        console.log('meta scraper error', e);
+                        // console.log('meta scraper error', e);
                         return reject('meta scraper error');
                     }
 
@@ -346,7 +387,7 @@ const getScrapedContent = async (url, sType) => {
             publisher = (metadata.publisher) ? metadata.publisher : '';
         } else {
             // no meta data or incorrect url
-            console.log('no meta data');
+            // console.log('no meta data');
             return reject('no meta');
         }
 
@@ -356,6 +397,7 @@ const getScrapedContent = async (url, sType) => {
             publisher,
             imageUrl
         }
+        /// console.log('resolve meta');
         resolve(scrapedContent);
     })
 

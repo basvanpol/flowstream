@@ -49,7 +49,7 @@ export function reducer(state = initialState, action: GroupActions.GroupActions)
           mutation: GroupMutations.DELETED
         };
       }
-      console.log('remainingGroups', remainingGroups);
+      // console.log('remainingGroups', remainingGroups);
       return {
         ...state,
         mutatedGroup: (!!dMutatedGroup) ? { ...dMutatedGroup } : null,
@@ -87,7 +87,7 @@ export function reducer(state = initialState, action: GroupActions.GroupActions)
           mutation: GroupMutations.SAVED
         };
       }
-      console.log('newAdminGroups', newAdminGroups);
+      // console.log('newAdminGroups', newAdminGroups);
       return {
         ...state,
         adminGroups: [...newAdminGroups],

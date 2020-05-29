@@ -51,6 +51,8 @@ export class PostComponent implements OnInit {
   }
 
   parseDateTimeLabel(dateString: string) {
+    // console.log('this._post.date', this._post.date);
+    // console.log('title', this.title);
     const date = this.getDate(dateString);
     const year = date.getFullYear();
     const month = date.getMonth();

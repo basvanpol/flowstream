@@ -62,7 +62,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
     this.formGroup = new FormGroup({
       'title': new FormControl(null, [Validators.required])
     });
-    console.log('this.data', this.data);
+    // console.log('this.data', this.data);
     this.isNewGroup = this.data.isNewItem;
     if (!this.isNewGroup) {
       this.setFormValues();
@@ -79,7 +79,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
   }
 
   public onSubmit(form: NgForm) {
-    console.log('form', form);
+    // console.log('form', form);
     let groupModel: GroupVM;
 
     if (!this.isNewGroup) {
@@ -103,7 +103,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
       };
     }
 
-    console.log('groupModel', groupModel);
+    // console.log('groupModel', groupModel);
     this.store.dispatch(new GroupActions.SaveGroup(groupModel));
   }
 

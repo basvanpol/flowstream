@@ -40,9 +40,6 @@ export class AuthEffects {
   registrationRedirect$ = this.actions$.pipe(
     ofType<AuthActions.SignInRedirect>(AuthActions.AuthActionTypes.SIGNIN_REDIRECT),
     map((action: AuthActions.SignInRedirect) => {
-      console.log('effect state', this.router);
-      console.log('route', this.route);
-      console.log('snapshot', this.router.routerState.snapshot.url);
       const tree = this.router.parseUrl(this.router.routerState.snapshot.url);
       const children = tree.root.children[PRIMARY_OUTLET];
       let isForwardedUrl = false;

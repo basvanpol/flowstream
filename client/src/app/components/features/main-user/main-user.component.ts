@@ -64,7 +64,7 @@ export class MainUserComponent implements OnInit {
   }
 
   public onOpenRightSideBar() {
-    console.log('open right sidebar');
+    // console.log('open right sidebar');
     this.isRightSidebarOpen = true;
   }
 
