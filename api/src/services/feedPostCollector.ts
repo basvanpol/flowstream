@@ -16,7 +16,7 @@ let feedPostRequestCounter = 0;
 
 let feedPostTimer = 30000;
 
-let latestTenFeedPosts = {};
+// let latestTenFeedPosts = {};
 
 const initFeedPostCollector = () => {
     // first get tokens
@@ -45,7 +45,6 @@ const getUser = async (id) => {
 const getFeedPosts = async () => {
     const tokens = await Token.find({}).limit(2);
     let subQueue = [];
-    let tooManyRequests = false;
     if (tokens && tokens.length > 0) {
         // console.log('token!', tokens);
         Subscription.find({ memberCount: { $gt: 0 } }, async (err, subscriptions) => {
@@ -61,7 +60,7 @@ const getFeedPosts = async () => {
                     let token = tokens[tokenIndex];
                     let currentSubscription = subQueue.shift();
 
-                    if (token && !tooManyRequests) {
+                    if (token) {
                         // make the twitter call
                         const oauth = new OAuth.OAuth(
                             'https://api.twitter.com/oauth/request_token',
@@ -98,7 +97,7 @@ const getFeedPosts = async () => {
                                     token.token, //test user token
                                     token.tokenSecret, //test user secret              
                                     (err, data, result) => {
-                                        // console.log('without since id', feed_id);
+                                        console.log('without since id', feed_id);
                                         if (err) {
                                             console.error(err);
                                         } else {
@@ -136,28 +135,28 @@ const getFeedPosts = async () => {
         let previousPostText;
         let currentPostText;
 
-        if (!latestTenFeedPosts[feedId]) {
-            latestTenFeedPosts[feedId] = [];
-        }
+        // if (!latestTenFeedPosts[feedId]) {
+        //     latestTenFeedPosts[feedId] = [];
+        // }
 
         for (let key in oData) {
 
-            // console.log('postData', oData[key]);
+            /// console.log('postData', oData[key]);
             const postData = oData[key];
 
             currentPostText = postData.text.substring(0, 10);
 
-            let latestTenFeedPostsArray = latestTenFeedPosts[feedId];
+            /// let latestTenFeedPostsArray = latestTenFeedPosts[feedId];
 
-            if (!latestTenFeedPostsArray.includes(currentPostText)) {
+            // if (!latestTenFeedPostsArray.includes(currentPostText)) {
                 // console.log('latestFeedPosts[feedId]', latestTenFeedPosts[feedId]);
                 /**
                  *  save latest ten feed posts' text to undouble trigger posts (publishers tend to send out the latest posts multiple times in a short period)
                  */
-                latestTenFeedPosts[feedId].unshift(currentPostText);
-                if (latestTenFeedPosts[feedId].length > 10) {
-                    latestTenFeedPosts[feedId].length = 10;
-                }
+                // latestTenFeedPosts[feedId].unshift(currentPostText);
+                // if (latestTenFeedPosts[feedId].length > 10) {
+                //     latestTenFeedPosts[feedId].length = 10;
+                // }
 
                 /**
                 *  check for retweets, ignore them.
@@ -187,26 +186,26 @@ const getFeedPosts = async () => {
                     newPost.metaData = metaData;
                     // save new post, but only if there's content. RT's often don't have any content, so don't save them.
                     if (newPost.contents.length > 0) {
-                        // console.log('save it', newPost);
+                        console.log('save it', newPost);
                         await newPost.save((err) => {
                             if (err) {
                                 if (err) { console.log(err) }
                             }
                         })
                     } else {
-                        // console.log('dont save it', newPost);
+                        console.log('dont save it', newPost);
                     }
                 } else {
-                    // console.log(' hey maar, toch n dubbele!', postData.text);
+                    console.log(' hey maar, toch n dubbele!', postData.text);
                 }
-            }
+            // }
 
             if (i === newestPostIndex) {
 
                 const sinceId = postData.id_str;
-                /// console.log('sinceId', sinceId);
-                /// console.log('postData', postData);
-                /// console.log('new date', new Date(postData.created_at).getTime())
+                console.log('sinceId', sinceId);
+                console.log('postData', postData);
+                console.log('new date', new Date(postData.created_at).getTime())
                 if (!subscription.sinceId || (subscription.sinceId && subscription.sinceId.toString() !== sinceId.toString())) {
                     subscription.sinceId = sinceId;
                     await subscription.save((err) => {
