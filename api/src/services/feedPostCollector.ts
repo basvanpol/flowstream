@@ -75,8 +75,12 @@ const getFeedPosts = async () => {
                         const max_id = (currentSubscription.maxId) ? currentSubscription.maxId : '';
                         const feed_id = (currentSubscription.feed.feedId) ? currentSubscription.feed.feedId : '';
                         // console.log('currentSubscription.feed', currentSubscription.feed);
-                        if (feed_id) {
+                        // console.log('feed_id', feed_id);
+                        // console.log('feed_id', typeof(feed_id));
+                        if (feed_id && feed_id === "3103641") {
+                            console.log(' go nrc');
                             feedPostRequestCounter++;
+                            console.log('since_id', since_id);
                             if (since_id) {
                                 await oauth.get(
                                     `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${feed_id}&count=10&since_id=${since_id}`,
@@ -119,6 +123,7 @@ const getFeedPosts = async () => {
     }
 
     const parseTwitterPostsData = async (subscription, feedId, data) => {
+        console.log('parsetwitter data', data);
         let oData = JSON.parse(data); //reverse since the oldest tweets need to be saved first, otherwise next time new tweets will be saved in wrong order after previously saved tweets
         if (oData.length > 0) {
             oData = [...oData].reverse();
@@ -185,16 +190,16 @@ const getFeedPosts = async () => {
                     };
                     newPost.metaData = metaData;
                     // save new post, but only if there's content. RT's often don't have any content, so don't save them.
-                    if (newPost.contents.length > 0) {
+                    //if (newPost.contents.length > 0) {
                         console.log('save it', newPost);
                         await newPost.save((err) => {
                             if (err) {
                                 if (err) { console.log(err) }
                             }
                         })
-                    } else {
-                        console.log('dont save it', newPost);
-                    }
+                    // } else {
+                    //     console.log('dont save it', newPost);
+                    // }
                 } else {
                     console.log(' hey maar, toch n dubbele!', postData.text);
                 }
@@ -206,7 +211,8 @@ const getFeedPosts = async () => {
                 console.log('sinceId', sinceId);
                 console.log('postData', postData);
                 console.log('new date', new Date(postData.created_at).getTime())
-                if (!subscription.sinceId || (subscription.sinceId && subscription.sinceId.toString() !== sinceId.toString())) {
+                console.log('subscription.sinceId', subscription.sinceId);
+                if (!subscription.sinceId || (subscription.sinceId.toString() !== sinceId.toString())) {
                     subscription.sinceId = sinceId;
                     await subscription.save((err) => {
                         if (err) { console.log(err) }
