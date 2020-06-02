@@ -16,7 +16,7 @@ let feedPostRequestCounter = 0;
 
 let feedPostTimer = 30000;
 
-// let latestTenFeedPosts = {};
+let latestTenFeedPosts = {};
 
 const initFeedPostCollector = () => {
     // first get tokens
@@ -75,12 +75,8 @@ const getFeedPosts = async () => {
                         const max_id = (currentSubscription.maxId) ? currentSubscription.maxId : '';
                         const feed_id = (currentSubscription.feed.feedId) ? currentSubscription.feed.feedId : '';
                         // console.log('currentSubscription.feed', currentSubscription.feed);
-                        // console.log('feed_id', feed_id);
-                        // console.log('feed_id', typeof(feed_id));
-                        if (feed_id && feed_id === "3103641") {
-                            console.log(' go nrc');
+                        if (feed_id) {
                             feedPostRequestCounter++;
-                            console.log('since_id', since_id);
                             if (since_id) {
                                 await oauth.get(
                                     `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${feed_id}&count=10&since_id=${since_id}`,
@@ -101,7 +97,7 @@ const getFeedPosts = async () => {
                                     token.token, //test user token
                                     token.tokenSecret, //test user secret              
                                     (err, data, result) => {
-                                        console.log('without since id', feed_id);
+                                        // console.log('without since id', feed_id);
                                         if (err) {
                                             console.error(err);
                                         } else {
@@ -123,7 +119,6 @@ const getFeedPosts = async () => {
     }
 
     const parseTwitterPostsData = async (subscription, feedId, data) => {
-        console.log('parsetwitter data', data);
         let oData = JSON.parse(data); //reverse since the oldest tweets need to be saved first, otherwise next time new tweets will be saved in wrong order after previously saved tweets
         if (oData.length > 0) {
             oData = [...oData].reverse();
@@ -140,28 +135,28 @@ const getFeedPosts = async () => {
         let previousPostText;
         let currentPostText;
 
-        // if (!latestTenFeedPosts[feedId]) {
-        //     latestTenFeedPosts[feedId] = [];
-        // }
+        if (!latestTenFeedPosts[feedId]) {
+            latestTenFeedPosts[feedId] = [];
+        }
 
         for (let key in oData) {
 
-            /// console.log('postData', oData[key]);
+            // console.log('postData', oData[key]);
             const postData = oData[key];
 
             currentPostText = postData.text.substring(0, 10);
 
-            /// let latestTenFeedPostsArray = latestTenFeedPosts[feedId];
+            let latestTenFeedPostsArray = latestTenFeedPosts[feedId];
 
-            // if (!latestTenFeedPostsArray.includes(currentPostText)) {
+            if (!latestTenFeedPostsArray.includes(currentPostText)) {
                 // console.log('latestFeedPosts[feedId]', latestTenFeedPosts[feedId]);
                 /**
                  *  save latest ten feed posts' text to undouble trigger posts (publishers tend to send out the latest posts multiple times in a short period)
                  */
-                // latestTenFeedPosts[feedId].unshift(currentPostText);
-                // if (latestTenFeedPosts[feedId].length > 10) {
-                //     latestTenFeedPosts[feedId].length = 10;
-                // }
+                latestTenFeedPosts[feedId].unshift(currentPostText);
+                if (latestTenFeedPosts[feedId].length > 10) {
+                    latestTenFeedPosts[feedId].length = 10;
+                }
 
                 /**
                 *  check for retweets, ignore them.
@@ -190,29 +185,28 @@ const getFeedPosts = async () => {
                     };
                     newPost.metaData = metaData;
                     // save new post, but only if there's content. RT's often don't have any content, so don't save them.
-                    //if (newPost.contents.length > 0) {
-                        console.log('save it', newPost);
+                    if (newPost.contents.length > 0) {
+                        // console.log('save it', newPost);
                         await newPost.save((err) => {
                             if (err) {
                                 if (err) { console.log(err) }
                             }
                         })
-                    // } else {
-                    //     console.log('dont save it', newPost);
-                    // }
+                    } else {
+                        // console.log('dont save it', newPost);
+                    }
                 } else {
-                    console.log(' hey maar, toch n dubbele!', postData.text);
+                    // console.log(' hey maar, toch n dubbele!', postData.text);
                 }
-            // }
+            }
 
             if (i === newestPostIndex) {
 
                 const sinceId = postData.id_str;
-                console.log('sinceId', sinceId);
-                console.log('postData', postData);
-                console.log('new date', new Date(postData.created_at).getTime())
-                console.log('subscription.sinceId', subscription.sinceId);
-                if (!subscription.sinceId || (subscription.sinceId.toString() !== sinceId.toString())) {
+                /// console.log('sinceId', sinceId);
+                /// console.log('postData', postData);
+                /// console.log('new date', new Date(postData.created_at).getTime())
+                if (!subscription.sinceId || (subscription.sinceId && subscription.sinceId.toString() !== sinceId.toString())) {
                     subscription.sinceId = sinceId;
                     await subscription.save((err) => {
                         if (err) { console.log(err) }
