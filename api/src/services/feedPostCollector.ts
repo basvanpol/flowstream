@@ -358,25 +358,7 @@ const getScrapedContent = async (url, sType) => {
                 if (metadata.image) {
                     imageUrl = metadata.image;
                 } else {
-                    request(url, function (error, response, body) {
-                        if (!error) {
-                            var $ = cheerio.load(body);
-                            var $image;
-                            $image = $('meta[property="og:image"]');
-
-                            if ($image != undefined) {
-                                imageUrl = $image.attr('content')
-                            } else {
-                                $image = $('article').find('img');
-                                if ($image != undefined) {
-                                    imageUrl = getImageUrl($image);
-                                }
-                            }
-                        } else {
-                            return reject('scrape meta cheerio error 2');
-                        }
-
-                    })
+                    imageUrl = "";
                 }
             }
 
