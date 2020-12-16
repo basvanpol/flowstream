@@ -101,6 +101,7 @@
     &.add-post {
         top: 20px;
         width: 488px;
+        max-height: 72vh;
 
         @media screen and (max-width: $screen-phone) {
             top: 0px;

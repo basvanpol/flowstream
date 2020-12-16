@@ -7,8 +7,6 @@ import { DynamicComponentModalComponent } from '../modals/dynamic-component-moda
   imports: [
     CommonModule
   ],
-  entryComponents: [
-    SelectConfirmationModalComponent
-  ]
+
 })
 export class ModalModule { }

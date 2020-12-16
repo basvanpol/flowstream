@@ -1,3 +1,4 @@
+import { SelectConfirmationModalComponent } from './modals/select-confirmation-modal/select-confirmation-modal.component';
 import { SelectItemDirective } from './../../directives/select-item/select-item.directive';
 import { SubscriptionButtonComponent } from './../features/add-feed/subscription-button/subscription-button.component';
 import { DynamicComponentModalHostDirective } from './modals/dynamic-component-modal/dynamic-component-modal-host.directive';
@@ -60,7 +61,8 @@ import { DropdownComponent } from './dropdown/dropdown.component';
         DynamicComponentModalHostDirective,
         DropdownComponent,
         SubscriptionButtonComponent,
-        SelectItemDirective
+        SelectItemDirective,
+        SelectConfirmationModalComponent
     ],
     exports: [
         IconModule,
@@ -89,11 +91,13 @@ import { DropdownComponent } from './dropdown/dropdown.component';
         DynamicComponentModalHostDirective,
         DropdownComponent,
         SubscriptionButtonComponent,
-        SelectItemDirective
+        SelectItemDirective,
+        SelectConfirmationModalComponent
     ],
     entryComponents: [
         ModalPostComponent,
-        DynamicComponentModalComponent
+        DynamicComponentModalComponent,
+        SelectConfirmationModalComponent
     ],
 })
 export class SharedModule {}

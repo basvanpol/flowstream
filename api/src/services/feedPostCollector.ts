@@ -251,7 +251,7 @@ const parseContent = (oData: any, key: any) => {
         }
 
 
-        const imageUrl = (entities.media && entities.media[0].media_url) ? entities.media[0].media_url : (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : ''
+        const imageUrl = (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : '';
 
         if (!!imageUrl) {
             imageFound = true;
@@ -352,13 +352,31 @@ const getScrapedContent = async (url, sType) => {
                             }
 
                         })
+                        // imageUrl = "";
                     }
                 }
             } else {
                 if (metadata.image) {
                     imageUrl = metadata.image;
                 } else {
-                    imageUrl = "";
+                    // imageUrl = "";
+                    request(url, function (error, response, body) {
+                        if (!error) {
+                            var $ = cheerio.load(body);
+                            var $image;
+                            $image = $('meta[property="og:image"]');
+                            if ($image != undefined) {
+                                imageUrl = $image.attr('content')
+                            } else {
+                                $image = $('article').find('img');
+                                if ($image != undefined) {
+                                    imageUrl = getImageUrl($image);
+                                }
+                            }
+                        } else {
+                            return reject('scrape meta cheerio error 2');
+                        }
+                    })
                 }
             }
 

@@ -16,7 +16,7 @@ export class SubscriptionButtonComponent implements OnInit {
   }
   feedVM: FeedVM;
 
-  constructor() { };
+  constructor() { }
 
   handleSubscription(feed: FeedVM) {
 
