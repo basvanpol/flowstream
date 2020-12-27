@@ -40,6 +40,9 @@ import { environment } from './environments/environment';
     HttpClientModule,
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
+  entryComponents: [
+    SelectConfirmationModalComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

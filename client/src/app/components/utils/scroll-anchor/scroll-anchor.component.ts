@@ -8,7 +8,7 @@ export class FixedElementComponent implements AfterViewInit, OnDestroy {
 
   @Input() options = { threshold: 0.0 };
   @Output() fixElement = new EventEmitter();
-  @ViewChild('fixedanchor', { static: false} ) anchor: ElementRef<HTMLElement>;
+  @ViewChild('fixedanchor') anchor: ElementRef<HTMLElement>;
 
   private observer: IntersectionObserver;
 
