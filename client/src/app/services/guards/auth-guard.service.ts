@@ -8,16 +8,18 @@ import {
 
 import { Observable } from 'rxjs';
 import { filter, switchMap, tap, take } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 
 
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs/internal/observable/of';
 import { IUser } from '../../models/user';
+import { getAuthState } from '../../store/auth/selectors/auth.selectors';
+import { IAppState } from '../../store/flow/selectors/flow.selectors';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private http: HttpClient, private store: Store<fromAuth.IAuthState>) {
+  constructor(private router: Router, private http: HttpClient, private store: Store<IAppState>) {
   }
 
   canActivate(): Observable<boolean> | boolean {
@@ -32,8 +34,9 @@ export class AuthGuard implements CanActivate {
   }
 
   getFromStoreOrApi(): any {
-    return this.store.select('auth')
+    return this.store
       .pipe(
+        select(getAuthState),
         tap((state: fromAuth.IAuthState) => {
           if (state.authenticated) {
             return of(true);

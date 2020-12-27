@@ -7,7 +7,10 @@ import * as GroupActions from '../../../store/group/actions/group.actions';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DefaultFormComponent } from '../../shared/default-form/default-form.component';
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { getGroupState } from '../../../store/group/selectors/group-selectors';
+import { IAppState } from '../../../store/flow/selectors/flow.selectors';
 
 @Component({
   selector: 'app-add-group',
@@ -23,13 +26,14 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private store: Store<GroupState>,
+    private store: Store<IAppState>,
     private matDialogRef: MatDialogRef<AddGroupComponent>) {
     super();
   }
 
   ngOnInit() {
-    this.groupSubscription = this.store.select('group').subscribe((state: GroupState) => {
+
+    this.store.pipe(untilDestroyed(this), select(getGroupState)).subscribe((state: GroupState) => {
       this.groupState = state;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
       if (this.saveGroupSuccess) {
@@ -88,8 +92,6 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
     });
   }
 
-  ngOnDestroy() {
-    this.groupSubscription.unsubscribe();
-  }
+  ngOnDestroy() { }
 
 }

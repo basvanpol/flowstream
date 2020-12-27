@@ -15,17 +15,14 @@ import { GeneralModule } from './general/general.module';
   imports: [
     HttpClientModule,
     TwitterStoreModule,
-    // ErrorStoreModule,
     FeedStoreModule,
     FlowStoreModule,
     GroupStoreModule,
-    // AuthStoreModule,
     AuthStoreModule,
     PostsStoreModule,
     FrontPageStoreModule,
     GeneralModule,
     StoreModule.forRoot({}, { metaReducers: [] }),
-    // StoreModule.forRoot({}, { metaReducers: [logout] }),
     EffectsModule.forRoot([])
   ]
 })

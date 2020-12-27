@@ -7,7 +7,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener }
 })
 export class DropdownComponent {
 
-  @ViewChild('dropdown') dropdown: ElementRef;
+  @ViewChild('dropdown',{ static: false}) dropdown: ElementRef;
   public showMenu = false;
 
   @HostListener('document:click', ['$event'])
