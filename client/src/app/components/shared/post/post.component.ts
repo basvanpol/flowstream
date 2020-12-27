@@ -81,6 +81,7 @@ export class PostComponent implements OnInit {
   setExternalFeed() {
     if (this._post) {
       // console.log(this._post);
+
     }
   }
   onImageUpdated(content: any) {
