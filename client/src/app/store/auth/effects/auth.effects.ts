@@ -13,8 +13,9 @@ export class AuthEffects {
 
   @Effect()
   getUser = this.actions$
-    .ofType(AuthActions.AuthActionTypes.GET_USER)
-    .pipe(switchMap((action: AuthActions.GetUser) => {
+    .pipe(
+      ofType(AuthActions.AuthActionTypes.GET_USER),
+      switchMap((action: AuthActions.GetUser) => {
       console.log('get current user');
       return this.http.get('/api/current_user', {
         observe: 'body',

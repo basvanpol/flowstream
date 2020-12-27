@@ -19,8 +19,8 @@ import { untilDestroyed } from '../../../../../../node_modules/ngx-take-until-de
 })
 export class DynamicComponentModalComponent implements OnDestroy, AfterViewInit {
 
-  @ViewChild(DynamicComponentModalHostDirective) dynamicComponentModalHost: DynamicComponentModalHostDirective;
-  @ViewChild('drilldownWrapper') drilldownWrapper: ElementRef<any>;
+  @ViewChild(DynamicComponentModalHostDirective, { static: false}) dynamicComponentModalHost: DynamicComponentModalHostDirective;
+  @ViewChild('drilldownWrapper', {static: false}) drilldownWrapper: ElementRef<any>;
   componentRef: ComponentRef<any>;
   contentComponent: DirectiveDecorator;
   showComponent = false;

@@ -8,7 +8,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class DefaultFormComponent {
 
-  @ViewChild('f') form: NgForm;
+  @ViewChild('f', {static: false}) form: NgForm;
 
   public formGroup: FormGroup;
   public failText: string;
