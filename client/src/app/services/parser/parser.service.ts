@@ -24,8 +24,9 @@ export class ParserService {
     let videoFound = false;
     let linkFound = false;
     let link;
-    const contents = post.contents;
-    contents.forEach(content => {
+    let contents = [...post.contents];
+    contents = contents.map(c => {
+      const content = {...c};
       content.postType = post.postType;
       if (content.mainType === ContentType.TEXT) {
         textFound = true;
@@ -43,6 +44,7 @@ export class ParserService {
 
         content.htmlContent = parsedContent;
         content.htmlSummaryContent = parsedContent;
+
 
       } else if (content.mainType === ContentType.LINK) {
         linkFound = true;
@@ -99,9 +101,12 @@ export class ParserService {
           content.htmlContent = content.source;
         }
       }
+      return content;
     });
 
+
     if (!titleFound && !!post.title) {
+
       /**
        * also create extra text field for to parse scraped title
        */
@@ -211,8 +216,6 @@ export class ParserService {
 
     content.push(linkContentObject);
 
-    console.log('content', content);
-
     const date = new Date();
     const publisherName: string = this.getShortSummary(publisher);
     const post: IPost = {
@@ -243,8 +246,12 @@ export class ParserService {
 
     let postType = "";
     let numContent = 0;
-    post.contents.forEach(content => {
+    post.contents.map(c => {
       numContent++;
+
+      const content = {
+        ...c
+      }
 
       const contentType = content.type;
       if (contentType.search("IMAGE") > -1) {
@@ -282,6 +289,8 @@ export class ParserService {
           postType = ContentType.VIDEO;
         }
       }
+
+      return content;
     });
 
     return postType;

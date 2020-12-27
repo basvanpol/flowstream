@@ -20,7 +20,7 @@ export class PostComponent implements OnInit {
   _post: IPost;
 
   @Input() set post(value: IPost) {
-    this._post = value;
+    this._post = {...value};
     this._post.postType = this.parserService.parsePostType(this._post);
     this._post.contents = this.filterService.filterSortContent(this._post.contents);
     this._post.contents = this.parserService.parseContent(this._post, this.showFull);

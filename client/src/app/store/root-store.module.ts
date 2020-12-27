@@ -24,8 +24,14 @@ import { GeneralModule } from './general/general.module';
     PostsStoreModule,
     FrontPageStoreModule,
     GeneralModule,
-    StoreModule.forRoot({}, { metaReducers: [] }),
-    // StoreModule.forRoot({}, { metaReducers: [logout] }),
+    StoreModule.forRoot({}, {
+      runtimeChecks: {
+        strictStateImmutability: false,
+        strictActionImmutability: false,
+        strictStateSerializability: false,
+        strictActionSerializability: false,
+      },
+      metaReducers: [] }),
     EffectsModule.forRoot([])
   ]
 })
