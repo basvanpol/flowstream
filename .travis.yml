@@ -21,7 +21,7 @@ deploy:
     region: ap-southeast-2
     app: Flowstream
     env: Flowstream-env
-    bucket_name: elasticbeanstalk-ap-southeast-2-747446493647
+    bucket_name: elasticbeanstalk-ap-southeast-2-747446493647  
     bucket_path: Flowstream
     on: 
       branch: master
