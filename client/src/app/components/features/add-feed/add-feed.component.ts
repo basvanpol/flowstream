@@ -12,17 +12,23 @@ import * as FeedActions from '../../../store/feed/actions/feed.actions';
 import { Subscription } from 'rxjs';
 import * as TwitterActions from '../../../store/twitter/actions/twitter.actions';
 import { TwitterState } from '../../../store/twitter/reducers/twitter.reducer';
-import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { getTwitterState } from 'src/app/store/twitter/selectors/twitter-selectors';
+import { IAppState } from '../../../store/flow/selectors/flow.selectors';
+import { getAuthState } from '../../../store/auth/selectors/auth.selectors';
+import { getGroupState } from 'src/app/store/group/selectors/group-selectors';
+import { getFeedsState } from 'src/app/store/feed/selectors/feed-selectors';
 
 @Component({
   selector: 'app-add-feed',
   templateUrl: './add-feed.component.html',
   styleUrls: ['./add-feed.component.scss']
 })
-export class AddFeedComponent extends DefaultFormComponent implements OnInit {
+export class AddFeedComponent extends DefaultFormComponent implements OnInit, OnDestroy {
 
   searchQuery: string;
   twitterSubscription: Subscription;
@@ -46,7 +52,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
   };
 
   constructor(
-    private store: Store<TwitterState | IAuthState>,
+    private store: Store<IAppState>,
     public dialogRef: MatDialogRef<AddFeedComponent>,
     public selectConfirmDialog: MatDialog) {
     super();
@@ -54,20 +60,18 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
 
   ngOnInit() {
 
-    this.twitterSubscription = this.store.select('twitter')
-      .subscribe((state: TwitterState) => {
-        this.searchFeedsData = state.searchFeedsResult.data;
-      });
-
-    this.authSubscription = this.store.select('auth')
-      .subscribe((state: IAuthState) => {
-        this.authState = state;
-        this.mapFeedSubscriptions(this.authState.feedSubscriptions);
-        this.setSubscribed();
-      });
+    this.store.pipe(untilDestroyed(this), select(getTwitterState)).subscribe((state: TwitterState) => {
+      this.searchFeedsData = state.searchFeedsResult.data;
+    });
 
 
-    this.groupsSubscription = this.store.select('group').subscribe((state: GroupState) => {
+    this.store.pipe(untilDestroyed(this), select(getAuthState)).subscribe((state: IAuthState) => {
+      this.authState = state;
+      this.mapFeedSubscriptions(this.authState.feedSubscriptions);
+      this.setSubscribed();
+    });
+
+    this.store.pipe(untilDestroyed(this), select(getGroupState)).subscribe((state: GroupState) => {
       this.groupState = state;
       this.selectedAdminGroup = this.groupState.selectedAdminGroup;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
@@ -98,7 +102,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
       }
     });
 
-    this.feedStateSubscription = this.store.select('feeds').subscribe((state: FeedState) => {
+    this.store.pipe(untilDestroyed(this), select(getFeedsState)).subscribe((state: FeedState) => {
       this.feedState = state;
       if (!this.feedState.featuredFeeds) {
         this.store.dispatch(new FeedActions.GetFeatureFeeds());
@@ -321,5 +325,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit {
     // };
     // this.store.dispatch(new FeedActions.RemoveFromFeatureList(featureRequestObject));
   }
+
+  ngOnDestroy() { }
 
 }

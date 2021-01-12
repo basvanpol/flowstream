@@ -6,9 +6,6 @@ import { DynamicComponentModalComponent } from '../modals/dynamic-component-moda
 @NgModule({
   imports: [
     CommonModule
-  ],
-  entryComponents: [
-    SelectConfirmationModalComponent
   ]
 })
 export class ModalModule { }
