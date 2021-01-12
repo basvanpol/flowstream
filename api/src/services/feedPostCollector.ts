@@ -76,7 +76,7 @@ const getFeedPosts = async () => {
                         // console.log('currentSubscription.feed', currentSubscription.feed);
                         if (feed_id) {
                             feedPostRequestCounter++;
-                            if (since_id) {
+                            if (since_id) { 
                                 await oauth.get(
                                     `https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=${feed_id}&count=10&since_id=${since_id}`,
                                     token.token, //test user token
