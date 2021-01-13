@@ -14,13 +14,12 @@ script:
     - docker push basvanpol/fs-nginx:latest
 
 deploy:
-    edge: true
     provider: elasticbeanstalk
-    region: ap-southeast-2
-    app: Flowstream
-    env: Flowstream-env
-    bucket_name: elasticbeanstalk-ap-southeast-2-747446493647
-    bucket_path: Flowstream
+    region: 'ap-southeast-2'
+    app: 'Flowstream'
+    env: 'Flowstream-env'
+    bucket_name: 'elasticbeanstalk-ap-southeast-2-747446493647'
+    bucket_path: 'Flowstream'
     on: 
       branch: master
     access_key_id: $AWS_ACCESS_KEY
