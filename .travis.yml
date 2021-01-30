@@ -1,6 +1,7 @@
 sudio: required
 services: 
     - docker
+language: node
       
 script:
     - docker build -t basvanpol/fs-client ./client
