@@ -89,6 +89,7 @@ const getFeedPosts = async () => {
                                             parseTwitterPostsData(currentSubscription, feed_id, data);
                                         }
                                     });
+                                    
 
                             } else {
                                 await oauth.get(
