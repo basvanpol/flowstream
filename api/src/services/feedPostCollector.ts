@@ -45,7 +45,6 @@ const getFeedPosts = async () => {
     let subQueue = [];
     let tooManyRequests = false;
     if (tokens && tokens.length > 0) {
-        console.log('token!', tokens);
         Subscription.find({ memberCount: { $gt: 0 } }, async (err, subscriptions) => {
             if (err) {
                 console.log('something went wrong when searching subscription');
@@ -211,8 +210,8 @@ const parseContent = (oData: any, key: any) => {
             }
         }
 
-        console.log('oData[key]', oData[key]);
-        console.log('scrapedContent', scrapedContent);
+        // console.log('oData[key]', oData[key]);
+        // console.log('scrapedContent', scrapedContent);
 
         const title = (scrapedContent && scrapedContent.title) ? scrapedContent.title : '';
         if (!!title) {

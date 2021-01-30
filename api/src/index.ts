@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 import './models/Token';
 import * as express from 'express';
 import * as cookieSession from 'cookie-session';
@@ -45,7 +45,7 @@ const corsOptions = {
 };
 
 
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 mongoose.connect(process.env.mongoURI, {
     keepAlive: true,

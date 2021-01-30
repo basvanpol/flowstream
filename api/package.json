@@ -33,7 +33,7 @@
     "graphql": "^14.5.8",
     "https": "^1.0.0",
     "metascraper": "1.0.2",
-    "mongoose": "^5.8.3",
+    "mongoose": "^5.11.14",
     "nodemailer": "^4.6.2",
     "oauth": "^0.9.15",
     "passport": "^0.4.0",
