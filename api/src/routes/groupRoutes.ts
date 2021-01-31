@@ -2,6 +2,12 @@ import * as mongoose from 'mongoose';
 const Group = mongoose.model('Group');
 const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 
+export interface IGroup extends mongoose.Document {
+    _user: string,
+    title: string,
+    icon: {}
+}
+
 export default (app) => {
 
     app.post('/api/groups/save', (req, res) => {
@@ -14,7 +20,7 @@ export default (app) => {
                     res.status(500).send({msg: 'this group already exists'});
                     // save flow
                 } else {
-                    const newGroup = new Group();
+                    const newGroup: IGroup = new mongoose.Document() as IGroup;
                     newGroup._id = new mongoose.Types.ObjectId();
                     newGroup._user = req.user._id;
                     newGroup.title = req.body.title;
@@ -39,7 +45,7 @@ export default (app) => {
                 res.status(500).send('Something broke!')
             }
             if (group) {
-                Group.deleteOne({ '_id': req.params.groupId }, function (err) {
+                Group.deleteOne({ '_id': req.params.groupId }, {}, function (err) {
                     if (err) {
                         res.status(500).send('delete fail!')
                     }

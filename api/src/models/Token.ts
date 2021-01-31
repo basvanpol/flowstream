@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
-const { Schema } = mongoose;
-const tokenSchema = new Schema({
+import { Schema} from 'mongoose';
+
+const tokenSchema: Schema = new Schema({
     _user: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
     token: String,
     tokenSecret: String,

@@ -4,6 +4,24 @@ const Post = mongoose.model('Post');
 const User = mongoose.model('User');
 const Subscription = mongoose.model('Subscription');
 
+export interface IPost extends mongoose.Document {
+    title: string,
+    feedId: string,
+    flows: string[],
+    users: string[],
+    thumb: string,
+    location: string,
+    contents: {}[],
+    comment: any[],
+    date: any,
+    metaData: {},
+    likeCount: number,
+    likeScore: number,
+    viewCount: number,
+    private: boolean,
+    tagData: {}[]
+}
+
 export class PostFunctions {
 
     errorSend: boolean;
@@ -15,7 +33,7 @@ export class PostFunctions {
         const reqPost = req.body.newPost;
 
         return new Promise(async (resolve, reject) => {
-            const newPost = await new Post();
+            const newPost: IPost = await new mongoose.Document() as IPost;
             newPost._id = new mongoose.Types.ObjectId();
             newPost.users = reqPost.users;
             const title = reqPost.contents.find((content) => content.mainType === 'TEXT').source;

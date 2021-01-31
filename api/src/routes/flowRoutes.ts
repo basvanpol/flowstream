@@ -3,6 +3,12 @@ import * as mongoose from 'mongoose';
 const Flow = mongoose.model('Flow');
 const Post = mongoose.model('Post');
 
+export interface IFlow extends mongoose.Document {
+    _user: string,
+    title: string,
+    flowViewType: string
+}
+
 export default (app) => {
 
     app.get('/invite/:hash', (req, res) => {
@@ -21,7 +27,7 @@ export default (app) => {
                 //     // save flow
                 // } else {
                 
-                const newFlow = await new Flow();
+                const newFlow: IFlow = await new mongoose.Document() as IFlow;
                 newFlow._id = new mongoose.Types.ObjectId();
                 newFlow._user = req.user._id;
                 newFlow.title = (req.body.title) ? req.body.title : req.body.flowTitle;
@@ -141,7 +147,7 @@ export default (app) => {
                 
                 if(flow){
                     
-                    Flow.deleteOne({ '_id': req.params.flowId }, function (err) {
+                    Flow.deleteOne({ '_id': req.params.flowId }, {}, function (err) {
                         if (err) {
                             res.status(500).send('delete fail!')
                         }

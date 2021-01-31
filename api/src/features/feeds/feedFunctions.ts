@@ -1,10 +1,40 @@
 import * as mongoose from 'mongoose';
 import { resolve } from 'url';
+import { IUser } from '../../services/passport';
+
 const Feed = mongoose.model('Feed');
 const FeedFeature = mongoose.model('FeedFeature');
 const User = mongoose.model('User');
 const Subscription = mongoose.model('Subscription');
 const UserFeedSubscription = mongoose.model('UserFeedSubscription');
+
+interface IFeed extends mongoose.Document {
+    feedName: string,
+    feedType: string,
+    feedId: string,
+    feedIcon: string
+}
+
+interface IFeateredFeed extends mongoose.Document {
+    _feed: string,
+    _user: string,
+    _group: string,
+    active: {
+        type: boolean,
+    }      
+}
+
+interface IUserFeedSubscription extends mongoose.Document {
+    _feed: string,
+    _user: string,
+    _group: string
+}
+
+interface ISubscription extends mongoose.Document {
+    memberCount: number,
+    feed: string,
+    sinceId: string
+}
 
 export class FeedFunctions {
 
@@ -42,7 +72,8 @@ export class FeedFunctions {
                     this.feedObjectId = feed._id;
                     resolve('found feed');
                 } else {
-                    const newFeed = await new Feed();
+                    // const newFeed = await new Feed();
+                    const newFeed: IFeed = new mongoose.Document() as IFeed;
                     newFeed._id = new mongoose.Types.ObjectId();
                     newFeed.feedName = requestFeed.feedName;
                     newFeed.feedId = requestFeed.feedId;
@@ -81,13 +112,13 @@ export class FeedFunctions {
                     }
                 }
                 if (feedFeatures && feedFeatures.length > 0) {
-                    const toBeRemovedFeaturedFeeds = feedFeatures.filter((feateredFeed) => {
+                    const toBeRemovedFeaturedFeeds = feedFeatures.filter((feateredFeed: IFeateredFeed) => {
                         return !this.groups.includes(feateredFeed._feed.toString());
                     });
                     const numToBeRemoved = toBeRemovedFeaturedFeeds.length;
                     let numRemoved = 0;
-                    toBeRemovedFeaturedFeeds.forEach(async (tbrFeaturedFeed) => {
-                        await FeedFeature.remove({ '_id': tbrFeaturedFeed._id }, (err, result) => {
+                    toBeRemovedFeaturedFeeds.forEach(async (tbrFeaturedFeed: IFeateredFeed) => {
+                        await FeedFeature.remove({ '_id': tbrFeaturedFeed._id }, (err) => {
                             if (err) {
                                 if (!this.errorSend) {
                                     reject(err.message);
@@ -139,7 +170,7 @@ export class FeedFunctions {
                                 resolve(' saved feature');
                             }
                         } else {
-                            const newFeedFeature = await new FeedFeature();
+                            const newFeedFeature: IFeateredFeed = await new mongoose.Document() as IFeateredFeed
                             newFeedFeature._id = new mongoose.Types.ObjectId();
                             newFeedFeature._feed = this.feedObjectId;
                             newFeedFeature._user = this.userId;
@@ -244,7 +275,7 @@ export class FeedFunctions {
         return new Promise((resolve, reject) => {
             UserFeedSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userFeedSubscription) => {
                 if (!userFeedSubscription) {
-                    const userFeedSubscription = await new UserFeedSubscription();
+                    const userFeedSubscription: IUserFeedSubscription = await new mongoose.Document() as IUserFeedSubscription;
                     userFeedSubscription._id = new mongoose.Types.ObjectId();
                     userFeedSubscription._feed = this.feedObjectId;
                     userFeedSubscription._user = this.userId;
@@ -264,7 +295,7 @@ export class FeedFunctions {
 
     removeUserSubscription(user, groupId, res) {
         return new Promise((resolve, reject) => {
-            UserFeedSubscription.deleteOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err) => {
+            UserFeedSubscription.deleteOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, {}, async (err) => {
                 if (err) {
                     reject('error deleting subscription');
                 }
@@ -344,7 +375,7 @@ export class FeedFunctions {
                     });
                     resolve('subscription updated');
                 } else {
-                    const newSubscription = await new Subscription();
+                    const newSubscription : ISubscription = await new mongoose.Document() as ISubscription;
                     newSubscription._id = new mongoose.Types.ObjectId();
                     newSubscription.feed = this.feedObjectId;
                     // newSubscription.memberCount = this.numFeedSubscriptionMutation;
@@ -381,7 +412,7 @@ export class FeedFunctions {
                     if (featuredFeeds) {
 
                         User.findOne({ '_id': this.userId })
-                            .exec((err, user) => {
+                            .exec((err, user: IUser) => {
                                 if (err) {
                                     if (!this.errorSend) {
                                         reject('Something broke!');

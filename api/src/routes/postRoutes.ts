@@ -85,7 +85,7 @@ export default (app) => {
         // 
         req.header("Access-Control-Allow-Origin", "*");
         req.header("Access-Control-Allow-Headers", "X-Requested-With");
-        await Post.findByIdAndUpdate(req.body._id, req.body, (error, doc) => {
+        await Post.findByIdAndUpdate(req.body._id, req.body, {}, (error, doc) => {
             // 
             res.status(200).send({ 'message': 'ok', data: { body: req.body } });
         });
@@ -97,7 +97,7 @@ export default (app) => {
         if (post) {
             // 
 
-            Post.deleteOne({ _id: postId }, function (err) {
+            Post.deleteOne({ _id: postId }, {}, function (err) {
                 if (err) {
                     res.status(500).send('delet fail!')
                 }

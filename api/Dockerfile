@@ -8,7 +8,7 @@ RUN mkdir -p /app/api
 WORKDIR "/app/api"
 
 # Copy dependency definitions
-COPY package*.json ./app/api/
+COPY package*.json /app/api/
 
 # Install dependecies
 RUN npm install

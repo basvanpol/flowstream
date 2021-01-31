@@ -7,6 +7,36 @@ import * as mongoose from 'mongoose';
 const User = mongoose.model('User');
 const Token = mongoose.model('Token');
 
+export interface IUser extends mongoose.Document {
+    credits: {
+        type: number,
+        default: number
+    },
+    local: {
+        email: string,
+        password: string,
+        username: string
+    },
+    google: {
+        googleId: string
+    },
+    twitter: {
+        twitterId: string,
+        token: string,
+        tokenSecret: string
+    },
+    isVerified: boolean,
+    forgotPasswordToken: string,
+    feedSubscriptions: any[]
+}
+
+export interface IToken extends mongoose.Document {
+    _user: any,
+    token: string,
+    tokenSecret: string,
+    tokenType: string
+}
+
 //user here is what came back from the db
 //this is used when logging in, after the user has been retrieved from the db. After this the cookie will be set
 passport.serializeUser((user, done) => {
@@ -43,11 +73,11 @@ passport.use(new TwitterStrategy({
         const existingUser = await User.findOne({ 'twitter.twitterId': profile.id })
             .populate('feedSubscriptions._feed')
             .populate('feedSubscriptions._group')
-            .exec(async (err, existingUser) => {
+            .exec(async (err, existingUser: IUser) => {
                 if (err) {
                     console.log(err)
                 }
-                
+
                 if (existingUser) {
                     //user exists!
                     existingUser.twitter.token = twitterToken;
@@ -60,7 +90,7 @@ passport.use(new TwitterStrategy({
                             token.tokenSecret = twitterTokenSecret;
                             token.save();
                         } else {
-                            const newToken = new Token();
+                            const newToken: IToken = new mongoose.Document() as IToken;
                             newToken._user = existingUser._id;
                             newToken.tokenType = 'TWITTER';
                             newToken.token = twitterToken;
@@ -72,14 +102,14 @@ passport.use(new TwitterStrategy({
                 } else {
                     //we don't have that user, save the user
 
-                    const newUser = await new User();
+                    const newUser: IUser = new mongoose.Document() as IUser;
                     newUser._id = new mongoose.Types.ObjectId();
                     newUser.twitter.twitterId = profile.id;
                     newUser.twitter.token = twitterToken;
                     newUser.twitter.tokenSecret = twitterTokenSecret;
                     newUser.save();
 
-                    const newToken = new Token();
+                    const newToken: IToken = new mongoose.Document() as IToken;
                     newToken._user = newUser._id;
                     newToken.tokenType = 'TWITTER';
                     newToken.token = twitterToken;
@@ -113,7 +143,7 @@ passport.use(
             done(null, existingUser);
         } else {
             //we don't have that user, save the user
-            const newUser = await new User();
+            const newUser: IUser = new mongoose.Document() as IUser;
             newUser.google.googleId = profile.id
             newUser.save();
             done(null, newUser);
@@ -123,29 +153,29 @@ passport.use(
 );
 
 
-passport.use('local-signin', new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password',
-    passReqToCallback: true
-}, (req, username, password, done) => {
+// passport.use('local-signin', new LocalStrategy({
+//     usernameField: 'email',
+//     passwordField: 'password',
+//     passReqToCallback: true
+// }, (req, username, password, done) => {
 
-    User.findOne({ 'local.email': username }, (err, user) => {
+//     User.findOne({ 'local.email': username }, (err, user) => {
 
-        if (err)
-            return done(err);
+//         if (err)
+//             return done(err);
 
-        if (!user)
-            return done(null, false, { authFail: true, wrongPassword: false, message: 'Incorrect username.' });
+//         if (!user)
+//             return done(null, false, { authFail: true, wrongPassword: false, message: 'Incorrect username.' });
 
-        if (!user.validPassword(password)) {
-            return done(null, false, { authFail: true, wrongPassword: true, message: 'Incorrect password.' });
-        }
+//         if (!user.validPassword(password)) {
+//             return done(null, false, { authFail: true, wrongPassword: true, message: 'Incorrect password.' });
+//         }
 
-        return done(null, user);
+//         return done(null, user);
 
-    });
-})
-);
+//     });
+// })
+// );
 
 
 
