@@ -189,7 +189,9 @@ const getFeedPosts = async () => {
                         // console.log('save it', newPost);
                         await newPost.save((err) => {
                             if (err) {
-                                if (err) { console.log(err) }
+                                if (err) { 
+                                    // console.log(err) 
+                                }
                             }
                         })
                     } else {
@@ -209,7 +211,9 @@ const getFeedPosts = async () => {
                 if (!subscription.sinceId || (subscription.sinceId && subscription.sinceId.toString() !== sinceId.toString())) {
                     subscription.sinceId = sinceId;
                     await subscription.save((err) => {
-                        if (err) { console.log(err) }
+                        if (err) { 
+                            // console.log(err) 
+                        }
                     })
                 }
             };

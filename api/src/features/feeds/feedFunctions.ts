@@ -1,11 +1,66 @@
 import * as mongoose from 'mongoose';
 import { resolve } from 'url';
 import { UserRoles } from '../../tsmodels/userRoles';
+import { IUser } from '../../../../client/src/app/models/user';
+
 const Feed = mongoose.model('Feed');
 const FeedFeature = mongoose.model('FeedFeature');
 const User = mongoose.model('User');
 const Subscription = mongoose.model('Subscription');
 const UserFeedSubscription = mongoose.model('UserFeedSubscription');
+
+export interface IFeed extends mongoose.Document {
+    feedName: string,
+    feedType: string,
+    feedId: string,
+    feedIcon: string
+}
+
+export interface IFeateredFeed extends mongoose.Document {
+    _feed: string,
+    _user: number,
+    _group: string,
+    _doc: mongoose.Document,
+    active: {
+        type: boolean,
+    }      
+}
+
+export interface IUserFeedSubscription extends mongoose.Document {
+    _feed: string,
+    _user: number,
+    _group: string
+}
+
+export interface ISubscription extends mongoose.Document {
+    memberCount: number,
+    feed: string,
+    sinceId: string
+}
+
+export interface IUserDocument extends mongoose.Document {
+    credits: {
+        type: number,
+        default: 0
+    },
+    local: {
+        email: string,
+        password: string,
+        username: string
+    },
+    google: {
+        googleId: string
+    },
+    twitter: {
+        twitterId: string,
+        token: string,
+        tokenSecret: string
+    },
+    permissions: {},
+    isVerified: boolean,
+    forgotPasswordToken: string,
+    feedSubscriptions: IUserFeedSubscription[]
+}
 
 export class FeedFunctions {
 
@@ -14,7 +69,7 @@ export class FeedFunctions {
     processedGroups: number;
     errorSend: boolean;
     feedObjectId: string;
-    userId: string;
+    userId: number;
     numFeedSubscriptionMutation = 0;
     updatedUser: {} = null;
     isUserFeedAdmin = false;
@@ -55,7 +110,8 @@ export class FeedFunctions {
                     this.feedObjectId = feed._id;
                     resolve('found feed');
                 } else {
-                    const newFeed = await new Feed();
+                    // const newFeed = await new Feed();
+                    const newFeed: IFeed = new mongoose.Document() as IFeed;
                     newFeed._id = new mongoose.Types.ObjectId();
                     newFeed.feedName = requestFeed.feedName;
                     newFeed.feedId = requestFeed.feedId;
@@ -93,7 +149,7 @@ export class FeedFunctions {
             }
             // if user is not a feed admin, retrieve just his own featured feeds
 
-            FeedFeature.find({ '_user': { $in: userIds }, '_feed': this.feedObjectId }, async (err, feedFeatures) => {
+            FeedFeature.find({ '_user': { $in: userIds }, '_feed': this.feedObjectId }, async (err, feedFeatures: IFeateredFeed[]) => {
                 if (err) {
                     if (!this.errorSend) {
                         reject(err.message);
@@ -109,7 +165,7 @@ export class FeedFunctions {
                     if (numToBeRemoved > 0) {
                         let numRemoved = 0;
                         toBeRemovedFeaturedFeeds.forEach(async (tbrFeaturedFeed) => {
-                            await FeedFeature.remove({ '_id': tbrFeaturedFeed._id }, (err, result) => {
+                            await FeedFeature.remove({ '_id': tbrFeaturedFeed._id }, (err: mongoose.NativeError) => {
                                 if (err) {
                                     if (!this.errorSend) {
                                         reject(err.message);
@@ -172,7 +228,7 @@ export class FeedFunctions {
                                 resolve(' saved feature');
                             }
                         } else {
-                            const newFeedFeature = await new FeedFeature();
+                            const newFeedFeature: IFeateredFeed = await new mongoose.Document() as IFeateredFeed
                             newFeedFeature._id = new mongoose.Types.ObjectId();
                             newFeedFeature._feed = this.feedObjectId;
                             newFeedFeature._user = this.userId;
@@ -277,7 +333,7 @@ export class FeedFunctions {
         return new Promise((resolve, reject) => {
             UserFeedSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userFeedSubscription) => {
                 if (!userFeedSubscription) {
-                    const userFeedSubscription = await new UserFeedSubscription();
+                    const userFeedSubscription: IUserFeedSubscription = await new mongoose.Document() as IUserFeedSubscription;
                     userFeedSubscription._id = new mongoose.Types.ObjectId();
                     userFeedSubscription._feed = this.feedObjectId;
                     userFeedSubscription._user = this.userId;
@@ -297,7 +353,7 @@ export class FeedFunctions {
 
     removeUserSubscription(user, groupId, res) {
         return new Promise((resolve, reject) => {
-            UserFeedSubscription.deleteOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err) => {
+            UserFeedSubscription.deleteOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, {}, async (err) => {
                 if (err) {
                     reject('error deleting subscription');
                 }
@@ -377,7 +433,7 @@ export class FeedFunctions {
                     });
                     resolve('subscription updated');
                 } else {
-                    const newSubscription = await new Subscription();
+                    const newSubscription : ISubscription = await new mongoose.Document() as ISubscription;
                     newSubscription._id = new mongoose.Types.ObjectId();
                     newSubscription.feed = this.feedObjectId;
                     // newSubscription.memberCount = this.numFeedSubscriptionMutation;
@@ -426,7 +482,7 @@ export class FeedFunctions {
 
             FeedFeature.find({ '_user': { $in: userIds }, 'active': true }).
                 populate('_feed').
-                exec((err, featuredFeeds) => {
+                exec((err, featuredFeeds: IFeateredFeed[]) => {
                     if (err) {
                         if (!this.errorSend) {
                             reject('Something broke!');
@@ -445,7 +501,7 @@ export class FeedFunctions {
                         // console.log('featuredFeeds', featuredFeeds);
                         // console.log('mappedFeatureFeeds', mappedFeatureFeeds);
                         User.findOne({ '_id': this.userId })
-                            .exec((err, user) => {
+                            .exec((err, user: IUserDocument) => {
                                 if (err) {
                                     if (!this.errorSend) {
                                         reject('Something broke!');
@@ -457,7 +513,7 @@ export class FeedFunctions {
                                     UserFeedSubscription.find({ '_user': req.user.id })
                                         .populate('_feed')
                                         .populate('_group')
-                                        .exec(async (err, userSubscriptions) => {
+                                        .exec(async (err, userSubscriptions: IUserFeedSubscription[]) => {
                                             user.feedSubscriptions = userSubscriptions;
                                             // res.status(200).send(currentUser);
                                             this.updatedUser = user;

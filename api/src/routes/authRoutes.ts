@@ -11,11 +11,11 @@ const UserFeedSubscription = mongoose.model('UserFeedSubscription');
 
 export default (app) => {
 
-    this.isExtension = false;
+    let isExtension = false;
 
 
     app.get('/api/auth/twitter', (req, res, next) => {
-        this.isExtension = false;
+        isExtension = false;
 
         passport.authenticate('twitter', (err, user, info) => {
 
@@ -24,7 +24,7 @@ export default (app) => {
     });
 
     app.get('/api/auth/twitterextension', (req, res, next) => {
-        this.isExtension = true;
+        isExtension = true;
         passport.authenticate('twitter', (err, user, info) => {
 
             // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
@@ -35,7 +35,7 @@ export default (app) => {
         '/api/auth/twitter/callback',
         passport.authenticate('twitter'),
         (req, res) => {
-            if (this.isExtension) {
+            if (isExtension) {
 
                 // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
                 res.redirect(`http://localhost:4200/static/authcallbackredirect.html?userId=${req.user._id}`);
@@ -47,7 +47,7 @@ export default (app) => {
     );
 
     app.get('/api/auth/google', (req, res, next) => {
-        this.isExtension = false;
+        isExtension = false;
         passport.authenticate('google', { scope: ['profile', 'email'] }, (err, user, info) => {
         }, { display: 'popup' })(req, res, next);
     });
@@ -57,7 +57,7 @@ export default (app) => {
         '/api/auth/google/callback',
         passport.authenticate('google'),
         (req, res) => {
-            if (this.isExtension) {
+            if (isExtension) {
                 // res.redirect(`http://localhost:4200/authCallback/authcallbackredirect.html?userId=${req.user._id}`);
                 res.redirect(`http://localhost:4200/static/authcallbackredirect.html?userId=${req.user._id}`);
             } else {

@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 import * as bcrypt from 'bcrypt-nodejs';
-const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const userSchema: Schema = new Schema({
     credits: {
         type: Number,
         default: 0
@@ -37,8 +37,8 @@ userSchema.methods.generateForgotPasswordToken = function (password) {
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function (password) {
-    return bcrypt.compareSync(password, this.local.password);
-};
+// userSchema.methods.validPassword = function (password) {
+//     return bcrypt.compareSync(password, this.local.password);
+// };
 
 mongoose.model('User', userSchema);

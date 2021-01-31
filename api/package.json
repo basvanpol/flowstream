@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/index.js",
   "engines": {
-    "node": "8.1.1",
+    "node": "12.14.1",
     "npm": "5.0.3"
   },
   "scripts": {
@@ -33,7 +33,7 @@
     "graphql": "^14.5.8",
     "https": "^1.0.0",
     "metascraper": "1.0.2",
-    "mongoose": "^5.8.3",
+    "mongoose": "^5.11.14",
     "nodemailer": "^4.6.2",
     "oauth": "^0.9.15",
     "passport": "^0.4.0",
@@ -45,7 +45,7 @@
     "passport-youtube-v3": "^2.1.0",
     "request": "^2.87.0",
     "socket.io": "^2.2.0",
-    "typescript": "^3.7.4"
+    "typescript": "3.8.3"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",

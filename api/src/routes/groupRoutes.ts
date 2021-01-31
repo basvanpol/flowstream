@@ -37,7 +37,7 @@ export default (app) => {
                     });
                     // save flow
                 } else {
-                    const newGroup = new Group();
+                    const newGroup: IGroup = new mongoose.Document() as IGroup;
                     newGroup._id = new mongoose.Types.ObjectId();
                     newGroup._user = req.user._id;
                     newGroup.title = req.body.title;
@@ -75,7 +75,7 @@ export default (app) => {
                 if (!canUserDelete) {
                     res.status(401).send("You don't have permission to delete this group");
                 } else {
-                    Group.deleteOne({ '_id': groupId }, function (err) {
+                    Group.deleteOne({ '_id': groupId }, {}, function (err) {
                         if (err) {
                             res.status(500).send('delete fail!')
                         }
@@ -87,6 +87,7 @@ export default (app) => {
                 }
 
             }
+
         });
     });
 

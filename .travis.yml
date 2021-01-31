@@ -1,6 +1,8 @@
-sudio: required
 services: 
     - docker
+language: node_js
+node_js:
+  - 12.14.1
       
 script:
     - docker build -t basvanpol/fs-client ./client
