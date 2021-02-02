@@ -23,6 +23,7 @@ export default (app) => {
         },{ display: 'popup' })(req, res, next);
       });
 
+
     app.get('/api/auth/twitterextension', (req, res, next) => {
         this.isExtension = true;
         passport.authenticate('twitter', (err, user, info) => {
