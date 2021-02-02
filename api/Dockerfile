@@ -5,10 +5,10 @@ FROM node:14.14.0-alpine
 RUN mkdir -p /app/api
 
 # Change directory so that our commands run inside this new directory
-WORKDIR "/app/api"
+WORKDIR /app/api
 
 # Copy dependency definitions
-COPY package*.json /app/api/
+COPY package.json /app/api/
 
 # Install dependecies
 RUN npm install
@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 8090
 
 # Serve the app
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]
