@@ -27,7 +27,9 @@
               "src/styles/style.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["./src/styles/shared-flowstream-style"]
+              "includePaths": [
+                "./src/styles/shared-flowstream-style"
+              ]
             },
             "scripts": []
           },
@@ -150,5 +152,8 @@
     "@ngrx/schematics:component": {
       "styleext": "scss"
     }
+  },
+  "cli": {
+    "analytics": "13e4621d-d8fb-450a-852d-2baf0b9b116d"
   }
 }
