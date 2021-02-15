@@ -22,6 +22,7 @@ import { environment } from './environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
+    SelectConfirmationModalComponent
   ],
   imports: [
     UtilsModule,
@@ -38,6 +39,9 @@ import { environment } from './environments/environment';
     RouterModule,
     HttpClientModule,
     !environment.production ? StoreDevtoolsModule.instrument() : []
+  ],
+  entryComponents: [
+    SelectConfirmationModalComponent
   ],
   bootstrap: [AppComponent]
 })
