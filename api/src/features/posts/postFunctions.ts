@@ -33,7 +33,7 @@ export class PostFunctions {
         const reqPost = req.body.newPost;
 
         return new Promise(async (resolve, reject) => {
-            const newPost: IPost = await new mongoose.Document() as IPost;
+            const newPost: IPost = new Post() as IPost;
             newPost._id = new mongoose.Types.ObjectId();
             newPost.users = reqPost.users;
             const title = reqPost.contents.find((content) => content.mainType === 'TEXT').source;

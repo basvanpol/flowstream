@@ -92,7 +92,7 @@ passport.use(new TwitterStrategy({
                             token.tokenSecret = twitterTokenSecret;
                             token.save();
                         } else {
-                            const newToken: IToken = new mongoose.Document() as IToken;
+                            const newToken: IToken = new Token() as IToken;
                             newToken._user = existingUser._id;
                             newToken.tokenType = 'TWITTER';
                             newToken.token = twitterToken;
@@ -104,14 +104,14 @@ passport.use(new TwitterStrategy({
                 } else {
                     //we don't have that user, save the user
 
-                    const newUser: IUser = new mongoose.Document() as IUser;
+                    const newUser: IUser = new User() as IUser;
                     newUser._id = new mongoose.Types.ObjectId();
                     newUser.twitter.twitterId = profile.id;
                     newUser.twitter.token = twitterToken;
                     newUser.twitter.tokenSecret = twitterTokenSecret;
                     newUser.save();
 
-                    const newToken: IToken = new mongoose.Document() as IToken;
+                    const newToken: IToken = new Token() as IToken;
                     newToken._user = newUser._id;
                     newToken.tokenType = 'TWITTER';
                     newToken.token = twitterToken;
@@ -145,7 +145,7 @@ passport.use(
             done(null, existingUser);
         } else {
             //we don't have that user, save the user
-            const newUser: IUser = new mongoose.Document() as IUser;
+            const newUser: IUser = new User() as IUser;
             newUser.google.googleId = profile.id
             newUser.save();
             done(null, newUser);

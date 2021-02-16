@@ -77,7 +77,8 @@ export class FeedFunctions {
 
     constructor() { }
 
-    handleFeed = async (req, res, finalCB) => {
+    handleFeed = async (req, res) => {
+        console.log('aloha');
         this.groups = req.body.groups;
         this.numGroups = this.groups.length;
         this.processedGroups = 0;
@@ -111,7 +112,7 @@ export class FeedFunctions {
                     resolve('found feed');
                 } else {
                     // const newFeed = await new Feed();
-                    const newFeed: IFeed = new mongoose.Document() as IFeed;
+                    const newFeed: IFeed = new UserFeedSubscription() as IFeed;
                     newFeed._id = new mongoose.Types.ObjectId();
                     newFeed.feedName = requestFeed.feedName;
                     newFeed.feedId = requestFeed.feedId;
@@ -137,7 +138,7 @@ export class FeedFunctions {
 
 
 
-    removeFeature = (req, res, finalCB) => {
+    removeFeature = (req, res) => {
         return new Promise(async (resolve, reject) => {
             const userId = req.user._id;
 
@@ -189,7 +190,7 @@ export class FeedFunctions {
         });
     }
 
-    savefeature = (req, res, finalCB) => {
+    savefeature = (req, res) => {
         return new Promise((resolve, reject) => {
             if (this.groups.length > 0) {
                 const userId = req.user._id;
@@ -228,7 +229,7 @@ export class FeedFunctions {
                                 resolve(' saved feature');
                             }
                         } else {
-                            const newFeedFeature: IFeateredFeed = await new mongoose.Document() as IFeateredFeed
+                            const newFeedFeature: IFeateredFeed = new FeedFeature() as IFeateredFeed
                             newFeedFeature._id = new mongoose.Types.ObjectId();
                             newFeedFeature._feed = this.feedObjectId;
                             newFeedFeature._user = this.userId;
@@ -255,7 +256,8 @@ export class FeedFunctions {
         })
     }
 
-    handleUser = (req, res, finalCB) => {
+    handleUser = (req, res) => {
+      console.log('handle user');
         return new Promise((resolve, reject) => {
             User.findOne({ '_id': this.userId }, async (err, user) => {
                 if (err) {
@@ -331,17 +333,20 @@ export class FeedFunctions {
     createUserSubscription(user, groupId, res) {
 
         return new Promise((resolve, reject) => {
-            UserFeedSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userFeedSubscription) => {
-                if (!userFeedSubscription) {
-                    const userFeedSubscription: IUserFeedSubscription = await new mongoose.Document() as IUserFeedSubscription;
+          UserFeedSubscription.findOne({ '_feed': this.feedObjectId, '_group': groupId, '_user': this.userId }, async (err, userFeedSubscription) => {
+              console.log('fins subscription')
+              if (!userFeedSubscription) {
+                  console.log('no subscription found')
+                    const userFeedSubscription: IUserFeedSubscription =  new UserFeedSubscription() as IUserFeedSubscription;
                     userFeedSubscription._id = new mongoose.Types.ObjectId();
                     userFeedSubscription._feed = this.feedObjectId;
                     userFeedSubscription._user = this.userId;
                     userFeedSubscription._group = groupId;
-                    await userFeedSubscription.save((err) => {
+                    userFeedSubscription.save((err) => {
                         if (err) {
                             reject('err.message')
                         }
+                        console.log('save userFeedSubscription ', userFeedSubscription);
                         resolve(userFeedSubscription);
                     });
                 }
@@ -408,7 +413,8 @@ export class FeedFunctions {
     //     return user;
     // }
 
-    handleSubscription = (req, res, finalCB) => {
+    handleSubscription = (req, res) => {
+      console.log('handle subscription');
         this.processedGroups = 0;
         return new Promise((resolve, reject) => {
             Subscription.findOne({ 'feed': this.feedObjectId }, async (err, subscription) => {
@@ -433,7 +439,7 @@ export class FeedFunctions {
                     });
                     resolve('subscription updated');
                 } else {
-                    const newSubscription : ISubscription = await new mongoose.Document() as ISubscription;
+                    const newSubscription : ISubscription = new UserFeedSubscription() as ISubscription;
                     newSubscription._id = new mongoose.Types.ObjectId();
                     newSubscription.feed = this.feedObjectId;
                     // newSubscription.memberCount = this.numFeedSubscriptionMutation;
@@ -454,7 +460,7 @@ export class FeedFunctions {
 
     }
 
-    getAllFeeds = (req, res) => {
+    getAllFeaturedFeeds = (req, res) => {
         this.userId = req.user._id;
         this.isUserFeedAdmin = (req.user && req.user.permissions && req.user.permissions.feeds && req.user.permissions.feeds === UserRoles.ADMIN);
         return new Promise(async (resolve, reject) => {

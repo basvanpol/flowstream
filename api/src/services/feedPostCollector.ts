@@ -21,7 +21,7 @@ let latestTenFeedPosts = {};
 const initFeedPostCollector = () => {
     // first get tokens
     getFeedPosts();
-    setInterval(() => getFeedPosts(), feedPostTimer);
+    // setInterval(() => getFeedPosts(), feedPostTimer);
 }
 
 const getUser = async (id) => {

@@ -37,7 +37,7 @@ export default (app) => {
                     });
                     // save flow
                 } else {
-                    const newGroup: IGroup = new mongoose.Document() as IGroup;
+                    const newGroup: IGroup = new Group() as IGroup;
                     newGroup._id = new mongoose.Types.ObjectId();
                     newGroup._user = req.user._id;
                     newGroup.title = req.body.title;
