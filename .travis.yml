@@ -6,6 +6,7 @@ script:
     - docker build -t basvanpol/fs-client ./client
     - docker build -t basvanpol/fs-api ./api
     - docker build -t basvanpol/fs-nginx ./nginx
+
     # login to docker cli
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # push these images to docker hub
@@ -14,14 +15,13 @@ script:
     - docker push basvanpol/fs-nginx:latest
 
 deploy:
-    edge: true
     provider: elasticbeanstalk
-    region: ap-southeast-2
-    app: Flowstream
-    env: Flowstream-env
-    bucket_name: elasticbeanstalk-ap-southeast-2-747446493647
-    bucket_path: Flowstream
+    region: "ap-southeast-2"
+    app: "flowstream-web"
+    env: "Flowstreamweb-env"
+    bucket_name: "elasticbeanstalk-ap-southeast-2-747446493647"
+    bucket_path: "flowstream-web"
     on: 
       branch: master
     access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
+    secret_access_key: "$AWS_SECRET_KEY"
