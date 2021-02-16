@@ -4,7 +4,6 @@ import { GroupVM } from '../../../models/group';
 import { areArraysUnequal } from '../../../utils/comparative.methods';
 import * as GroupActions from '../../../store/group/actions/group.actions';
 import { FeedState } from '../../../store/feed/reducers/feed.reducer';
-import { IGroupState } from '../../../store/group/reducers/group.reducer';
 import { DefaultFormComponent } from '../../shared/default-form/default-form.component';
 import { FeedSubscription } from '../../../models/feed';
 import { IAuthState } from '../../../store/auth/reducers/auth.reducer';
@@ -12,10 +11,17 @@ import * as FeedActions from '../../../store/feed/actions/feed.actions';
 import { Subscription } from 'rxjs';
 import * as TwitterActions from '../../../store/twitter/actions/twitter.actions';
 import { TwitterState } from '../../../store/twitter/reducers/twitter.reducer';
-import { Store } from '@ngrx/store';
+import { Store , select} from '@ngrx/store';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm, FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { IAppState } from 'src/app/store/app/app.state';
+import { getTwitterState } from 'src/app/store/twitter/selectors/twitter.selectors';
+import { getAuthState } from '../../../store/auth/selectors/auth.selectors';
+import { IGroupState } from 'src/app/store/group/reducers/group.reducer';
+import { getFeedsState } from 'src/app/store/feed/selectors/feed.selectors';
+import { getGroupState } from 'src/app/store/group/selectors/group.selectors';
 
 @Component({
   selector: 'app-add-feed',
@@ -46,7 +52,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
   public isLoading = false;
 
   constructor(
-    private store: Store<TwitterState | IAuthState>,
+    private store: Store<IAppState>,
     public dialogRef: MatDialogRef<AddFeedComponent>,
     public selectConfirmDialog: MatDialog) {
     super();
@@ -54,20 +60,18 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
 
   ngOnInit() {
 
-    this.twitterSubscription = this.store.select('twitter')
-      .subscribe((state: TwitterState) => {
-        this.searchFeedsData = state.searchFeedsResult.data;
-      });
+    this.store.pipe(untilDestroyed(this), select(getTwitterState)).subscribe((state: TwitterState) => {
+      this.searchFeedsData = state.searchFeedsResult.data;
+    });
 
-    this.authSubscription = this.store.select('auth')
-      .subscribe((state: IAuthState) => {
-        this.authState = state;
-        this.mapFeedSubscriptions(this.authState.feedSubscriptions);
-        this.setSubscribed();
-      });
+    this.store.pipe(untilDestroyed(this), select(getAuthState)).subscribe((state: IAuthState) => {
+      this.authState = state;
+      this.mapFeedSubscriptions(this.authState.feedSubscriptions);
+      this.setSubscribed();
+    });
 
 
-    this.groupsSubscription = this.store.select('group').subscribe((state: IGroupState) => {
+    this.store.pipe(untilDestroyed(this), select(getGroupState)).subscribe((state: IGroupState) => {
       this.groupState = state;
       this.selectedAdminGroup = this.groupState.selectedAdminGroup;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
@@ -99,7 +103,7 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
       }
     });
 
-    this.feedStateSubscription = this.store.select('feeds').subscribe((state: FeedState) => {
+    this.store.pipe(untilDestroyed(this), select(getFeedsState)).subscribe((state: FeedState) => {
       this.feedState = state;
       if (!this.feedState.featuredFeeds) {
         this.store.dispatch(new FeedActions.GetFeatureFeeds());
@@ -344,10 +348,6 @@ export class AddFeedComponent extends DefaultFormComponent implements OnInit, On
   }
 
   ngOnDestroy() {
-    this.feedStateSubscription.unsubscribe();
-    this.groupsSubscription.unsubscribe();
-    this.authSubscription.unsubscribe();
-    this.twitterSubscription.unsubscribe();
   }
 
 }

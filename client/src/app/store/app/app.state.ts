@@ -3,11 +3,15 @@ import { IFrontPageState } from './../frontpage/reducers/frontpage.reducers';
 import { IAuthState } from './../auth/reducers/auth.reducer';
 import { IFlowState } from './../flow/reducers/flow.reducers';
 import { IGroupState } from '../group/reducers/group.reducer';
+import { FeedState } from '../feed/reducers/feed.reducer';
+import { TwitterState } from '../twitter/reducers/twitter.reducer';
 
 export interface IAppState {
   flows: IFlowState;
   auth: IAuthState;
   frontpage: IFrontPageState;
-  group: IGroupState;
+  twitter: TwitterState;
+  groups: IGroupState;
   posts: PostsState;
+  feeds: FeedState;
 }

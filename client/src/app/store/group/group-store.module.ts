@@ -10,7 +10,7 @@ import { GroupFacade } from './facade/group.facade';
   declarations: [],
   imports: [
     CommonModule,
-    StoreModule.forFeature('group', fromGroup.reducer),
+    StoreModule.forFeature('groups', fromGroup.reducer),
     EffectsModule.forFeature([GroupEffects])
   ],
   providers: [GroupEffects, GroupFacade]

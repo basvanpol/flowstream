@@ -1,13 +1,16 @@
 import { IconTypes, defaultSvgClass } from './../../../models/icon';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GroupVM } from '../../../models/group';
-import { IGroupState } from '../../../store/group/reducers/group.reducer';
 import { Subscription } from 'rxjs';
 import * as GroupActions from '../../../store/group/actions/group.actions';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DefaultFormComponent } from '../../shared/default-form/default-form.component';
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { IAppState } from 'src/app/store/app/app.state';
+import { getGroupState } from 'src/app/store/group/selectors/group.selectors';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { IGroupState } from '../../../store/group/reducers/group.reducer';
 
 @Component({
   selector: 'app-add-group',
@@ -53,7 +56,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
       isNewItem: boolean,
       selectedGroup: GroupVM
     },
-    private store: Store<IGroupState>,
+    private store: Store<IAppState>,
     private matDialogRef: MatDialogRef<AddGroupComponent>) {
     super();
   }
@@ -69,7 +72,7 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
       this.selectedIconId = this.data.selectedGroup.icon.value;
     }
 
-    this.groupSubscription = this.store.select('group').subscribe((state: IGroupState) => {
+    this.store.pipe(untilDestroyed(this), select(getGroupState)).subscribe((state: IGroupState) => {
       this.groupState = state;
       this.saveGroupSuccess = this.groupState.saveGroupSuccess;
       if (this.saveGroupSuccess) {
@@ -133,7 +136,6 @@ export class AddGroupComponent extends DefaultFormComponent implements OnInit, O
   }
 
   ngOnDestroy() {
-    this.groupSubscription.unsubscribe();
   }
 
 }

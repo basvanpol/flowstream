@@ -1,5 +1,4 @@
 import { UtilsModule } from './components/utils/utils.module';
-import { SelectConfirmationModalComponent } from './components/shared/modals/select-confirmation-modal/select-confirmation-modal.component';
 import { AuthGuard } from './services/guards/auth-guard.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RoutesModule } from './routes/routes.module';
@@ -22,7 +21,6 @@ import { environment } from './environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
-    SelectConfirmationModalComponent
   ],
   imports: [
     UtilsModule,
@@ -39,9 +37,6 @@ import { environment } from './environments/environment';
     RouterModule,
     HttpClientModule,
     !environment.production ? StoreDevtoolsModule.instrument() : []
-  ],
-  entryComponents: [
-    SelectConfirmationModalComponent
   ],
   bootstrap: [AppComponent]
 })

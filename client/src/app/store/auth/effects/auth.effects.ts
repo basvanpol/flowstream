@@ -13,13 +13,14 @@ export class AuthEffects {
 
   @Effect()
   getUser = this.actions$
-    .ofType(AuthActions.AuthActionTypes.GET_USER)
-    .pipe(switchMap((action: AuthActions.GetUser) => {
-      return this.http.get('/api/current_user', {
-        observe: 'body',
-        responseType: 'json'
-      });
-    }),
+    .pipe(
+      ofType(AuthActions.AuthActionTypes.GET_USER),
+      switchMap((action: AuthActions.GetUser) => {
+        return this.http.get('/api/current_user', {
+          observe: 'body',
+          responseType: 'json'
+        });
+      }),
       take(1),
       switchMap((result) => {
         if (!result) {

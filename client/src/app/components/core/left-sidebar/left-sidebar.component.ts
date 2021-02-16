@@ -14,6 +14,8 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GroupFacade } from 'src/app/store/group/facade/group.facade';
 import { IAppState } from 'src/app/store/app/app.state';
+import { getAuthState } from '../../../store/auth/selectors/auth.selectors';
+
 
 interface IMappedFeedGroup {
   group: GroupVM;
@@ -54,7 +56,7 @@ export class LeftSidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userSubscription = this.store.pipe(untilDestroyed(this), select('auth')).subscribe((state: IAuthState) => {
+    this.store.pipe(untilDestroyed(this), select(getAuthState)).subscribe((state: IAuthState) => {
       this.authState = state;
       this.parseFeedSubscriptions(this.authState.feedSubscriptions);
     });

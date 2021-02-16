@@ -252,7 +252,7 @@ export class ParserService {
 
       const content = {
         ...c
-      }
+      };
 
       const contentType = content.type;
       if (contentType.search("IMAGE") > -1) {

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { IAuthState } from './store/auth/reducers/auth.reducer';
 import { getAuthState } from './store/auth/selectors/auth.selectors';
 import { untilDestroyed } from 'ngx-take-until-destroy';
-import { IAppState } from './store/flow/selectors/flow.selectors';
+import { IAppState } from 'src/app/store/app/app.state';
 
 @Component({
   selector: 'app-root',
