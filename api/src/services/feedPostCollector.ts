@@ -1,6 +1,17 @@
 const mongoose = require('mongoose');
 var cheerio = require("cheerio");
-const Metascraper = require('metascraper')
+const metascraper = require('metascraper')([
+    require('metascraper-author')(),
+    require('metascraper-date')(),
+    require('metascraper-description')(),
+    require('metascraper-image')(),
+    require('metascraper-logo')(),
+    require('metascraper-clearbit')(),
+    require('metascraper-publisher')(),
+    require('metascraper-title')(),
+    require('metascraper-url')()
+])
+const got = require('got');
 var request = require('request');
 require('./../dbmodels/Subscription');
 require('./../dbmodels/User');
@@ -21,7 +32,7 @@ let latestTenFeedPosts = {};
 const initFeedPostCollector = () => {
     // first get tokens
     getFeedPosts();
-    // setInterval(() => getFeedPosts(), feedPostTimer);
+    setInterval(() => getFeedPosts(), feedPostTimer);
 }
 
 const getUser = async (id) => {
@@ -189,7 +200,7 @@ const getFeedPosts = async () => {
                         // console.log('save it', newPost);
                         await newPost.save((err) => {
                             if (err) {
-                                if (err) { 
+                                if (err) {
                                     // console.log(err) 
                                 }
                             }
@@ -211,7 +222,7 @@ const getFeedPosts = async () => {
                 if (!subscription.sinceId || (subscription.sinceId && subscription.sinceId.toString() !== sinceId.toString())) {
                     subscription.sinceId = sinceId;
                     await subscription.save((err) => {
-                        if (err) { 
+                        if (err) {
                             // console.log(err) 
                         }
                     })
@@ -230,6 +241,8 @@ const parseContent = (oData: any, key: any) => {
         const entities = oData[key].entities;
         let imageFound = false;
         let scrapedContent;
+
+        console.log('entities', entities);
 
         if (entities.urls) {
             const urls = entities.urls;
@@ -254,8 +267,14 @@ const parseContent = (oData: any, key: any) => {
             aContent.push(oText);
         }
 
+        let imageUrl;
+        if (entities.media) {
+            imageUrl = entities.media[0] ? (entities.media[0].media_url) ? entities.media[0].media_url : null : null;
+        }
 
-        const imageUrl = (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : '';
+        if (!imageUrl) {
+            imageUrl = (scrapedContent && scrapedContent.imageUrl) ? scrapedContent.imageUrl : '';
+        }
 
         if (!!imageUrl) {
             imageFound = true;
@@ -283,7 +302,7 @@ const parseContent = (oData: any, key: any) => {
 
 }
 
-const getScrapedContent = async (url, sType) => {
+const getScrapedContent = async (toParseUrl, sType) => {
 
     var imageUrl;
     var title;
@@ -293,7 +312,10 @@ const getScrapedContent = async (url, sType) => {
     return new Promise(async (resolve, reject) => {
         let metadata;
         try {
-            metadata = await Metascraper.scrapeUrl(url);
+            const { body: html, url } = await got(toParseUrl)
+            metadata = await metascraper({ html, url })
+            console.log(metadata);
+            // metadata = await Metascraper.scrapeUrl(url);
         } catch (e) {
             /// console.log('meta data error');
             return reject('meta data error');
@@ -314,13 +336,15 @@ const getScrapedContent = async (url, sType) => {
                     const indirectArticleUrl = aUrl[0];
 
                     try {
+                        const { body: html, url } = await got(indirectArticleUrl)
+                        metadata = await metascraper({ html, url })
                         /// console.log('redirected media', indirectArticleUrl);
-                        Metascraper.scrapeUrl(indirectArticleUrl).then(value => {
-                            // console.log('yeah!', value);
-                            redirectedMetadata = value;
-                        }, reason => {
-                            // console.log('oh no!');
-                        });
+                        // Metascraper.scrapeUrl(indirectArticleUrl).then(value => {
+                        //     // console.log('yeah!', value);
+                        //     redirectedMetadata = value;
+                        // }, reason => {
+                        //     // console.log('oh no!');
+                        // });
                     }
                     catch (e) {
                         // console.log('meta scraper error', e);
@@ -336,7 +360,7 @@ const getScrapedContent = async (url, sType) => {
                     if (metadata.image) {
                         imageUrl = metadata.image;
                     } else {
-                        request(url, function (error, response, body) {
+                        request(toParseUrl, function (error, response, body) {
                             if (!error) {
                                 var $ = cheerio.load(body);
                                 var $image;
@@ -364,7 +388,7 @@ const getScrapedContent = async (url, sType) => {
                     imageUrl = metadata.image;
                 } else {
                     // imageUrl = "";
-                    request(url, function (error, response, body) {
+                    request(toParseUrl, function (error, response, body) {
                         if (!error) {
                             var $ = cheerio.load(body);
                             var $image;
