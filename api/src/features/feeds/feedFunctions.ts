@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import { resolve } from 'url';
 import { UserRoles } from '../../tsmodels/userRoles';
-import { IUser } from '../../../../client/src/app/models/user';
 
 const Feed = mongoose.model('Feed');
 const FeedFeature = mongoose.model('FeedFeature');
