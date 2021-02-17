@@ -459,88 +459,90 @@ export class FeedFunctions {
 
     }
 
-    getAllFeaturedFeeds = (req, res) => {
-        this.userId = req.user._id;
-        this.isUserFeedAdmin = (req.user && req.user.permissions && req.user.permissions.feeds && req.user.permissions.feeds === UserRoles.ADMIN);
-        return new Promise(async (resolve, reject) => {
-            /**
-             * first, find all users that have admin permissions for feeds.
-             */
-            if (!this.adminUserIds || this.adminUserIds.length === 0) {
-                const adminUsers = await User.find({ 'permissions.feeds': UserRoles.ADMIN }, (err, users) => {
-                    if (err) {
-                        res.status(500).send('Something broke!')
-                    }
-                    return users;
-                });
-                if (!!adminUsers && adminUsers.length > 0) {
-                    this.adminUserIds = adminUsers.map(adminUser => adminUser._id);
-                };
-            }
 
-            let userIds = [];
-            if (this.isUserFeedAdmin) {
-                userIds = [...this.adminUserIds];
-            } else {
-                userIds = [...this.adminUserIds, req.user._id];
-            }
 
-            FeedFeature.find({ '_user': { $in: userIds }, 'active': true }).
-                populate('_feed').
-                exec((err, featuredFeeds: IFeateredFeed[]) => {
-                    if (err) {
-                        if (!this.errorSend) {
-                            reject('Something broke!');
-                            res.status(500).send('Something broke!')
-                            this.errorSend = true;
-                        }
-                    }
-                    if (featuredFeeds) {
-                        const mappedFeatureFeeds = featuredFeeds.map(featuredFeed => {
-                            // console.log('featuredFeed', featuredFeed);
-                            return {
-                                ...featuredFeed._doc,
-                                canUserEdit: ((this.isUserFeedAdmin && this.adminUserIds.includes(featuredFeed._user)) || featuredFeed._user.toString() === this.userId.toString())
-                            }
-                        })
-                        // console.log('featuredFeeds', featuredFeeds);
-                        // console.log('mappedFeatureFeeds', mappedFeatureFeeds);
-                        User.findOne({ '_id': this.userId })
-                            .exec((err, user: IUserDocument) => {
-                                if (err) {
-                                    if (!this.errorSend) {
-                                        reject('Something broke!');
-                                        res.status(500).send('Something broke!')
-                                        this.errorSend = true;
-                                    }
-                                }
-                                if (user) {
-                                    UserFeedSubscription.find({ '_user': req.user.id })
-                                        .populate('_feed')
-                                        .populate('_group')
-                                        .exec(async (err, userSubscriptions: IUserFeedSubscription[]) => {
-                                            user.feedSubscriptions = userSubscriptions;
-                                            // res.status(200).send(currentUser);
-                                            this.updatedUser = user;
-                                            res.status(200).send({
-                                                'message': 'all good in the hood', data: {
-                                                    user: this.updatedUser,
-                                                    featuredFeeds: [...mappedFeatureFeeds]
-                                                }
-                                            });
-                                        });
+    getAllFeeds = (req, res) => {
+      this.userId = req.user._id;
+      this.isUserFeedAdmin = (req.user && req.user.permissions && req.user.permissions.feeds && req.user.permissions.feeds === UserRoles.ADMIN);
+      return new Promise(async (resolve, reject) => {
+          /**
+           * first, find all users that have admin permissions for feeds.
+           */
+          if (!this.adminUserIds || this.adminUserIds.length === 0) {
+              const adminUsers = await User.find({ 'permissions.feeds': UserRoles.ADMIN }, (err, users) => {
+                  if (err) {
+                      res.status(500).send('Something broke!')
+                  }
+                  return users;
+              });
+              if (!!adminUsers && adminUsers.length > 0) {
+                  this.adminUserIds = adminUsers.map(adminUser => adminUser._id);
+              };
+          }
 
-                                }
-                            })
+          let userIds = [];
+          if (this.isUserFeedAdmin) {
+              userIds = [...this.adminUserIds];
+          } else {
+              userIds = [...this.adminUserIds, req.user._id];
+          }
 
-                    } else {
-                        const errorMessage = 'Shizzle my nizze, no featured feeds here';
-                        reject(errorMessage);
-                        res.status(500).send(errorMessage);
-                    }
-                });
-        })
-    }
+          FeedFeature.find({ '_user': { $in: userIds }, 'active': true }).
+              populate('_feed').
+              exec((err, featuredFeeds: IFeateredFeed[]) => {
+                  if (err) {
+                      if (!this.errorSend) {
+                          reject('Something broke!');
+                          res.status(500).send('Something broke!')
+                          this.errorSend = true;
+                      }
+                  }
+                  if (featuredFeeds) {
+                      const mappedFeatureFeeds = featuredFeeds.map(featuredFeed => {
+                          // console.log('featuredFeed', featuredFeed);
+                          return {
+                              ...featuredFeed._doc,
+                              canUserEdit: ((this.isUserFeedAdmin && this.adminUserIds.includes(featuredFeed._user)) || featuredFeed._user.toString() === this.userId.toString())
+                          }
+                      })
+                      // console.log('featuredFeeds', featuredFeeds);
+                      // console.log('mappedFeatureFeeds', mappedFeatureFeeds);
+                      User.findOne({ '_id': this.userId })
+                          .exec((err, user: IUserDocument) => {
+                              if (err) {
+                                  if (!this.errorSend) {
+                                      reject('Something broke!');
+                                      res.status(500).send('Something broke!')
+                                      this.errorSend = true;
+                                  }
+                              }
+                              if (user) {
+                                  UserFeedSubscription.find({ '_user': req.user.id })
+                                      .populate('_feed')
+                                      .populate('_group')
+                                      .exec(async (err, userSubscriptions: IUserFeedSubscription[]) => {
+                                          user.feedSubscriptions = userSubscriptions;
+                                          // res.status(200).send(currentUser);
+                                          this.updatedUser = user;
+                                          res.status(200).send({
+                                              'message': 'all good in the hood', data: {
+                                                  user: this.updatedUser,
+                                                  featuredFeeds: [...mappedFeatureFeeds]
+                                              }
+                                          });
+                                      });
+
+                              }
+                          })
+
+                  } else {
+                      const errorMessage = 'Shizzle my nizze, no featured feeds here';
+                      reject(errorMessage);
+                      res.status(500).send(errorMessage);
+                  }
+              });
+      })
+  }
 
 }
 
