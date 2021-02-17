@@ -27,7 +27,7 @@ export default (app) => {
                 //     // save flow
                 // } else {
                 
-                const newFlow: IFlow = await Flow() as IFlow;
+                const newFlow: IFlow = new Flow() as IFlow;
                 newFlow._id = new mongoose.Types.ObjectId();
                 newFlow._user = req.user._id;
                 newFlow.title = (req.body.title) ? req.body.title : req.body.flowTitle;
