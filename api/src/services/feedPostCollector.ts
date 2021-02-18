@@ -96,7 +96,7 @@ const getFeedPosts = async () => {
                                     (err, data, result) => {
                                         // console.log('with since id', feed_id);
                                         if (err) {
-                                            console.error(err);
+                                            // console.error(err);
                                         } else {
                                             parseTwitterPostsData(currentSubscription, feed_id, data);
                                         }
@@ -242,7 +242,7 @@ const parseContent = (oData: any, key: any) => {
         let imageFound = false;
         let scrapedContent;
 
-        console.log('entities', entities);
+        // console.log('entities', entities);
 
         if (entities.urls) {
             const urls = entities.urls;
@@ -314,7 +314,7 @@ const getScrapedContent = async (toParseUrl, sType) => {
         try {
             const { body: html, url } = await got(toParseUrl)
             metadata = await metascraper({ html, url })
-            console.log(metadata);
+            // console.log(metadata);
             // metadata = await Metascraper.scrapeUrl(url);
         } catch (e) {
             /// console.log('meta data error');

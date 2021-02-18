@@ -1,5 +1,5 @@
 # Create image based on the official Node 6 image from the dockerhub
-FROM node:12.14.1
+FROM node:14.15.4
 
 # Create a directory where our app will be placed
 RUN mkdir -p /app/api

@@ -45,7 +45,7 @@ export class AuthGuard implements CanActivate {
           }
         }),
         tap((result: fromAuth.IAuthState) => {
-          console.log('result', result);
+          // console.log('result', result);
           if (result && result.authenticated && result._id) {
             return result;
           } else if (result.isAuthenticating) {
