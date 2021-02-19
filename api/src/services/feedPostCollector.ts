@@ -255,7 +255,7 @@ const parseContent = (oData: any, key: any) => {
                     /// console.log('scrapedContent', scrapedContent);
                 }
                 catch (error) {
-                    console.error(error);
+                    // console.error(error);
                     reject('Parse Error');
                 }
             }
