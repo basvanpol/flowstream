@@ -111,7 +111,7 @@ export class FeedFunctions {
                     resolve('found feed');
                 } else {
                     // const newFeed = await new Feed();
-                    const newFeed: IFeed = new UserFeedSubscription() as IFeed;
+                    const newFeed: IFeed = await new Feed() as IFeed;
                     newFeed._id = new mongoose.Types.ObjectId();
                     newFeed.feedName = requestFeed.feedName;
                     newFeed.feedId = requestFeed.feedId;

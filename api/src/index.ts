@@ -10,6 +10,7 @@ import * as cors from 'cors';
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const v8 = require('v8');
 require('dotenv').config();
 
 const graphqlHttp = require('express-graphql');
@@ -55,9 +56,18 @@ mongoose.connect(process.env.mongoURI, {
 
 if (cluster.isMaster) {
     cluster.fork();
-    cluster.fork();
-    cluster.fork();
-    cluster.fork();
+    cluster.on('exit', (deadWorker, code, signal) => {
+        // Restart the worker
+        let worker = cluster.fork();
+        
+        // Note the process IDs
+        let newPID = worker.process.pid;
+        let oldPID = deadWorker.process.pid;
+        
+        // Log the event
+        console.log('worker ' + oldPID + ' died.');
+        console.log('worker ' + newPID + ' born.');
+      });
     collector.initFeedPostCollector();
 } else {
 
@@ -111,7 +121,21 @@ if (cluster.isMaster) {
 
     //const PORT = process.env.PORT || 6000;
 
-
+    const initialStats = v8.getHeapStatistics();
+  
+    const totalHeapSizeThreshold = initialStats.heap_size_limit * 85 / 100;
+    console.log("totalHeapSizeThreshold: " + totalHeapSizeThreshold);
+    
+    let detectHeapOverflow = () => {
+      let stats = v8.getHeapStatistics();
+      
+      console.log("total_heap_size: " + (stats.total_heap_size));
+      
+      if ((stats.total_heap_size) > totalHeapSizeThreshold) {
+        process.exit();
+      }
+    };
+    setInterval(detectHeapOverflow, 6000);
 
     const PORT = 8090;
     app.listen(PORT);
