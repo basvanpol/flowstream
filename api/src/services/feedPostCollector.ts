@@ -183,7 +183,7 @@ const getFeedPosts = async () => {
                         aContent = [];
                     }
 
-                    const newPost = await new Post();
+                    const newPost = new Post();
                     newPost.feedId = feedId;
                     newPost.date = new Date(postData.created_at);
                     newPost.contents = aContent;
@@ -198,18 +198,18 @@ const getFeedPosts = async () => {
                     // save new post, but only if there's content. RT's often don't have any content, so don't save them.
                     if (newPost.contents.length > 0) {
                         // console.log('save it', newPost);
-                        await newPost.save((err) => {
+                        newPost.save((err) => {
                             if (err) {
                                 if (err) {
-                                    // console.log(err) 
+                                    console.log(err) 
                                 }
                             }
                         })
                     } else {
-                        // console.log('dont save it', newPost);
+                        console.log('dont save it', newPost);
                     }
                 } else {
-                    // console.log(' hey maar, toch n dubbele!', postData.text);
+                    console.log(' hey maar, toch n dubbele!', postData.text);
                 }
             }
 
@@ -256,7 +256,7 @@ const parseContent = (oData: any, key: any) => {
                 }
                 catch (error) {
                     // console.error(error);
-                    reject('Parse Error');
+                    return reject('Parse Error');
                 }
             }
         }

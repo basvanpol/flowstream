@@ -55,8 +55,8 @@ mongoose.connect(process.env.mongoURI, {
 });
 
 if (cluster.isMaster) {
-    cluster.fork();
-    cluster.on('exit', (deadWorker, code, signal) => {
+    const clusterFork = cluster.fork();
+    clusterFork.on('exit', (deadWorker, code, signal) => {
         // Restart the worker
         let worker = cluster.fork();
         
