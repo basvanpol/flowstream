@@ -438,7 +438,7 @@ export class FeedFunctions {
                     });
                     resolve('subscription updated');
                 } else {
-                    const newSubscription : ISubscription = new UserFeedSubscription() as ISubscription;
+                    const newSubscription : ISubscription = new Subscription() as ISubscription;
                     newSubscription._id = new mongoose.Types.ObjectId();
                     newSubscription.feed = this.feedObjectId;
                     // newSubscription.memberCount = this.numFeedSubscriptionMutation;

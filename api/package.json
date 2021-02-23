@@ -43,6 +43,7 @@
     "metascraper-title": "^5.18.4",
     "metascraper-url": "^5.18.4",
     "mongoose": "^5.11.13",
+    "node-fetch": "^2.6.1",
     "nodemailer": "^4.6.2",
     "oauth": "^0.9.15",
     "passport": "^0.4.0",

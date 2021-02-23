@@ -1,5 +1,8 @@
+import { clear } from "console";
+
 const mongoose = require('mongoose');
 var cheerio = require("cheerio");
+var fetch = require("node-fetch");
 const metascraper = require('metascraper')([
     require('metascraper-author')(),
     require('metascraper-date')(),
@@ -57,14 +60,16 @@ const getFeedPosts = async () => {
     const tokens = await Token.find({}).limit(2);
     let subQueue = [];
     if (tokens && tokens.length > 0) {
-        // console.log('token!', tokens);
+        console.log('token!', tokens);
         Subscription.find({ memberCount: { $gt: 0 } }, async (err, subscriptions) => {
             if (err) {
                 console.log('something went wrong when searching subscription');
             }
+            // console.log('subscriptions', subscriptions);
             feedPostTimer = Math.floor((15 * 60 * 1000) / Math.floor(900 / subscriptions.length));
             subQueue = subscriptions;
             let tokenIndex = 0;
+            console.log(' subQueue.length', subQueue.length);
             if (subQueue.length > 0) {
 
                 while (subQueue.length > 0) {
@@ -183,6 +188,8 @@ const getFeedPosts = async () => {
                         aContent = [];
                     }
 
+                    console.log('aContent', aContent);
+
                     const newPost = new Post();
                     newPost.feedId = feedId;
                     newPost.date = new Date(postData.created_at);
@@ -201,7 +208,7 @@ const getFeedPosts = async () => {
                         newPost.save((err) => {
                             if (err) {
                                 if (err) {
-                                    console.log(err) 
+                                    console.log(err)
                                 }
                             }
                         })
@@ -338,7 +345,7 @@ const getScrapedContent = async (toParseUrl, sType) => {
                     try {
                         const { body: html, url } = await got(indirectArticleUrl)
                         metadata = await metascraper({ html, url })
-                        /// console.log('redirected media', indirectArticleUrl);
+                        console.log('metadata!! : ', metadata);
                         // Metascraper.scrapeUrl(indirectArticleUrl).then(value => {
                         //     // console.log('yeah!', value);
                         //     redirectedMetadata = value;
@@ -353,33 +360,29 @@ const getScrapedContent = async (toParseUrl, sType) => {
 
                     // console.log('redirectedMetadata', redirectedMetadata);
 
-                    if (redirectedMetadata) {
-                        imageUrl = redirectedMetadata.image;
+                    if (metadata) {
+                        imageUrl = metadata.image;
                     }
                 } else {
                     if (metadata.image) {
                         imageUrl = metadata.image;
                     } else {
-                        request(toParseUrl, function (error, response, body) {
-                            if (!error) {
-                                var $ = cheerio.load(body);
-                                var $image;
-                                $image = $('meta[property="og:image"]');
-
-                                if ($image != undefined) {
-                                    imageUrl = $image.attr('content')
-
+                        fetch(toParseUrl)
+                            .then(result => result.text())
+                            .then(html => {
+                                var $ = cheerio.load(html);
+                                imageUrl = $('meta[property="og:image"]').attr('content');
+                                console.log('cheerio $image', imageUrl);
+                                if (!!imageUrl) {
+                                    console.log('cheerio', imageUrl);
                                 } else {
-                                    $image = $('article').find('img');
-                                    if ($image != undefined) {
-                                        imageUrl = getImageUrl($image);
-                                    }
-                                }
-                            } else {
-                                return reject('scrape meta cheerio error');
-                            }
+                                    imageUrl = getImageUrl($('article').find('img'));
 
-                        })
+                                }
+                            }).catch(error => {
+                                return reject(`scrape meta cheerio error 1: ${error}`);
+                            })
+
                         // imageUrl = "";
                     }
                 }
@@ -388,23 +391,25 @@ const getScrapedContent = async (toParseUrl, sType) => {
                     imageUrl = metadata.image;
                 } else {
                     // imageUrl = "";
-                    request(toParseUrl, function (error, response, body) {
-                        if (!error) {
-                            var $ = cheerio.load(body);
+                    fetch(toParseUrl)
+                        .then(result => result.text())
+                        .then(html => {
+                            var $ = cheerio.load(html);
                             var $image;
                             $image = $('meta[property="og:image"]');
+                            console.log('cheerio $image', $image);
                             if ($image != undefined) {
                                 imageUrl = $image.attr('content')
+                                console.log('cheerio', imageUrl);
                             } else {
                                 $image = $('article').find('img');
                                 if ($image != undefined) {
                                     imageUrl = getImageUrl($image);
                                 }
                             }
-                        } else {
-                            return reject('scrape meta cheerio error 2');
-                        }
-                    })
+                        }).catch(error => {
+                            return reject(`scrape meta cheerio error 2: ${error}`);
+                        })
                 }
             }
 
@@ -414,7 +419,7 @@ const getScrapedContent = async (toParseUrl, sType) => {
             publisher = (metadata.publisher) ? metadata.publisher : '';
         } else {
             // no meta data or incorrect url
-            // console.log('no meta data');
+            console.log('no meta data');
             return reject('no meta');
         }
 
