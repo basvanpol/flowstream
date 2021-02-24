@@ -344,7 +344,7 @@ const getScrapedContent = async (toParseUrl, sType) => {
 
                     try {
                         const { body: html, url } = await got(indirectArticleUrl)
-                        metadata = await metascraper({ html, url })
+                        redirectedMetadata = await metascraper({ html, url })
                         console.log('metadata!! : ', metadata);
                         // Metascraper.scrapeUrl(indirectArticleUrl).then(value => {
                         //     // console.log('yeah!', value);
@@ -360,8 +360,8 @@ const getScrapedContent = async (toParseUrl, sType) => {
 
                     // console.log('redirectedMetadata', redirectedMetadata);
 
-                    if (metadata) {
-                        imageUrl = metadata.image;
+                    if (redirectedMetadata) {
+                        imageUrl = redirectedMetadata.image;
                     }
                 } else {
                     if (metadata.image) {
